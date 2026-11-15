@@ -1,0 +1,509 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>תוכנית ארון הליכה PAX</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Hebrew:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#f3f4f1; --paper:#ffffff; --ink:#1d2327; --muted:#5b6469; --line:#d5d9d6; --line-strong:#9aa3a3;
+  --hang:#0f6e56; --hang-bg:#dff3ea; --drawer:#185fa5; --drawer-bg:#e3eefb; --shoe:#b34a1f; --shoe-bg:#f9e6dc;
+  --box:#6b5ea8; --box-bg:#ebe8f7; --warn:#8a5a0b; --warn-bg:#f8ecd3; --grid:#e6e9e6;
+  --eli:#1d6fa3; --eli-bg:#dcecf8; --mezi:#a0346b; --mezi-bg:#f7e1ec; --shared:#5f6a6e; --shared-bg:#e6eaea;
+  --sans:"IBM Plex Sans Hebrew","IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Arial,sans-serif; --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ color-scheme:dark;
+  --bg:#161a1c; --paper:#1f2426; --ink:#e8ebe9; --muted:#a4adaf; --line:#343c3f; --line-strong:#5a6468;
+  --hang:#5dcaa5; --hang-bg:#0f3d31; --drawer:#85b7eb; --drawer-bg:#12314d; --shoe:#f0997b; --shoe-bg:#4a2416;
+  --box:#afa9ec; --box-bg:#2b2650; --warn:#fac775; --warn-bg:#3f2d0c; --grid:#262c2f;
+  --eli:#7db8e6; --eli-bg:#143550; --mezi:#e68cc0; --mezi-bg:#4a1f38; --shared:#aab4b8; --shared-bg:#2c3336; } }
+:root[data-theme="dark"]{ color-scheme:dark;
+  --bg:#161a1c; --paper:#1f2426; --ink:#e8ebe9; --muted:#a4adaf; --line:#343c3f; --line-strong:#5a6468;
+  --hang:#5dcaa5; --hang-bg:#0f3d31; --drawer:#85b7eb; --drawer-bg:#12314d; --shoe:#f0997b; --shoe-bg:#4a2416;
+  --box:#afa9ec; --box-bg:#2b2650; --warn:#fac775; --warn-bg:#3f2d0c; --grid:#262c2f;
+  --eli:#7db8e6; --eli-bg:#143550; --mezi:#e68cc0; --mezi-bg:#4a1f38; --shared:#aab4b8; --shared-bg:#2c3336; }
+*{box-sizing:border-box}
+body{direction:rtl;margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.6;padding-inline:16px;padding-block:28px 60px}
+.wrap{max-width:1040px;margin:0 auto;display:grid;gap:36px}
+h1{font-size:30px;font-weight:600;letter-spacing:-.01em;margin:0 0 6px;text-wrap:balance}
+h2{font-size:19px;font-weight:600;margin:0 0 12px;text-wrap:balance}
+h3{font-size:15px;font-weight:600;margin:0 0 6px}
+p{margin:0 0 10px;max-width:68ch}
+.lede{color:var(--muted);max-width:70ch}
+.lede a{color:var(--drawer)}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-top:18px}
+.fact{background:var(--paper);padding:14px 16px}
+.fact b{display:block;font-family:var(--mono);font-size:22px;font-weight:500;font-variant-numeric:tabular-nums}
+.fact span{font-size:13px;color:var(--muted)}
+.sheet{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:20px}
+.legend{display:flex;flex-wrap:wrap;gap:14px 22px;font-size:13px;color:var(--muted);margin:6px 0 14px}
+.legend i{display:inline-block;width:14px;height:14px;border-radius:3px;vertical-align:-2px;margin-right:6px;border:1px solid transparent}
+.svgbox{overflow-x:auto;direction:ltr}
+svg text{font-family:var(--mono);font-size:11px;fill:var(--muted)}
+svg .lbl{font-family:var(--sans);font-size:12px;fill:var(--ink);font-weight:500}
+svg .big{font-size:14px;font-weight:600;fill:var(--ink)}
+.walls{display:grid;grid-template-columns:1fr;gap:28px}
+.wall h3{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.wall h3 small{font-weight:400;color:var(--muted);font-family:var(--mono);font-size:12px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:right;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500}
+td.n,th.n{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.sum td{font-weight:600;border-top:2px solid var(--line-strong);border-bottom:0}
+.tag{display:inline-block;font-size:12px;padding:1px 8px;border-radius:999px;font-weight:500;white-space:nowrap}
+.t-hang{background:var(--hang-bg);color:var(--hang)} .t-drawer{background:var(--drawer-bg);color:var(--drawer)} .t-shoe{background:var(--shoe-bg);color:var(--shoe)} .t-box{background:var(--box-bg);color:var(--box)}
+.t-eli{background:var(--eli-bg);color:var(--eli)} .t-mezi{background:var(--mezi-bg);color:var(--mezi)} .t-shared{background:var(--shared-bg);color:var(--shared)} .t-seen{background:var(--grid);color:var(--muted)}
+.note{background:var(--warn-bg);color:var(--warn);border-radius:8px;padding:12px 14px;font-size:14px}
+.note p{color:inherit;margin:0}
+ol,ul{margin:0;padding-right:20px;padding-left:0;max-width:70ch} li{margin-bottom:6px}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px}
+.tbl{overflow-x:auto}
+.foot{color:var(--muted);font-size:13px}
+.who{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-top:14px}
+.who div{border-radius:10px;padding:14px 16px}
+.who h3{margin-bottom:8px}
+.who ul{padding-right:18px;padding-left:0;font-size:14px}
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">ארון הליכה · 193 × 296 × 389 ס"מ · IKEA PAX + KOMPLEMENT · גרסה 4</div>
+    <h1>תוכנית ארון הליכה PAX</h1>
+    <p class="lede">שבע מסגרות PAX על הרצפה ושש חתוכות ל-148 ס"מ מעליהן, מחולקות לאזור של אלי מאחור ואזור של מזי מלפנים, עם מסגרת משותפת אחת ביניהם. דלת עליית הגג ממוקמת לפי המדידה שלכם, וסולם על מסילה משרת את הקומה השנייה. יש גם <a href="3d-he.html">מודל תלת-ממד אינטראקטיבי</a> של הפריסה הזו. אורכים בסנטימטרים, מחירים בשקלים.</p>
+    <div class="facts">
+      <div class="fact"><b>600 ס"מ</b><span>מוט תלייה, 100 מתוכו תלייה ארוכה ב-A2 בקומה השנייה</span></div>
+      <div class="fact"><b>36 זוגות</b><span>מכנסיים על 3 מתלים נשלפים ב-C</span></div>
+      <div class="fact"><b>15</b><span>מגירות: 9 עמוקות, 6 רדודות, ועוד שלושה מתלי מכנסיים ומגש אביזרים</span></div>
+      <div class="fact"><b>32 זוגות</b><span>נעליים על 8 מדפי נעליים KOMPLEMENT ב-F, ועוד שני תאי מגפיים</span></div>
+      <div class="fact"><b>100 ס"מ</b><span>מעבר בין שני הקירות הארוכים</span></div>
+      <div class="fact"><b>384 ס"מ</b><span>גובה הקומה השנייה, 5 ס"מ מתחת לתקרה</span></div>
+    </div>
+    <div class="who">
+      <div style="background:var(--eli-bg)"><h3 style="color:var(--eli)">אלי · החצי האחורי</h3><ul style="color:var(--eli)"><li>A: תלייה כפולה, 200 ס"מ מוט. A2 מעליה: תלייה ארוכה, מוט ב-142 במסגרת 148, למעילים ושמלות</li><li>G: 5 מגירות עם חזית זכוכית מתחת למדף הזכוכית, מוט ומדף עליון מעליהן, מאחורי דלתות המראה</li><li>D, עכשיו ברוחב 75: שישה מדפים של בגדים מקופלים מעל תא מגפיים. בלי מגירות: בפינה, כל דבר נשלף היה פוגע בצד של G</li></ul></div>
+      <div style="background:var(--mezi-bg)"><h3 style="color:var(--mezi)">מזי · החצי הקדמי</h3><ul style="color:var(--mezi)"><li>B: תלייה כפולה, 200 ס"מ מוט, עם מגירה נשלפת בין המוטות</li><li>C: 3 מגירות גדולות, מגש האביזרים, ושלושה מתלי מכנסיים נשלפים של 75 ס"מ, 36 זוגות</li><li>F: מגדל נעליים, 32 זוגות, תא מגפיים ו-2 מגירות</li></ul></div>
+      <div style="background:var(--shared-bg)"><h3 style="color:var(--shared)">משותף · אמצע הקיר הימני</h3><ul style="color:var(--shared)"><li>E, עכשיו ברוחב 100: 4 מגירות רדודות, הבחירה שלכם 100 × 35, שתיים לכל אחד, לגרביים ותחתונים</li><li>4 מדפים מעליהן לתיקים וסריגים; E בגובה 201 מתחת לדלת עליית הגג</li><li>קומה שנייה: שמיכות וקופסאות עונתיות. מזוודות עולות דרך דלת עליית הגג</li></ul></div>
+    </div>
+  </header>
+
+  <section class="sheet">
+    <div class="eyebrow">גיליון 1</div>
+    <h2>תוכנית רצפה</h2>
+    <div class="legend"><span><i style="background:var(--hang-bg);border-color:var(--hang)"></i>תלייה</span><span><i style="background:var(--drawer-bg);border-color:var(--drawer)"></i>מגירות</span><span><i style="background:var(--shoe-bg);border-color:var(--shoe)"></i>נעליים ומגפיים</span><span><i style="background:var(--warn-bg);border-color:var(--warn)"></i>דלת עליית הגג</span><span><i style="background:var(--paper);border-color:var(--line-strong)"></i>קיר</span></div>
+    <div class="svgbox" id="plan"></div>
+    <p class="foot">מסגרות הקיר השמאלי בעומק 58 ס"מ, מסגרות הקיר הימני בעומק 35 ס"מ, ולכן 193 − 58 − 35 משאיר בדיוק 100 ס"מ למעבר ובדיוק 100 ס"מ למסגרת G בקיר האחורי. כל שורה ארוכה היא 275 ס"מ, צמודה לקיר הכניסה; 21 הס"מ שנותרו יושבים בשתי הפינות האחוריות ככיסים סגורים ליד G, וכל כיס מסתיר דרייבר תאורה. השורה הימנית היא D 75, E 100, F 100 כדי שהכנף הקדמית של עליית הגג תעבור ליד D. דלת עליית הגג היא זוג כנפיים בקיר הימני מעל גובה הארון, 83 ס"מ יחד, החל מ-70.5 ס"מ מהקיר האחורי. הכנף האחורית מכוסה על ידי מסגרת הקומה השנייה D2 ונשארת סגורה; הכנף הקדמית, 112 עד 153.5 ס"מ מהקיר האחורי, נשארת בשימוש ונפתחת לתוך הפער של 75 ס"מ מעל E. פתיחת דלת הכניסה לא מצוירת; ודאו שהדלת עוברת ליד מסגרת C או F.</p>
+  </section>
+
+  <section class="sheet">
+    <div class="eyebrow">גיליון 2</div>
+    <h2>חזיתות הקירות</h2>
+    <p>כל קיר כפי שרואים אותו כשעומדים במעבר. הקומה התחתונה היא PAX רגיל בגובה 236 ס"מ. הקומה השנייה היא אותן מסגרות PAX שנקנות בגובה 201 ס"מ ונחתכות ל-148 ס"מ, מורכבות במקום מעל. בקיר הימני הקומה השנייה נעצרת משני צידי דלת עליית הגג כדי שהדלת תוכל להיפתח.</p>
+    <div class="legend"><span><i style="background:var(--hang-bg);border-color:var(--hang)"></i>מוט</span><span><i style="background:var(--drawer-bg);border-color:var(--drawer)"></i>מגירה 16 ס"מ</span><span><i style="background:var(--shoe-bg);border-color:var(--shoe)"></i>מדף נעליים משופע</span><span><i style="background:var(--box-bg);border-color:var(--box)"></i>קומה שנייה, קופסאות ומזוודות</span><span><i style="background:var(--warn-bg);border-color:var(--warn)"></i>תחום פתיחת דלת עליית הגג, לא בונים</span></div>
+    <div class="walls" id="walls"></div>
+  </section>
+
+  <section class="sheet">
+    <div class="eyebrow">גיליון 3</div>
+    <h2>מה נכנס בכל מסגרת</h2>
+    <div class="tbl"><table>
+      <thead><tr><th>מסגרת</th><th>של מי</th><th>מידה</th><th>קומה תחתונה, 236 ס"מ</th><th>קומה שנייה, 148 ס"מ</th></tr></thead>
+      <tbody>
+        <tr><td><b>A</b> שמאל, מאחור</td><td><span class="tag t-eli">אלי</span></td><td>100 × 58</td><td><span class="tag t-hang">תלייה</span> מדף עליון ב-214 עם תא של 20 ס"מ מעליו, מוט עליון ב-210, מוט תחתון ב-100, ושום דבר ביניהם. בלי מגירה כאן: A בפינה ומגירה הייתה פוגעת בצד של G. פסי תאורה מתחת ללוח העליון ובגובה האמצע.</td><td>A2, תלייה ארוכה: מוט אחד ב-142 ס"מ בתוך מסגרת 148, נפילה של 134 ס"מ למעילים ושמלות, בגישה מהסולם. המזוודות עולות לעליית הגג.</td></tr>
+        <tr><td><b>G</b> קיר אחורי</td><td><span class="tag t-eli">אלי</span></td><td>100 × 58</td><td><span class="tag t-drawer">מגירות</span> <span class="tag t-hang">תלייה</span> 5 מגירות עם חזית זכוכית מהרצפה עד 100 ומדף הזכוכית ב-102 ישירות מעליהן, כך שרואים לתוך המגירה העליונה. מוט ב-210 עם נפילה של 104 ס"מ לחולצות וז'קטים, מדף עליון ב-214 עם תא של 20 ס"מ מעליו. שתי דלתות מראה ÅHEIM מלפנים, כך שהמראה שיש לכם היום עוברת לכאן.</td><td>G2, חמישה מדפים, שש קופסאות HEMMAFIXARE 69 ס"מ.</td></tr>
+        <tr><td><b>D</b> ימין, מאחור</td><td><span class="tag t-eli">אלי</span></td><td>75 × 35</td><td>תא מגפיים על הרצפה עד 50, ואז 6 מדפים במרווח 30 ס"מ לבגדים מקופלים, סריגים וג'ינסים. שום דבר נשלף: D עומדת בפינה ו-58 הס"מ האחוריים של כל מגירה היו נתקלים בצד של מסגרת G. ברוחב 75 כדי שתסתיים ב-96 ס"מ, 16 ס"מ לפני הכנף הקדמית של עליית הגג.</td><td>D2, ברוחב 75 מעל D, ארבעה מדפים במרווח 30 ס"מ, חמישה תאים של בגדים מקופלים. מכסה את רוב הכנף האחורית של דלת עליית הגג; שאר הכנף נשאר סגור מעל E.</td></tr>
+        <tr><td><b>B</b> שמאל, אמצע</td><td><span class="tag t-mezi">מזי</span></td><td>100 × 58</td><td><span class="tag t-hang">תלייה</span> <span class="tag t-drawer">מגירה</span> כמו A: מדף עליון ב-214, מוטות ב-210 ו-100, מגירה נשלפת ביניהם.</td><td>B2, חמישה מדפים, שש קופסאות HEMMAFIXARE 69 ס"מ. שמיכות פוך, כריות, שמיכות.</td></tr>
+        <tr><td><b>C</b> שמאל, ליד הדלת</td><td><span class="tag t-mezi">מזי</span></td><td>75 × 58</td><td><span class="tag t-drawer">מגירות</span> <span class="tag t-drawer">נשלפים</span> 3 מגירות מהרצפה עד 60, מגש נשלף עם מחיצת האביזרים ב-64, ואז שלושה מתלי מכנסיים נשלפים של 75 ס"מ ב-120, 166 ו-212, 6 זרועות כל אחד, 36 זוגות בסך הכל. מדף ב-214 עם תא של 20 ס"מ מעליו. בלי מוט.</td><td>C2, חמישה מדפים, שתים-עשרה קופסאות HEMMAFIXARE 34 ס"מ, שתיים בכל מדף.</td></tr>
+        <tr><td><b>F</b> ימין, ליד הדלת</td><td><span class="tag t-mezi">מזי</span></td><td>100 × 35</td><td><span class="tag t-drawer">מגירות</span> <span class="tag t-shoe">נעליים</span> 2 מגירות עד 40, תא מגפיים 44 עד 90, ואז 8 מדפי נעליים KOMPLEMENT, 32 זוגות.</td><td>F2, שישה מדפים במרווח 19 ס"מ, 28 קופסאות נעליים SKUBB, נעליים מחוץ לעונה מעל מגדל הנעליים.</td></tr>
+        <tr><td><b>E</b> ימין, אמצע</td><td><span class="tag t-shared">משותף</span></td><td>100 × 35, גובה 201</td><td><span class="tag t-drawer">מגירות</span> 4 מגירות מהרצפה עד 80, הבחירה שלכם 100 × 35, שתיים לכל אחד, ואז 4 מדפים במרווח 30 ס"מ לתיקים וסריגים. נבנית בגובה 201 ולא 236, כדי שסף דלת עליית הגג ב-202 יעבור מעליה. משתרעת מ-96 עד 196, כך שכל הכנף הקדמית מעליה.</td><td>אין. מעל E, מ-201 ומעלה, תחום הפתיחה של הכנף, עם לוח המדרגה מדיקט על גבי E בגובה 201, סנטימטר אחד מתחת לסף.</td></tr>
+      </tbody>
+    </table></div>
+    <div class="note" style="margin-top:14px"><p><b>דלת עליית הגג, שתי כנפיים.</b> זוג דלתות בקיר הימני מעל גובה הארון, 83 ס"מ יחד, החל מ-70.5 ס"מ מהקיר האחורי, כך שכל כנף היא כ-41.5 ס"מ. הכנף האחורית, 70.5 עד 112, נשארת סגורה מאחורי מסגרת הקומה השנייה D2, שרצה עכשיו לכל 100 הס"מ מעל D. הכנף הקדמית, 112 עד 153.5, נשארת בשימוש: תלו אותה על צירים בקצה הקדמי שלה ב-153.5 כך שתיפתח אל הפער של 100 ס"מ מעל E, 42 ס"מ מ-F2. פתח של 41.5 ס"מ מעביר אדם בצידו ומזוודה על צידה; אם זה מרגיש צר, החלופה היא לשמור את שתי הכנפיים ולחזור ל-D2 של 50 ס"מ. הכניסה: מטפסים בסולם עד כ-170 ס"מ, דורכים על הלוח שעל E בגובה 201 ועוברים דרך הכנף שהסף שלה ב-202. הלוח העליון של PAX לא נועד לעמידה, ולכן המדרגה היא לוח דיקט 18 עד 21 מ"מ, 96 × 35 ס"מ, שנשען על שני לוחות הצד של E ומוברג אליהם, בתוספת זווית L לקיר. הגובה הפנוי מעל הלוח הוא 177 ס"מ עד מסילת הסולם. הסף ב-202 ס"מ, ולכן מסגרת E נבנית בגובה 201 במקום 236 והכנף נפתחת חופשי מעליה. נותרה מדידה אחת: הקצה העליון של הכנפיים, שחייב להישאר מתחת ל-375 ס"מ בערך כדי לעבור מתחת למסילת הסולם.</p></div>
+  </section>
+
+  <section class="sheet">
+    <div class="eyebrow">גיליון 4</div>
+    <h2>רשימת קניות</h2>
+    <p>כל מחיר למטה נקרא מ-ikea.com/il ב-15 בנובמבר 2026, אלא אם מסומן הערכה. שורות המסומנות <span class="tag" style="background:var(--hang-bg);color:var(--hang)">הבחירה שלכם</span> הן מספרי הפריטים ששלחתם; כשהבחירה שלכם ברוחב שונה מהמסגרת שהיא נכנסת אליה, רשום הרוחב המתאים וההערה מציינת זאת.</p>
+    <div class="tbl"><table>
+      <thead><tr><th>מוצר</th><th>פריט</th><th>מידה</th><th class="n">כמות</th><th class="n">ליחידה ₪</th><th class="n">סה"כ ₪</th><th>איפה</th></tr></thead>
+      <tbody>
+        <tr><td colspan="7" style="font-weight:600;background:var(--bg)">מסגרות קומה תחתונה, 236 ס"מ</td></tr>
+        <tr><td>מסגרת PAX, לבן</td><td>804.582.07</td><td>100 × 58 × 236</td><td class="n">3</td><td class="n">545</td><td class="n">1,635</td><td>A, B, G</td></tr>
+        <tr><td>מסגרת PAX, לבן</td><td>904.582.35</td><td>75 × 58 × 236</td><td class="n">1</td><td class="n">495</td><td class="n">495</td><td>C</td></tr>
+        <tr><td>מסגרת PAX, לבן</td><td>704.581.99</td><td>100 × 35 × 236</td><td class="n">1</td><td class="n">495</td><td class="n">495</td><td>F</td></tr>
+        <tr><td>מסגרת PAX, לבן</td><td>604.582.27</td><td>75 × 35 × 236</td><td class="n">1</td><td class="n">445</td><td class="n">445</td><td>D</td></tr>
+        <tr><td>מסגרת PAX, לבן</td><td></td><td>100 × 35 × 201</td><td class="n">1</td><td class="n">445</td><td class="n">445</td><td>E, גובה 201 כדי שדלת עליית הגג תעבור מעליה. הערכה</td></tr>
+        <tr><td colspan="7" style="font-weight:600;background:var(--bg)">תלייה</td></tr>
+        <tr><td>מוט תלייה KOMPLEMENT <span class="tag t-mezi" style="background:var(--hang-bg);color:var(--hang)">הבחירה שלכם</span></td><td>302.568.91</td><td>100</td><td class="n">6</td><td class="n">30</td><td class="n">180</td><td>A ×2, B ×2, G, A2</td></tr>
+        <tr><td>מתלה מכנסיים נשלף KOMPLEMENT, אפור-בז' <span class="tag t-mezi" style="background:var(--hang-bg);color:var(--hang)">הבחירה שלכם</span></td><td>305.090.68</td><td>75 × 58</td><td class="n">3</td><td class="n">175</td><td class="n">525</td><td>C, 6 זרועות ו-12 זוגות כל אחד. הלבן הוא 704.465.40</td></tr>
+        <tr><td colspan="7" style="font-weight:600;background:var(--bg)">מגירות, מגשים, סלסילות</td></tr>
+        <tr><td>מגירה KOMPLEMENT עם חזית זכוכית, אפור-בז' <span class="tag t-mezi" style="background:var(--hang-bg);color:var(--hang)">הבחירה שלכם</span></td><td>205.090.83</td><td>100 × 58</td><td class="n">5</td><td class="n">200</td><td class="n">1,000</td><td>G. הגרסה הלבנה 202.467.08; מגירה לבנה רגילה 902.463.52 ב-165</td></tr>
+        <tr><td>מגירה KOMPLEMENT, לבן</td><td>902.463.52</td><td>100 × 58</td><td class="n">1</td><td class="n">165</td><td class="n">165</td><td>B, בין שני המוטות. לא ב-A, הפינה חוסמת</td></tr>
+        <tr><td>מגירה KOMPLEMENT, לבן</td><td>102.463.32</td><td>75 × 58</td><td class="n">3</td><td class="n">140</td><td class="n">420</td><td>C, שלוש תחתונות</td></tr>
+        <tr><td>מגירה KOMPLEMENT, לבן <span class="tag t-mezi" style="background:var(--hang-bg);color:var(--hang)">הבחירה שלכם</span></td><td>702.467.58</td><td>100 × 35</td><td class="n">6</td><td class="n">140</td><td class="n">840</td><td>E ×4, שתיים לכל אחד. F ×2 מתחת לתא המגפיים. אין ב-D, הפינה חוסמת</td></tr>
+        <tr><td>מגש נשלף KOMPLEMENT, לבן <span class="tag t-mezi" style="background:var(--hang-bg);color:var(--hang)">הבחירה שלכם</span></td><td>302.463.74</td><td>75 × 58</td><td class="n">1</td><td class="n">150</td><td class="n">150</td><td>C, מעל המגירות</td></tr>
+        <tr><td>מחיצה למגש נשלף KOMPLEMENT, אפור בהיר <span class="tag t-mezi" style="background:var(--hang-bg);color:var(--hang)">הבחירה שלכם</span></td><td>692.778.16</td><td>75 × 58</td><td class="n">1</td><td class="n">265</td><td class="n">265</td><td>C, בתוך המגש. שעונים, משקפיים, חגורות</td></tr>
+        <tr><td>סלסילת רשת KOMPLEMENT עם מסילה נשלפת <span class="tag t-mezi" style="background:var(--hang-bg);color:var(--hang)">הבחירה שלכם</span></td><td>190.109.85 / 790.109.87</td><td>100 × 35 / 50 × 35</td><td class="n">0</td><td class="n">70 / 50</td><td class="n">0</td><td>הוחלפה במגירות ב-E לבקשתכם. אפשר להחזיר בכל עת, הסלסילה 75 × 35 עולה 60</td></tr>
+        <tr><td>קופסה עם תאים SKUBB, אפור כהה <span class="tag t-mezi" style="background:var(--hang-bg);color:var(--hang)">הבחירה שלכם</span></td><td>504.000.05</td><td>44 × 34 × 11</td><td class="n">4</td><td class="n">49</td><td class="n">196</td><td>בתוך המגירות של E והמגירות התחתונות של F. גרביים ותחתונים</td></tr>
+        <tr><td colspan="7" style="font-weight:600;background:var(--bg)">מדפים</td></tr>
+        <tr><td>מדף זכוכית KOMPLEMENT, לבן <span class="tag t-mezi" style="background:var(--hang-bg);color:var(--hang)">הבחירה שלכם</span></td><td>702.576.38</td><td>100 × 58</td><td class="n">1</td><td class="n">140</td><td class="n">140</td><td>G, ישירות על המגירה העליונה, מתחת לפס התאורה</td></tr>
+        <tr><td>מדף KOMPLEMENT, לבן</td><td>002.779.89</td><td>100 × 58</td><td class="n">3</td><td class="n">65</td><td class="n">195</td><td>מדפים עליונים ב-A, B, G</td></tr>
+        <tr><td>מדף KOMPLEMENT, לבן</td><td>702.779.95</td><td>75 × 58</td><td class="n">2</td><td class="n">55</td><td class="n">110</td><td>C</td></tr>
+        <tr><td>מדף KOMPLEMENT, לבן</td><td>702.779.95</td><td>75 × 35</td><td class="n">6</td><td class="n">40</td><td class="n">240</td><td>D, שישה מדפי בגדים מקופלים. הערכה</td></tr>
+        <tr><td>מדף KOMPLEMENT, לבן</td><td>002.779.89</td><td>100 × 35</td><td class="n">5</td><td class="n">45</td><td class="n">225</td><td>E ×4. F ×1: רצפת תא המגפיים</td></tr>
+        <tr><td colspan="7" style="font-weight:600;background:var(--bg)">נעליים</td></tr>
+        <tr><td>מדף נעליים KOMPLEMENT, לבן <span class="tag t-mezi" style="background:var(--hang-bg);color:var(--hang)">הבחירה שלכם</span></td><td>502.572.53</td><td>100 × 35</td><td class="n">8</td><td class="n">70</td><td class="n">560</td><td>F ×8. 4 זוגות כל אחד</td></tr>
+        <tr><td>מדף נעליים KOMPLEMENT, לבן <span class="tag t-mezi" style="background:var(--hang-bg);color:var(--hang)">הבחירה שלכם</span></td><td>802.572.61 / 602.572.57</td><td>75 × 35 / 50 × 35</td><td class="n">0</td><td class="n">60 / 50</td><td class="n">0</td><td>רק אם מגדל משנה רוחב. 3 זוגות ו-2 זוגות</td></tr>
+        <tr><td>מדף נעליים נשלף KOMPLEMENT, לבן <span class="tag t-mezi" style="background:var(--hang-bg);color:var(--hang)">הבחירה שלכם</span></td><td>802.574.64</td><td>50 × 58</td><td class="n">0</td><td class="n">145</td><td class="n">0</td><td>דורש מסגרת 50 × 58, אין כזו בפריסה. הגרסה 75 × 58 (170) הייתה נכנסת ל-C במקום מגירה אחת</td></tr>
+        <tr><td colspan="7" style="font-weight:600;background:var(--bg)">דלתות מראה על G</td></tr>
+        <tr><td>דלת מראה ÅHEIM</td><td>804.100.55</td><td>50 × 229</td><td class="n">2</td><td class="n">475</td><td class="n">950</td><td>VIKEDAL לא נמכרת בישראל; ÅHEIM היא דלת המראה בסדרה</td></tr>
+        <tr><td>ציר KOMPLEMENT סגירה שקטה, 3 יח'</td><td>002.145.05</td><td></td><td class="n">2</td><td class="n">50</td><td class="n">100</td><td>דלתות G</td></tr>
+        <tr><td colspan="7" style="font-weight:600;background:var(--bg)">תאורה</td></tr>
+        <tr><td>פס לד ÖVERSIDAN עם חיישן, לבן <span class="tag t-mezi" style="background:var(--hang-bg);color:var(--hang)">הבחירה שלכם</span></td><td>205.894.85</td><td>71 ס"מ</td><td class="n">14</td><td class="n">69</td><td class="n">966</td><td>שניים לכל מסגרת תחתונה, למעלה ובגובה האמצע</td></tr>
+        <tr><td>דרייבר TRÅDFRI, 30 וואט</td><td>603.426.56</td><td></td><td class="n">2</td><td class="n">145</td><td class="n">290</td><td>דרייבר L ל-A, B, C ב-21 וואט; דרייבר R ל-D, E, F, G ב-28 וואט. ראו גיליון 7</td></tr>
+        <tr><td>כבל חשמל FÖRNIMMA</td><td></td><td>3.5 מ'</td><td class="n">2</td><td class="n">25</td><td class="n">50</td><td>אחד לכל דרייבר</td></tr>
+        <tr><td>כבלים מאריכים, 5 מ' ו-2 מ', ומפצל כפול</td><td></td><td></td><td class="n">1</td><td class="n">90</td><td class="n">90</td><td>מהשקע לכיס השמאלי מאחורי הבסיסים, מפצל בכיס, 2 מ' מאחורי G לכיס הימני. הערכה</td></tr>
+        <tr><td>תאורת ארון לד YTBERG <span class="tag t-mezi" style="background:var(--hang-bg);color:var(--hang)">הבחירה שלכם</span></td><td></td><td></td><td class="n">0</td><td class="n"></td><td class="n"></td><td>ספוט ולא פס; אותו דרייבר. אופציונלי למסגרת המראה G</td></tr>
+        <tr class="sum"><td colspan="5">קומה תחתונה</td><td class="n">11,082</td><td></td></tr>
+      </tbody>
+    </table></div>
+    <div class="tbl" style="margin-top:22px"><table>
+      <thead><tr><th>מוצר</th><th>פריט</th><th>מידה</th><th class="n">כמות</th><th class="n">ליחידה ₪</th><th class="n">סה"כ ₪</th><th>איפה</th></tr></thead>
+      <tbody>
+        <tr><td colspan="7" style="font-weight:600;background:var(--bg)">קומה שנייה, נקנית בגובה 201 ונחתכת ל-148 ס"מ</td></tr>
+        <tr><td>מסגרת PAX, לבן</td><td>704.582.03</td><td>100 × 58 × 201</td><td class="n">3</td><td class="n">495</td><td class="n">1,485</td><td>A2, B2, G2</td></tr>
+        <tr><td>מסגרת PAX, לבן</td><td>804.582.31</td><td>75 × 58 × 201</td><td class="n">1</td><td class="n">445</td><td class="n">445</td><td>C2</td></tr>
+        <tr><td>מסגרת PAX, לבן</td><td></td><td>100 × 35 × 201</td><td class="n">1</td><td class="n">445</td><td class="n">445</td><td>F2. הערכה, הדף לא נטען</td></tr>
+        <tr><td>מסגרת PAX, לבן</td><td>304.582.24</td><td>75 × 35 × 201</td><td class="n">1</td><td class="n">395</td><td class="n">395</td><td>D2</td></tr>
+        <tr><td>מדף KOMPLEMENT, לבן</td><td>002.779.89</td><td>100 × 58</td><td class="n">10</td><td class="n">65</td><td class="n">650</td><td>B2, G2, חמישה בכל אחת, במרווח 23 ס"מ</td></tr>
+        <tr><td>מדף KOMPLEMENT, לבן</td><td>702.779.95</td><td>75 × 58</td><td class="n">5</td><td class="n">55</td><td class="n">275</td><td>C2</td></tr>
+        <tr><td>מדף KOMPLEMENT, לבן</td><td>002.779.89</td><td>100 × 35</td><td class="n">6</td><td class="n">45</td><td class="n">270</td><td>F2, במרווח 19 לקופסאות נעליים</td></tr>
+        <tr><td>מדף KOMPLEMENT, לבן</td><td>702.779.95</td><td>75 × 35</td><td class="n">4</td><td class="n">40</td><td class="n">160</td><td>D2, במרווח 30 לבגדים מקופלים. הערכה</td></tr>
+        <tr><td>קופסת אחסון HEMMAFIXARE <span class="tag t-mezi" style="background:var(--hang-bg);color:var(--hang)">הבחירה שלכם</span></td><td>705.039.17</td><td>69 × 51 × 19</td><td class="n">12</td><td class="n">95</td><td class="n">1,140</td><td>B2, G2, אחת לכל מדף. עומק 51 מתאים רק למסגרות 58</td></tr>
+        <tr><td>קופסת אחסון HEMMAFIXARE <span class="tag t-mezi" style="background:var(--hang-bg);color:var(--hang)">הבחירה שלכם</span></td><td>905.039.21</td><td>34 × 51 × 19</td><td class="n">12</td><td class="n">49</td><td class="n">588</td><td>C2, שתיים לכל מדף. בגדים עונתיים</td></tr>
+        <tr><td>קופסת נעליים SKUBB, 4 יח', אפור כהה <span class="tag t-mezi" style="background:var(--hang-bg);color:var(--hang)">הבחירה שלכם</span></td><td>804.000.04</td><td>22 × 34 × 16</td><td class="n">7</td><td class="n">49</td><td class="n">343</td><td>F2, ארבע לכל מדף, 28 קופסאות. עומק 34 מתאים למסגרת 35</td></tr>
+        <tr><td>חיתוך במסור לוחות, קנט, ברגים</td><td></td><td></td><td class="n">1</td><td class="n">250</td><td class="n">250</td><td>נגרייה. הערכה</td></tr>
+        <tr><td>לוח מדרגה מדיקט 96 × 35 × 2 ס"מ</td><td></td><td></td><td class="n">1</td><td class="n">80</td><td class="n">80</td><td>על גבי E בגובה 201, מוברג ללוחות הצד של E. הערכה</td></tr>
+        <tr class="sum"><td colspan="5">קומה שנייה</td><td class="n">6,596</td><td></td></tr>
+        <tr class="sum"><td colspan="5">הכול</td><td class="n">17,678</td><td>העיצוב שלכם במתכנן היה 6,920 בלי מגירות, תאורה או קומה שנייה</td></tr>
+      </tbody>
+    </table></div>
+    <p class="foot" style="margin-top:12px">מחירי המסגרות ב-ikea.com/il גבוהים מאלה שהמתכנן הציג במהלך הפגישה, ב-50 עד 100 למסגרת; ייתכן שהמתכנן הציג מבצע. בדקו את סכום העגלה לפני ההזמנה. לא כלול: סולם הספרייה בגיליון 6, שרפרף מדרגה, ודלתות FORSAND לקומה השנייה אם תחליטו לסגור אותה. הקומה השנייה מחולקת במדפים כל 22 ס"מ מעל מסגרות ה-58 עם שכבה אחת של קופסאות בכל מדף, כל 30 ס"מ ב-D2 לבגדים מקופלים וכל 19 ס"מ ב-F2 לקופסאות נעליים: 25 מדפים, 24 קופסאות ו-28 קופסאות נעליים, ועוד מוט התלייה הארוכה ב-A2. ערימה של שתי קופסאות על חצי מהמדפים הייתה חוסכת כ-₪900 במדפים אבל מחייבת להרים קופסה בגובה 3 מטר כדי להגיע לזו שמתחתיה.</p>
+  </section>
+
+  <section class="sheet">
+    <div class="eyebrow">גיליון 5</div>
+    <h2>חיתוך והערמה של הקומה השנייה</h2>
+    <div class="cols">
+      <div>
+        <h3>חיתוך</h3>
+        <ol>
+          <li>קנו את המסגרות של 201 ס"מ. לפני החיתוך, מדדו את חורי הדיבלים והנעילה בקצה העליון של כל לוח צד ורשמו את מרחקם מהקצה העליון.</li>
+          <li>חתכו 53 ס"מ מהקצה העליון של שני לוחות הצד, כך שהלוח המוגמר הוא 148 ס"מ. השאירו את הקצה התחתון שלם. מסור לוחות בנגרייה נותן חיתוך בלי שבבים; מסור יד ישבור את הפורמייקה.</li>
+          <li>סמנו את מיקומי החורים שרשמתם מהקצה העליון החדש וקדחו אותם. השתמשו בחתיכה שנחתכה כתבנית כדי שהלוח העליון יתאים בדיוק כמו קודם.</li>
+          <li>חתכו את לוח הגב הדק לאותו אורך. הדביקו בגיהוץ קנט לבן על הקצוות החתוכים.</li>
+        </ol>
+      </div>
+      <div>
+        <h3>הערמה</h3>
+        <ol>
+          <li>בנו ועגנו קודם את כל שבע המסגרות התחתונות, מוברגות זו לזו צד לצד.</li>
+          <li>מסגרת 148 × 58 אי אפשר להטות למצב זקוף על גבי הבסיס, כי האלכסון שלה 159 ס"מ ויש רק 153 ס"מ גובה פנוי. הרכיבו כל מסגרת עליונה במקום, בעמידה על סולם מדרגות, או ששני אנשים ירימו מסגרת בנויה ישר למעלה מעל 236 ס"מ.</li>
+          <li>הבריגו כל מסגרת עליונה כלפי מטה דרך לוח התחתית שלה אל הלוח העליון של המסגרת שמתחת, ארבעה ברגים למסגרת, וקבעו כל מסגרת עליונה לקיר עם זוויות הקיר של PAX. D2 עומדת מול הכנף האחורית הסגורה של דלת עליית הגג, ולכן עגנו אותה לקיר ליד הדלת, לא דרכה.</li>
+          <li>שמרו את הקומה השנייה לדברים קלים: מזוודות, מצעים, קופסאות. איקאה לא מאשרת הערמה של PAX, ולכן השורה העליונה נושאת משקל קטן ונשענת על עיגוני הקיר.</li>
+        </ol>
+      </div>
+    </div>
+    <h3 style="margin-top:18px">תרשים חיתוך, לוח צד אחד</h3>
+    <div class="legend"><span><i style="background:var(--paper);border-color:var(--ink)"></i>לוח צד PAX, 201 ס"מ, כפי שנקנה</span><span><i style="background:var(--warn-bg);border-color:var(--warn)"></i>שארית 53 ס"מ</span><span><i style="background:var(--paper);border-color:#c0392b;border-style:dashed"></i>קו חיתוך ב-148 מהתחתית</span><span><i style="background:var(--drawer-bg);border-color:var(--drawer);border-radius:50%"></i>חורי הלוח העליון להעתקה ולקדיחה מחדש</span></div>
+    <div class="svgbox" id="cut"></div>
+    <p class="foot">שני לוחות הצד של כל מסגרת עליונה נחתכים באותו אופן, כך שהמסגרת שומרת על עומקה המלא ועל כל חורי פיני המדפים מתחת לחיתוך. החורים בכחול הם אלה שהלוח העליון ננעל אליהם: מדדו את מיקומם מהקצה העליון הישן לפני החיתוך, סמנו את אותם מיקומים מהקצה העליון החדש, וקדחו במקדחים 8 מ"מ ו-15 מ"מ. לוח הגב הדק נחתך גם הוא ב-53 ס"מ.</p>
+    <h3 style="margin-top:18px">מה אפשר לעשות עם השאריות</h3>
+    <div class="tbl"><table>
+      <thead><tr><th>שארית</th><th class="n">חתיכות</th><th>שימוש</th></tr></thead>
+      <tbody>
+        <tr><td>לוח צד 53 × 58 ס"מ, לבן, 1.8 ס"מ, עם חורי פיני מדפים</td><td class="n">8</td><td>לחתוך לרצועות של 12 ס"מ: 32 מחיצות מגירה למגירות הזכוכית ב-G ולמגירות ב-B, C ו-F, באורך 52 ס"מ למגירה בעומק 58. ארבע רצועות עושות גם מכסים לשני הכיסים הפינתיים, 21 × 58 ו-21 × 35, כך שהכיסים נסגרים מלמעלה מתחת לקומה השנייה.</td></tr>
+        <tr><td>לוח צד 53 × 35 ס"מ, לבן, 1.8 ס"מ</td><td class="n">4</td><td>לחתוך ל-21 × 35: שמונה מדפים קטנים לרצועת הקיר של 42 ס"מ ליד דלת עליית הגג, בקיר הימני בין הכנף הפתוחה ל-F2, מוברגים ללוח הצד של F2. קולבים רזרביים, טיפוח נעליים, שקיות ואקום.</td></tr>
+        <tr><td>רצועת לוח גב, 3 מ"מ, 53 ס"מ גובה ברוחב המסגרת</td><td class="n">6</td><td>לחתוך לרצועות של 5 ס"מ ולצבוע לבן: סינר שסוגר את הפער של 5 ס"מ בין הקומה השנייה לתקרה לאורך שלושת הקירות, כ-6.5 מ' בסך הכל. לקבע בסרט דו-צדדי ללוחות העליונים.</td></tr>
+        <tr><td>קצה הלוח העליון אחרי החיתוך</td><td></td><td>אין מה לנצל; הקצה המנוסר מקבל קנט לבן בגיהוץ, גליל 2 מ', כ-₪20.</td></tr>
+      </tbody>
+    </table></div>
+    <p class="foot">שום דבר מהשאריות לא יכול להפוך למדף PAX: החתיכה הארוכה ביותר היא 53 ס"מ והמסגרת הצרה ביותר צריכה 71.4 ס"מ. המחיצות, מדפי רצועת הדלת וסינר התקרה מנצלים כמעט הכול; השאר הוא פסולת ניסור וקצוות.</p>
+  </section>
+
+  <section class="sheet">
+    <div class="eyebrow">גיליון 6</div>
+    <h2>סולם</h2>
+    <p>סולם ספרייה באורך קבוע עם ווים הוא הכלי הנכון לחדר הזה: לא מתקפל, יד אחת להזזה, ולא יכול להחליק כי הווים יושבים על מסילה. המספרים למטה הם מה שהחדר מאפשר.</p>
+    <div class="tbl"><table>
+      <thead><tr><th>פריט</th><th class="n">ערך</th><th>למה</th></tr></thead>
+      <tbody>
+        <tr><td>גובה המסילה</td><td class="n">380 ס"מ</td><td>מקובעת לאורך הקצה העליון של מסגרות הקומה השנייה, לא לתקרה, כך שלעולם לא חוצה את דלת עליית הגג.</td></tr>
+        <tr><td>מסילות</td><td class="n">2 × 275 ס"מ</td><td>מסילה רציפה אחת בכל קיר ארוך. בימין היא מקובעת ל-D2 ול-F2 ומגשרת על פער הדלת של 125 ס"מ כמפתח חופשי, כך שהסולם מחליק לכל האורך ונעצר ליד דלת עליית הגג. הקצה העליון של הדלת חייב להישאר מתחת ל-375 ס"מ בערך כדי להיפתח מתחת למסילה; בדקו זאת כשתמדדו את הדלת.</td></tr>
+        <tr><td>אורך הסולם</td><td class="n">כ-392 ס"מ</td><td>ווים ב-380 ס"מ, רגליים 88 ס"מ מחזית המסגרות.</td></tr>
+        <tr><td>זווית</td><td class="n">77°</td><td>תלולה יותר מסולם חנות ספרים (בדרך כלל 65 עד 72°) כי הרגליים חייבות להישאר בתוך המעבר של 100 ס"מ. נוח עם יד על הצדדים, וזו הסיבה להתעקש על גלגלים עם בלימה במשקל או רגליות גומי.</td></tr>
+        <tr><td>משקל</td><td class="n">12 עד 20 ק"ג</td><td>אלומיניום קל יותר, אלון נראה טוב יותר. כל אחד מהם מתרומם מהמסילה ועובר לקיר השני בתנועה אחת.</td></tr>
+        <tr><td>גישה לעליית הגג</td><td class="n">להחליק עד הדלת</td><td>מחליקים את הסולם לאורך המסילה הימנית עד הדלת, פותחים את הדלת ועוברים בגובה המדף. הרבה יותר קל מפתח בתקרה.</td></tr>
+      </tbody>
+    </table></div>
+    <h3 style="margin-top:16px">איפה קונים</h3>
+    <ul>
+      <li><b>ערכת פרזול וסולם באורך מותאם.</b> ערכות ווים מתגלגלים עם מסילות, ווים וגלגלים נמכרות אצל <a href="https://www.libraryladdersinternational.com/rolling-hook">Library Ladders International</a> וכערכות זולות יותר ב-<a href="https://www.amazon.com/rolling-library-ladder/s?k=rolling+library+ladder">אמזון</a>, כולל ערכות פרזול של 3.5 מ' כמו <a href="https://www.amazon.com/-/he/%D7%97%D7%95%D7%9E%D7%A8%D7%94-%D7%9C%D7%A1%D7%95%D7%9C%D7%9D-%D7%A1%D7%A4%D7%A8%D7%99%D7%99%D7%94-%D7%9E%D7%AA%D7%92%D7%9C%D7%92%D7%9C%D7%AA-%D7%A8%D7%95%D7%9C%D7%A8%D7%99%D7%9D/dp/B0B3MQZ64Q">ערכת DIYHD</a>. הערכות מגיעות בדרך כלל בלי סולם או עם סולם של 2 מ'; נגרייה תבנה את הסולם של 392 ס"מ לפי שרטוטי הערכה.</li>
+      <li><b>ספקים בישראל.</b> <a href="https://bitter.co.il/product/%D7%A2%D7%A8%D7%9B%D7%94-%D7%9C%D7%A1%D7%95%D7%9C%D7%9D-%D7%A1%D7%A4%D7%A8%D7%99%D7%94-%D7%A2%D7%9D-%D7%A1%D7%95%D7%9C%D7%9D-2-%D7%9E%D7%98%D7%A8/">האחים ביטר</a> מוכרים ערכת סולם ספרייה עם סולם 2 מ', ו<a href="https://www.ofekagencies.co.il/products_cat/%D7%A1%D7%95%D7%9C%D7%9E%D7%95%D7%AA-%D7%A0%D7%99%D7%99%D7%93%D7%99%D7%9D/">אופק סוכנויות</a> מייבאת סולמות מסילה Italscale בתקן EN-131. בקשו משניהם סולם מסילה חתוך ל-392 ס"מ עם זווית עבודה של 77°.</li>
+      <li><b>חלופה בלי מסילות.</b> סולם במה תעשייתי מתגלגל עם חמש מדרגות ומעקה, במה בגובה כ-125 ס"מ, מגיע ל-384 ס"מ ומתגלגל על גלגלים שננעלים תחת עומס. הוא לעולם לא מתקפל, אבל תופס כ-55 על 90 ס"מ על הרצפה וצריך לחנות ליד הדלת.</li>
+    </ul>
+    <p class="foot">תקציב של כ-₪1,500 עד ₪3,500 למסילות, פרזול וסולם באורך מותאם. לא כלול בסיכומים בגיליון 4.</p>
+  </section>
+
+  <section class="sheet">
+    <div class="eyebrow">גיליון 7</div>
+    <h2>תאורה וחשמל</h2>
+    <p>ארבעה-עשר פסי ÖVERSIDAN, שניים לכל מסגרת תחתונה בעומק האמצע: אחד מתחת ללוח העליון למוט העליון, אחד מתחת למגירה או למדף הקרובים לגובה האמצע, למשל מתחת למגירה ב-102 ב-A וב-B, למוט התחתון, למגירות ולנשלפים. הפסים נתפסים ללוח או למדף עם התושבות שלהם. לכל פס חיישן תנועה מובנה וכבל של 3.5 מ', ולכן לא צריך מתג ואורך הכבל קובע איפה הדרייברים יכולים להיות.</p>
+    <div class="tbl"><table>
+      <thead><tr><th>דרייבר</th><th>איפה</th><th>מזין</th><th class="n">עומס</th><th>מהלכי כבלים</th><th>חשמל</th></tr></thead>
+      <tbody>
+        <tr><td>דרייבר L, TRÅDFRI 30 וואט</td><td>בכיס הסגור של 21 ס"מ בפינה האחורית השמאלית, בין לוח הקצה של A לצד של G, בגובה כ-225 ס"מ, עם גישה מלמעלה דרך פער התקרה</td><td>A, B, C, 6 פסים</td><td class="n">21 וואט</td><td>מאחורי לוחות הגב בגובה 225 ס"מ לכיוון אחור, דרך חורים של 12 מ"מ בלוחות הצד המשותפים בין C ל-B, B ל-A, ואל הכיס דרך לוח הקצה של A. הכבל הארוך ביותר, הפס האמצעי של C, כ-3.4 מ'</td><td>מאריך 5 מ' מהשקע משמאל לכניסה: כמה סנטימטרים לאורך הפנל, דרך חור ברצפה בלוח הקצה של C, ואז מאחורי הבסיסים של C, B ו-A אל הכיס, שם מפצל כפול מזין את הדרייבר</td></tr>
+        <tr><td>דרייבר R, TRÅDFRI 30 וואט</td><td>בכיס התואם בפינה האחורית הימנית, בין לוח הקצה של D לצד של G</td><td>D, E, F, G, 8 פסים</td><td class="n">28 וואט</td><td>D, E, F מאחורי לוחות הגב לכיוון אחור, דרך חורים בין המסגרות ואל הכיס דרך לוח הקצה של D; הפס האמצעי של F הוא הארוך ביותר, 3.3 מ'. הכבלים של G רצים מאחורי לוח הגב של G ונכנסים לכיס דרך לוח הצד הימני של G, פחות מ-2.3 מ'</td><td>מאריך 2 מ' מהמפצל בכיס השמאלי, מאחורי הבסיס של G דרך חורים בשני לוחות הצד של G בגובה הרצפה, אל הכיס הימני</td></tr>
+      </tbody>
+    </table></div>
+    <ul style="margin-top:12px">
+      <li>למה שני דרייברים: דרייבר 30 וואט מקבל לכל היותר 10 גופי תאורה ו-30 וואט, ולכן 14 פסים ב-3.5 וואט צריכים שניים. החלוקה גם שומרת כל כבל מתחת ל-3 מ', בתוך 3.5 המטרים שאיתם הוא מגיע. שני הדרייברים ממש מתחת לגבול, ולכן פס 15 יצריך דרייבר שלישי.</li>
+      <li>שקע אחד להכול, ושום דבר גלוי: המאריך של 5 מ' מהשקע רץ מאחורי הבסיסים לכיס השמאלי, המפצל יושב בכיס, ומאריך של 2 מ' רץ מאחורי הבסיס של G לכיס הימני. שני הכיסים פתוחים לפער התקרה, כך שאפשר להרים דרייבר החוצה מסולם אם יתקלקל. כל עומס התאורה הוא 49 וואט.</li>
+      <li>חורים: חור אחד של 12 מ"מ בפינה האחורית העליונה של כל לוח צד משותף, 1 ס"מ מהקצה האחורי בגובה 225 ס"מ, מוסתר בתעלה שמאחורי לוחות הגב. נגר או אתם עם מקדחה, עשר דקות.</li>
+      <li>הדרייברים הם Zigbee. הוסיפו שלט TRÅDFRI או רכזת DIRIGERA רק אם רוצים עמעום או אפליקציה; החיישנים מדליקים ומכבים את הפסים בעצמם.</li>
+      <li>השאירו את מסגרות הקומה השנייה בלי תאורה. קופסאות לא צריכות אור, והפסים היו בגובה 3.8 מ'.</li>
+    </ul>
+    <h3 style="margin-top:18px">תרשים חיווט</h3>
+    <div class="legend"><span><i style="background:#f2c94c;border-color:#8a5a0b"></i>פס ÖVERSIDAN, למעלה ובגובה האמצע</span><span><i style="background:var(--paper);border-color:#e07b00;border-style:dashed"></i>כבל הפס מאחורי לוחות הגב בגובה 225 ס"מ</span><span><i style="background:var(--paper);border-color:#8a5a0b;border-radius:50%"></i>חור 12 מ"מ דרך לוח צד</span><span><i style="background:#8a8f93"></i>דרייבר TRÅDFRI 30 וואט</span><span><i style="background:#185fa5"></i>מאריך 5 מ' מהשקע, מאחורי הבסיסים</span><span><i style="background:var(--paper);border-color:#185fa5;border-style:dashed"></i>מאריך 2 מ' מאחורי G לדרייבר R</span><span><i style="background:var(--warn-bg);border-color:var(--warn);border-style:dashed"></i>כיס פינתי 21 ס"מ</span></div>
+    <div class="svgbox" id="wiring"></div>
+    <p class="foot">הקירות פרושים שטוחים, כפי שרואים מהמעבר. שני הפסים של כל מסגרת יורדים לתעלה שמאחורי לוח הגב ורצים לאורכה בגובה 225 ס"מ עד הדרייבר, דרך חור אחד בכל לוח צד משותף. הכבלים של G חוצים את הפינה לתעלה של D. אורכי הכבלים הם מהפס עד הדרייבר; כולם מתחת ל-3.5 המטרים המסופקים. שקע אחד משרת הכול דרך מאריכים מאחורי הבסיסים: 5 מ' לכיס השמאלי, שם מפצל מזין את דרייבר L, ו-2 מ' מאחורי G לדרייבר R בכיס הימני. אורכי הכבלים מוצגים לכל מסגרת כפס עליון / פס אמצעי.</p>
+  </section>
+
+  <section class="sheet">
+    <div class="eyebrow">נקודות פתוחות</div>
+    <h2>לפני ההזמנה</h2>
+    <ul>
+      <li>דלת עליית הגג: הקצה העליון של הכנפיים חייב להיות מתחת ל-375 ס"מ בערך בשביל מסילת הסולם. הסף ב-202 כבר בתוכנית. אשרו שאתם מרוצים מכנף אחת של 41.5 ס"מ כפתח.</li>
+      <li>פתיחת דלת הכניסה: לאיזה צד היא נפתחת והאם היא עוברת ליד מסגרת 58 ס"מ ב-C או מסגרת 35 ס"מ ב-F. אם היא מפריעה, קצרו את השורה הזו במסגרת אחת של 50 ס"מ.</li>
+      <li>השקע נמצא משמאל לקיר הכניסה, כפי שאמרתם; המאריך של 5 מ' מתחיל שם. עכשיו ש-C ו-F צמודות לקיר הכניסה, ודאו שמשקוף דלת הכניסה לא נכנס ל-58 הס"מ הראשונים משמאל או ל-35 הס"מ הראשונים מימין של הקיר הזה.</li>
+      <li>גובה התקרה בכל ארבע הפינות. 389 ס"מ נמדדו פעם אחת; תקרות ישנות משתנות בכמה סנטימטרים, וגובה החיתוך הולך לפי הנקודה הנמוכה ביותר.</li>
+      <li>האזורים של אלי ומזי באותו גודל, כך שאם אחד מכם צריך יותר תלייה או יותר נעליים, החליפו את התוויות ולא את המסגרות.</li>
+      <li>בדקו באפליקציית איקאה ישראל את מחירי המגירות, מדפי הנעליים ודלתות המראה. השורות האלה הן הערכות.</li>
+    </ul>
+  </section>
+</div>
+
+<script>
+(function(){
+  function WHO(w){ return w==='Eli'?'אלי':w==='Mezi'?'מזי':w==='shared'?'משותף':w; }
+  var S = 1.3;
+  var plan = [];
+  var W=193, L=296, ox=70, oy=40;
+  var pw = W*S, pl = L*S;
+  plan.push('<svg viewBox="0 0 '+(pw+190)+' '+(pl+110)+'" width="'+(pw+190)+'" style="max-width:100%;height:auto;display:block;margin:0 auto">');
+  plan.push('<rect x="'+(ox-6)+'" y="'+(oy-6)+'" width="'+(pw+12)+'" height="'+(pl+6)+'" fill="none" stroke="var(--line-strong)" stroke-width="6"/>');
+  function fr(x,y,w,h,cls,label,sub,who){
+    var fill = cls==='hang'?'var(--hang-bg)':cls==='drawer'?'var(--drawer-bg)':'var(--shoe-bg)';
+    var st = cls==='hang'?'var(--hang)':cls==='drawer'?'var(--drawer)':'var(--shoe)';
+    var wc = who==='Eli'?'var(--eli)':who==='Mezi'?'var(--mezi)':'var(--shared)';
+    plan.push('<rect x="'+(ox+x*S)+'" y="'+(oy+y*S)+'" width="'+(w*S)+'" height="'+(h*S)+'" fill="'+fill+'" stroke="'+st+'" stroke-width="1"/>');
+    var cx = ox+(x+w/2)*S, cy = oy+(y+h/2)*S;
+    plan.push('<text class="big" x="'+cx+'" y="'+(cy-6)+'" text-anchor="middle" style="fill:'+st+'">'+label+'</text>');
+    plan.push('<text x="'+cx+'" y="'+(cy+8)+'" text-anchor="middle" style="fill:'+wc+'">'+WHO(who)+'</text>');
+    if(sub) plan.push('<text x="'+cx+'" y="'+(cy+22)+'" text-anchor="middle" style="fill:'+st+'">'+sub+'</text>');
+  }
+  fr(0,21,58,100,'hang','A','100&times;58','Eli');
+  fr(0,121,58,100,'hang','B','100&times;58','Mezi');
+  fr(0,221,58,75,'drawer','C','75&times;58','Mezi');
+  fr(58,0,100,58,'hang','G','100&times;58','Eli');
+  fr(158,21,35,75,'drawer','D','','Eli');
+  fr(158,96,35,100,'drawer','E','','shared');
+  fr(158,196,35,100,'shoe','F','','Mezi');
+  plan.push('<line x1="'+(ox+158*S)+'" y1="'+(oy+58*S)+'" x2="'+(ox+58*S)+'" y2="'+(oy+58*S)+'" stroke="var(--hang)" stroke-width="2.5"/>');
+  plan.push('<text x="'+(ox+108*S)+'" y="'+(oy+58*S+14)+'" text-anchor="middle">דלתות מראה</text>');
+  plan.push('<rect x="'+(ox+193*S-4)+'" y="'+(oy+70.5*S)+'" width="10" height="'+(41.5*S)+'" fill="var(--grid)" stroke="var(--warn)" stroke-dasharray="3 2"/>');
+  plan.push('<rect x="'+(ox+193*S-4)+'" y="'+(oy+112*S)+'" width="10" height="'+(41.5*S)+'" fill="var(--warn-bg)" stroke="var(--warn)"/>');
+  plan.push('<path d="M '+(ox+193*S)+' '+(oy+153.5*S)+' A '+(41.5*S)+' '+(41.5*S)+' 0 0 1 '+(ox+151.5*S)+' '+(oy+153.5*S)+'" fill="none" stroke="var(--warn)" stroke-dasharray="4 3"/>');
+  plan.push('<text class="lbl" x="'+(ox+150*S)+'" y="'+(oy+100*S)+'" text-anchor="middle" style="fill:var(--warn)">דלת עליית הגג, 2 כנפיים</text>');
+  plan.push('<text x="'+(ox+150*S)+'" y="'+(oy+110*S)+'" text-anchor="middle" style="fill:var(--warn)">הכנף האחורית מכוסה על ידי D2</text>');
+  plan.push('<text x="'+(ox+150*S)+'" y="'+(oy+120*S)+'" text-anchor="middle" style="fill:var(--warn)">הכנף הקדמית נשארת, ציר ב-153.5</text>');
+  var sy = oy+137.5*S;
+  plan.push('<line x1="'+(ox+60*S)+'" y1="'+sy+'" x2="'+(ox+131*S)+'" y2="'+sy+'" stroke="var(--line-strong)" stroke-dasharray="6 4"/>');
+  plan.push('<text class="lbl" x="'+(ox+95*S)+'" y="'+(sy-10)+'" text-anchor="middle" style="fill:var(--eli)">אלי</text>');
+  plan.push('<text class="lbl" x="'+(ox+95*S)+'" y="'+(sy+18)+'" text-anchor="middle" style="fill:var(--mezi)">מזי</text>');
+  plan.push('<text class="lbl" x="'+(ox+108*S)+'" y="'+(oy+240*S)+'" text-anchor="middle">מעבר 100</text>');
+  plan.push('<rect x="'+(ox+45*S)+'" y="'+(oy+pl-4)+'" width="'+(90*S)+'" height="8" fill="var(--paper)" stroke="var(--line-strong)" stroke-dasharray="3 3"/>');
+  plan.push('<text class="lbl" x="'+(ox+90*S)+'" y="'+(oy+pl+26)+'" text-anchor="middle">כניסה, פתיחת הדלת לא מצוירת</text>');
+  plan.push('<text x="'+(ox+pw/2)+'" y="'+(oy-16)+'" text-anchor="middle">193</text>');
+  plan.push('<text x="'+(ox-22)+'" y="'+(oy+pl/2)+'" text-anchor="middle" transform="rotate(-90 '+(ox-22)+' '+(oy+pl/2)+')">296</text>');
+  plan.push('<text x="'+(ox+29*S)+'" y="'+(oy+13*S)+'" text-anchor="middle">21</text>');
+  plan.push('<text x="'+(ox+175*S)+'" y="'+(oy+13*S)+'" text-anchor="middle">21</text>');
+  var hx = ox+pw+16;
+  plan.push('<text x="'+hx+'" y="'+(oy+8)+'">מהקיר האחורי</text>');
+  [['0',0],['21',21],['70.5',70.5],['96',96],['153.5',153.5],['196',196],['296',296]].forEach(function(m){ plan.push('<line x1="'+(hx-4)+'" y1="'+(oy+m[1]*S)+'" x2="'+(hx+2)+'" y2="'+(oy+m[1]*S)+'" stroke="var(--line-strong)"/>'); plan.push('<text x="'+(hx+6)+'" y="'+(oy+m[1]*S+4)+'">'+m[0]+'</text>'); });
+  plan.push('<text x="'+hx+'" y="'+(oy+230*S)+'">D 75&times;35</text>');
+  plan.push('<text x="'+hx+'" y="'+(oy+240*S)+'">E 100&times;35</text>');
+  plan.push('<text x="'+hx+'" y="'+(oy+250*S)+'">F 100&times;35</text>');
+  plan.push('</svg>');
+  document.getElementById('plan').innerHTML = plan.join('');
+
+  var K = 1.15, TOP=20, BOT=46, LM=42, RM=16, CEIL=389, G=236, T=148;
+  function py(cm){ return TOP + (CEIL-cm)*K; }
+  function wall(name, sub, frames, tops, flip, gaps){
+    var total = frames.reduce(function(a,f){return a+f.w},0);
+    var width = total*K + LM + RM, height = py(0)+BOT;
+    function px(x,w){ return flip ? LM + (total - x - w)*K : LM + x*K; }
+    var s=[];
+    s.push('<svg viewBox="0 0 '+width+' '+height+'" width="'+width+'" style="max-width:100%;height:auto;display:block">');
+    s.push('<line x1="'+LM+'" y1="'+py(CEIL)+'" x2="'+(LM+total*K)+'" y2="'+py(CEIL)+'" stroke="var(--line-strong)" stroke-width="3"/>');
+    s.push('<line x1="'+LM+'" y1="'+py(0)+'" x2="'+(LM+total*K)+'" y2="'+py(0)+'" stroke="var(--line-strong)" stroke-width="3"/>');
+    [0,G,G+T].forEach(function(h){ s.push('<text x="'+(LM-6)+'" y="'+(py(h)+4)+'" text-anchor="end">'+h+'</text>'); s.push('<line x1="'+(LM-3)+'" y1="'+py(h)+'" x2="'+LM+'" y2="'+py(h)+'" stroke="var(--line-strong)"/>'); });
+    s.push('<text x="'+(LM+total*K)+'" y="'+(py(CEIL)-6)+'" text-anchor="end">תקרה 389</text>');
+    function items(f, x0, x1, base){
+      var ix0=x0+3, ix1=x1-3;
+      (f.items||[]).forEach(function(it){
+        var y = function(v){ return py(base+v); };
+        if(it.t==='shelf'){ s.push('<line x1="'+ix0+'" y1="'+y(it.y)+'" x2="'+ix1+'" y2="'+y(it.y)+'" stroke="var(--ink)" stroke-width="2"/>'); }
+        if(it.t==='rail'){ var yy=y(it.y); s.push('<line x1="'+ix0+'" y1="'+yy+'" x2="'+ix1+'" y2="'+yy+'" stroke="var(--hang)" stroke-width="3"/>');
+          var n=Math.max(3,Math.floor(f.w/14)); for(var i=0;i<n;i++){ var hx=ix0+(i+0.5)*(ix1-ix0)/n; s.push('<line x1="'+hx+'" y1="'+(yy+2)+'" x2="'+hx+'" y2="'+(yy+(it.drop||60)*K)+'" stroke="var(--hang)" stroke-width="1" opacity=".55"/>'); } }
+        if(it.t==='drawers'){ for(var d=0; d<it.n; d++){ var yb=it.y+d*20, yt=yb+16; s.push('<rect x="'+ix0+'" y="'+y(yt)+'" width="'+(ix1-ix0)+'" height="'+(16*K)+'" fill="var(--drawer-bg)" stroke="var(--drawer)" stroke-width="1"/>'); s.push('<line x1="'+((ix0+ix1)/2-10)+'" y1="'+y(yb+8)+'" x2="'+((ix0+ix1)/2+10)+'" y2="'+y(yb+8)+'" stroke="var(--drawer)" stroke-width="2"/>'); } }
+        if(it.t==='shoes'){ for(var k=0;k<it.n;k++){ var ys=it.y+k*it.pitch; s.push('<line x1="'+ix0+'" y1="'+y(ys)+'" x2="'+ix1+'" y2="'+y(ys+9)+'" stroke="var(--shoe)" stroke-width="2.2"/>'); } }
+        if(it.t==='boot'){ s.push('<rect x="'+ix0+'" y="'+y(it.y+it.h)+'" width="'+(ix1-ix0)+'" height="'+(it.h*K)+'" fill="var(--shoe-bg)" stroke="none"/>'); s.push('<text x="'+((ix0+ix1)/2)+'" y="'+(y(it.y+it.h/2)+4)+'" text-anchor="middle" style="fill:var(--shoe)">מגפיים</text>'); }
+        if(it.t==='tr'){ var ty=y(it.y); s.push('<line x1="'+ix0+'" y1="'+ty+'" x2="'+ix1+'" y2="'+ty+'" stroke="var(--drawer)" stroke-width="2.5"/>'); var na=Math.max(4,Math.floor(f.w/12)); for(var a2=0;a2<na;a2++){ var ax2=ix0+(a2+0.5)*(ix1-ix0)/na; s.push('<line x1="'+ax2+'" y1="'+(ty+2)+'" x2="'+ax2+'" y2="'+(ty+40*K)+'" stroke="var(--drawer)" stroke-width="1.2" opacity=".6"/>'); } }
+        if(it.t==='txt'){ s.push('<text x="'+((ix0+ix1)/2)+'" y="'+(y(it.y)+4)+'" text-anchor="middle" style="fill:var(--box)">'+it.s+'</text>'); }
+        if(it.t==='mirror'){ s.push('<line x1="'+((x0+x1)/2)+'" y1="'+py(G)+'" x2="'+((x0+x1)/2)+'" y2="'+py(0)+'" stroke="var(--ink)" stroke-width="1"/>'); for(var m=0;m<8;m++){ var mx=x0+8+m*(x1-x0-16)/7; s.push('<line x1="'+mx+'" y1="'+(py(G)+8)+'" x2="'+(mx-14)+'" y2="'+(py(G)+34)+'" stroke="var(--hang)" stroke-width="1" opacity=".5"/>'); } }
+      });
+    }
+    (gaps||[]).forEach(function(gp){ var gx0=px(gp.x,gp.w), gx1=gx0+gp.w*K, gy0=gp.y0||G; s.push('<rect x="'+gx0+'" y="'+py(G+T)+'" width="'+(gx1-gx0)+'" height="'+((G+T-gy0)*K)+'" fill="var(--warn-bg)" stroke="var(--warn)" stroke-dasharray="5 4"/>'); s.push('<text class="lbl" x="'+((gx0+gx1)/2)+'" y="'+(py(G+T/2))+'" text-anchor="middle" style="fill:var(--warn)">'+gp.s+'</text>'); s.push('<text x="'+((gx0+gx1)/2)+'" y="'+(py(G+T/2)+16)+'" text-anchor="middle" style="fill:var(--warn)">'+gp.s2+'</text>'); });
+    var x = 0;
+    frames.forEach(function(f){
+      var x0 = px(x,f.w), x1 = x0 + f.w*K;
+      var fh = f.h || G;
+      s.push('<rect x="'+x0+'" y="'+py(fh)+'" width="'+(x1-x0)+'" height="'+(fh*K)+'" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.2"/>');
+      if (f.step){ s.push('<rect x="'+x0+'" y="'+(py(fh)-3)+'" width="'+(x1-x0)+'" height="3" fill="var(--warn)"/>'); }
+      items(f, x0, x1, 0);
+      var wc = f.who==='Eli'?'var(--eli)':f.who==='Mezi'?'var(--mezi)':'var(--shared)';
+      s.push('<text class="big" x="'+((x0+x1)/2)+'" y="'+(py(0)+16)+'" text-anchor="middle">'+f.id+'</text>');
+      s.push('<text x="'+((x0+x1)/2)+'" y="'+(py(0)+29)+'" text-anchor="middle" style="fill:'+wc+'">'+WHO(f.who)+'</text>');
+      s.push('<text x="'+((x0+x1)/2)+'" y="'+(py(0)+42)+'" text-anchor="middle">'+f.w+'</text>');
+      x += f.w;
+    });
+    (tops||[]).forEach(function(t){
+      var x0 = px(t.x,t.w), x1 = x0 + t.w*K;
+      s.push('<rect x="'+x0+'" y="'+py(G+T)+'" width="'+(x1-x0)+'" height="'+(T*K)+'" fill="var(--box-bg)" stroke="var(--ink)" stroke-width="1.2"/>');
+      items(t, x0, x1, G);
+      s.push('<text x="'+((x0+x1)/2)+'" y="'+(py(G+T)-5)+'" text-anchor="middle">'+t.id+' · '+t.w+'</text>');
+    });
+    s.push('</svg>');
+    return '<div class="wall"><h3><span>'+name+'</span><small>'+sub+'</small></h3><div class="svgbox">'+s.join('')+'</div></div>';
+  }
+  var A={id:'A',w:100,who:'Eli',items:[{t:'shelf',y:214},{t:'rail',y:210,drop:84},{t:'rail',y:100,drop:90}]};
+  var B={id:'B',w:100,who:'Mezi',items:[{t:'shelf',y:214},{t:'rail',y:210,drop:84},{t:'drawers',y:102,n:1},{t:'rail',y:100,drop:90}]};
+  var C={id:'C',w:75,who:'Mezi',items:[{t:'shelf',y:214},{t:'drawers',y:0,n:3},{t:'shelf',y:64},{t:'shelf',y:70},{t:'tr',y:120},{t:'tr',y:166},{t:'tr',y:212}]};
+  var Gf={id:'G',w:100,who:'Eli',items:[{t:'shelf',y:214},{t:'rail',y:210,drop:104},{t:'shelf',y:102},{t:'drawers',y:0,n:5},{t:'mirror'}]};
+  var D={id:'D',w:75,who:'Eli',items:[{t:'boot',y:0,h:50},{t:'shelf',y:50},{t:'shelf',y:80},{t:'shelf',y:110},{t:'shelf',y:140},{t:'shelf',y:170},{t:'shelf',y:200}]};
+  var E={id:'E',w:100,who:'shared',h:201,step:true,items:[{t:'drawers',y:0,n:4},{t:'shelf',y:85},{t:'shelf',y:115},{t:'shelf',y:145},{t:'shelf',y:175}]};
+  var F={id:'F',w:100,who:'Mezi',items:[{t:'drawers',y:0,n:2},{t:'shelf',y:42},{t:'boot',y:44,h:46},{t:'shoes',y:92,n:8,pitch:19.5}]};
+  function deepTop(id,x,w){ var it=[]; [23,46,69,92,115].forEach(function(y){ it.push({t:'shelf',y:y}); }); [11,34,57,80,103,128].forEach(function(y){ it.push({t:'txt',y:y,s:'קופסה'}); }); return {id:id,x:x,w:w,items:it}; }
+  function shoeTop(id,x,w){ var it=[]; [19,38,57,76,95,114].forEach(function(y){ it.push({t:'shelf',y:y}); }); [9,47,85,123].forEach(function(y){ it.push({t:'txt',y:y,s:'קופסאות נעליים'}); }); return {id:id,x:x,w:w,items:it}; }
+  function foldTop(id,x,w){ var it=[]; [30,60,90,120].forEach(function(y){ it.push({t:'shelf',y:y}); }); [15,45,75,105,133].forEach(function(y){ it.push({t:'txt',y:y,s:'מקופל'}); }); return {id:id,x:x,w:w,items:it}; }
+  var A2={id:'A2',x:0,w:100,items:[{t:'rail',y:142,drop:130}]};
+  var B2=deepTop('B2',100,100);
+  var C2=deepTop('C2',200,75);
+  var G2=deepTop('G2',0,100);
+  var D2=foldTop('D2',0,75);
+  var F2=shoeTop('F2',175,100);
+  var html = '';
+  html += wall('קיר שמאל, עומק 58 ס"מ', 'הקיר האחורי משמאל · A B C, 21 עד 296 ס"מ מהקיר האחורי, צמוד לקיר הכניסה', [A,B,C], [A2,B2,C2], false);
+  html += wall('קיר אחורי', 'מסגרת G בין שתי השורות · 100 ס"מ · דלתות מראה', [Gf], [G2], false);
+  html += wall('קיר ימין, עומק 35 ס"מ', 'הקיר האחורי מימין · D 75, E 100, F 100, 21 עד 296 מהקיר האחורי · כנפי דלת עליית הגג 70.5 עד 112 (מכוסה) ו-112 עד 153.5 (בשימוש) · סף 202 · E בגובה 201', [D,E,F], [D2,F2], true, [{x:75,w:100,y0:201,s:'כנף קדמית, סף 202',s2:'לוח מדרגה על E ב-201'}]);
+  document.getElementById('walls').innerHTML = html;
+
+  (function(){
+    var K=1.05, top=30, left=60;
+    function panel(x0, depth, label){
+      var w=depth*K, h=201*K, y0=top;
+      var s='';
+      s+='<rect x="'+x0+'" y="'+y0+'" width="'+w+'" height="'+h+'" fill="var(--paper)" stroke="var(--ink)" stroke-width="1"/>';
+      s+='<rect x="'+x0+'" y="'+y0+'" width="'+w+'" height="'+(53*K)+'" fill="var(--warn-bg)" stroke="none"/>';
+      s+='<line x1="'+(x0-10)+'" y1="'+(y0+53*K)+'" x2="'+(x0+w+10)+'" y2="'+(y0+53*K)+'" stroke="#c0392b" stroke-width="1.5" stroke-dasharray="5 3"/>';
+      s+='<line x1="'+(x0+w-1.2*K)+'" y1="'+y0+'" x2="'+(x0+w-1.2*K)+'" y2="'+(y0+h)+'" stroke="var(--line-strong)" stroke-width="1" stroke-dasharray="2 2"/>';
+      for (var yy=8; yy<196; yy+=3.2){ if (yy < 53 || yy > 58){ s+='<circle cx="'+(x0+3.7*K)+'" cy="'+(y0+yy*K)+'" r="0.9" fill="var(--muted)"/>'; s+='<circle cx="'+(x0+w-4.9*K)+'" cy="'+(y0+yy*K)+'" r="0.9" fill="var(--muted)"/>'; } }
+      [[3.7,2.2],[depth-4.9,2.2]].forEach(function(p){ s+='<circle cx="'+(x0+p[0]*K)+'" cy="'+(y0+p[1]*K)+'" r="2.4" fill="var(--drawer-bg)" stroke="var(--drawer)" stroke-width="1"/>'; s+='<circle cx="'+(x0+p[0]*K)+'" cy="'+(y0+(53+p[1])*K)+'" r="2.4" fill="var(--drawer-bg)" stroke="var(--drawer)" stroke-width="1" stroke-dasharray="2 1.5"/>'; });
+      s+='<text x="'+(x0+w/2)+'" y="'+(y0+h+16)+'" text-anchor="middle">'+label+'</text>';
+      s+='<text x="'+(x0+w/2)+'" y="'+(y0+28*K)+'" text-anchor="middle" style="fill:var(--warn)">שארית 53</text>';
+      s+='<text x="'+(x0+w/2)+'" y="'+(y0+120*K)+'" text-anchor="middle">148</text>';
+      s+='<text x="'+(x0+w/2)+'" y="'+(y0+132*K)+'" text-anchor="middle">נשאר</text>';
+      return s;
+    }
+    var s=[]; var Wd=left+58*K+40+35*K+260, Hd=top+201*K+40;
+    s.push('<svg viewBox="0 0 '+Wd+' '+Hd+'" width="'+Wd+'" style="max-width:100%;height:auto;display:block">');
+    s.push(panel(left, 58, 'עומק 58, A2 B2 C2 G2'));
+    s.push(panel(left+58*K+40, 35, 'עומק 35, D2 F2'));
+    var tx = left+58*K+40+35*K+30;
+    s.push('<text x="'+tx+'" y="'+(top+2.2*K+4)+'" style="fill:var(--drawer)">חורי הלוח העליון הישנים: למדוד</text>');
+    s.push('<text x="'+tx+'" y="'+(top+55.2*K+4)+'" style="fill:var(--drawer)">חורים חדשים: אותם מרחקים מהקצה העליון החדש</text>');
+    s.push('<text x="'+tx+'" y="'+(top+53*K-6)+'" style="fill:#c0392b">לחתוך כאן, 53 ס"מ מלמעלה</text>');
+    s.push('<text x="'+tx+'" y="'+(top+100*K)+'">חורי פיני מדפים כל 3.2 ס"מ, כולם נשארים</text>');
+    s.push('<text x="'+tx+'" y="'+(top+114*K)+'">חריץ לוח הגב 1 ס"מ מהקצה האחורי</text>');
+    s.push('<text x="'+tx+'" y="'+(top+128*K)+'">הקצה התחתון ללא שינוי: רגליות ולוח תחתון</text>');
+    s.push('<text x="'+tx+'" y="'+(top+150*K)+'">לוח מוגמר 148 ס"מ; מסגרת 148 על גבי 236 = 384</text>');
+    s.push('<text x="'+tx+'" y="'+(top+164*K)+'">לחתוך במסור לוחות, להדביק סרט על הקו, לקנט את החיתוך</text>');
+    s.push('</svg>');
+    document.getElementById('cut').innerHTML = s.join('');
+  })();
+
+  (function(){
+    var LBL = {strips:'2 פסים', each:'כל אחד', corner:'פינה', drvL:'דרייבר L', drvR:'דרייבר R', pocket:'כיס 21', w30:'30 וואט', socket:'שקע', lead5:'מאריך 5 מ׳ מאחורי הבסיסים', lead2:'מאריך 2 מ׳ מאחורי G', left:'קיר שמאל, פרוס', right:'קיר ימין, פרוס', back:'קיר אחורי', c225:'225 ס"מ', entrance:'כניסה'};
+    var K=0.72, top=44, M=58;
+    var fr=[{id:'C',w:75,h:236,mid:118,x:21},{id:'B',w:100,h:236,mid:100,x:96},{id:'A',w:100,h:236,mid:118,x:196},
+            {id:'G',w:100,h:236,mid:102,x:337},
+            {id:'D',w:75,h:236,mid:118,x:478},{id:'E',w:100,h:201,mid:100,x:553},{id:'F',w:100,h:236,mid:118,x:653}];
+    var cords={C:'2.4 / 3.4',B:'1.6 / 2.6',A:'0.6 / 1.6',G:'1.3 / 2.3',D:'0.5 / 1.5',E:'1.6 / 2.5',F:'2.3 / 3.3'};
+    function px(cm){ return M + cm*K; } function py(cm){ return top + (236-cm)*K; }
+    var s=[]; var W=px(753)+40, H=py(0)+70;
+    s.push('<svg viewBox="0 0 '+W+' '+H+'" width="'+W+'" style="max-width:100%;height:auto;display:block">');
+    s.push('<line x1="'+px(0)+'" y1="'+py(0)+'" x2="'+px(753)+'" y2="'+py(0)+'" stroke="var(--line-strong)" stroke-width="2"/>');
+    fr.forEach(function(f){
+      var x0=px(f.x), x1=px(f.x+f.w);
+      s.push('<rect x="'+x0+'" y="'+py(f.h)+'" width="'+(x1-x0)+'" height="'+(f.h*K)+'" fill="var(--paper)" stroke="var(--ink)" stroke-width="1"/>');
+      s.push('<text class="big" x="'+((x0+x1)/2)+'" y="'+(py(0)+16)+'" text-anchor="middle">'+f.id+'</text>');
+      s.push('<text x="'+((x0+x1)/2)+'" y="'+(py(0)+30)+'" text-anchor="middle">'+LBL.strips+', '+cords[f.id]+' m</text>');
+      [f.h-4, f.mid].forEach(function(y){
+        s.push('<rect x="'+(x0+6)+'" y="'+(py(y)-2)+'" width="'+(x1-x0-12)+'" height="4" fill="#f2c94c" stroke="#8a5a0b" stroke-width=".5"/>');
+        s.push('<line x1="'+((x0+x1)/2)+'" y1="'+py(y)+'" x2="'+((x0+x1)/2)+'" y2="'+py(225)+'" stroke="#e07b00" stroke-width="1.2"/>');
+      });
+    });
+    function chan(xa,xb){ s.push('<line x1="'+px(xa)+'" y1="'+py(225)+'" x2="'+px(xb)+'" y2="'+py(225)+'" stroke="#e07b00" stroke-width="1.6" stroke-dasharray="6 3"/>'); }
+    chan(21,306); chan(337,437); chan(468,753);
+    s.push('<path d="M '+px(437)+' '+py(225)+' C '+px(445)+' '+py(260)+' '+px(460)+' '+py(260)+' '+px(468)+' '+py(225)+'" fill="none" stroke="#e07b00" stroke-width="1.6" stroke-dasharray="6 3"/>');
+    s.push('<text x="'+px(452)+'" y="'+(py(260)+4)+'" text-anchor="middle">'+LBL.corner+'</text>');
+    [96,196,296,337,478,553,653].forEach(function(x){ s.push('<circle cx="'+px(x)+'" cy="'+py(225)+'" r="3.5" fill="var(--paper)" stroke="#8a5a0b" stroke-width="1.2"/>'); });
+    [[296,316],[458,478]].forEach(function(p){ s.push('<rect x="'+px(p[0])+'" y="'+py(236)+'" width="'+((p[1]-p[0])*K)+'" height="'+(236*K)+'" fill="var(--warn-bg)" stroke="var(--warn)" stroke-dasharray="3 2"/>'); s.push('<text x="'+px(p[0]+10)+'" y="'+(py(120))+'" text-anchor="middle" style="font-size:9px;fill:var(--warn)">'+LBL.pocket+'</text>'); });
+    s.push('<rect x="'+(px(306)-6)+'" y="'+(py(232))+'" width="12" height="'+(11*K)+'" fill="#8a8f93" stroke="var(--ink)" stroke-width=".5"/>');
+    s.push('<text class="lbl" x="'+px(306)+'" y="'+(py(232)-8)+'" text-anchor="middle">'+LBL.drvL+'</text>');
+    s.push('<rect x="'+(px(468)-6)+'" y="'+(py(227))+'" width="12" height="'+(11*K)+'" fill="#8a8f93" stroke="var(--ink)" stroke-width=".5"/>');
+    s.push('<text class="lbl" x="'+px(468)+'" y="'+(py(227)-8)+'" text-anchor="middle">'+LBL.drvR+'</text>');
+    s.push('<rect x="'+(px(0))+'" y="'+(py(30))+'" width="12" height="10" fill="#185fa5"/>');
+    s.push('<text x="'+(px(0)+6)+'" y="'+(py(30)+24)+'" text-anchor="middle">'+LBL.socket+'</text>');
+    s.push('<path d="M '+(px(0)+6)+' '+py(30)+' L '+(px(0)+6)+' '+py(12)+' L '+px(306)+' '+py(12)+' L '+px(306)+' '+py(221)+'" fill="none" stroke="#185fa5" stroke-width="1.6"/>');
+    s.push('<text x="'+px(160)+'" y="'+(py(12)-6)+'" text-anchor="middle" style="fill:#185fa5">'+LBL.lead5+'</text>');
+    s.push('<path d="M '+px(306)+' '+py(221)+' L '+px(306)+' '+py(6)+' L '+px(468)+' '+py(6)+' L '+px(468)+' '+py(216)+'" fill="none" stroke="#185fa5" stroke-width="1.6" stroke-dasharray="3 3"/>');
+    s.push('<text x="'+px(387)+'" y="'+(py(6)+16)+'" text-anchor="middle" style="fill:#185fa5">'+LBL.lead2+'</text>');
+    s.push('<text x="'+px(160)+'" y="'+(py(236)-8)+'" text-anchor="middle">'+LBL.left+'</text>');
+    s.push('<text x="'+px(387)+'" y="'+(py(236)-8)+'" text-anchor="middle">'+LBL.back+'</text>');
+    s.push('<text x="'+px(610)+'" y="'+(py(236)-8)+'" text-anchor="middle">'+LBL.right+'</text>');
+    s.push('<text x="'+(px(21)-4)+'" y="'+(py(225)+4)+'" text-anchor="end" style="font-size:10px">'+LBL.c225+'</text>');
+    s.push('<text x="'+(px(0)+6)+'" y="'+(py(0)+16)+'" text-anchor="middle">'+LBL.entrance+'</text>');
+    s.push('</svg>');
+    document.getElementById('wiring').innerHTML = s.join('');
+  })();
+})();
+</script>
+
+</body>
+</html>

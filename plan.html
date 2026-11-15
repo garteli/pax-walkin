@@ -1,0 +1,508 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Walk-in PAX Plan</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#f3f4f1; --paper:#ffffff; --ink:#1d2327; --muted:#5b6469; --line:#d5d9d6; --line-strong:#9aa3a3;
+  --hang:#0f6e56; --hang-bg:#dff3ea; --drawer:#185fa5; --drawer-bg:#e3eefb; --shoe:#b34a1f; --shoe-bg:#f9e6dc;
+  --box:#6b5ea8; --box-bg:#ebe8f7; --warn:#8a5a0b; --warn-bg:#f8ecd3; --grid:#e6e9e6;
+  --eli:#1d6fa3; --eli-bg:#dcecf8; --mezi:#a0346b; --mezi-bg:#f7e1ec; --shared:#5f6a6e; --shared-bg:#e6eaea;
+  --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Arial,sans-serif; --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ color-scheme:dark;
+  --bg:#161a1c; --paper:#1f2426; --ink:#e8ebe9; --muted:#a4adaf; --line:#343c3f; --line-strong:#5a6468;
+  --hang:#5dcaa5; --hang-bg:#0f3d31; --drawer:#85b7eb; --drawer-bg:#12314d; --shoe:#f0997b; --shoe-bg:#4a2416;
+  --box:#afa9ec; --box-bg:#2b2650; --warn:#fac775; --warn-bg:#3f2d0c; --grid:#262c2f;
+  --eli:#7db8e6; --eli-bg:#143550; --mezi:#e68cc0; --mezi-bg:#4a1f38; --shared:#aab4b8; --shared-bg:#2c3336; } }
+:root[data-theme="dark"]{ color-scheme:dark;
+  --bg:#161a1c; --paper:#1f2426; --ink:#e8ebe9; --muted:#a4adaf; --line:#343c3f; --line-strong:#5a6468;
+  --hang:#5dcaa5; --hang-bg:#0f3d31; --drawer:#85b7eb; --drawer-bg:#12314d; --shoe:#f0997b; --shoe-bg:#4a2416;
+  --box:#afa9ec; --box-bg:#2b2650; --warn:#fac775; --warn-bg:#3f2d0c; --grid:#262c2f;
+  --eli:#7db8e6; --eli-bg:#143550; --mezi:#e68cc0; --mezi-bg:#4a1f38; --shared:#aab4b8; --shared-bg:#2c3336; }
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.6;padding-inline:16px;padding-block:28px 60px}
+.wrap{max-width:1040px;margin:0 auto;display:grid;gap:36px}
+h1{font-size:30px;font-weight:600;letter-spacing:-.01em;margin:0 0 6px;text-wrap:balance}
+h2{font-size:19px;font-weight:600;margin:0 0 12px;text-wrap:balance}
+h3{font-size:15px;font-weight:600;margin:0 0 6px}
+p{margin:0 0 10px;max-width:68ch}
+.lede{color:var(--muted);max-width:70ch}
+.lede a{color:var(--drawer)}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-top:18px}
+.fact{background:var(--paper);padding:14px 16px}
+.fact b{display:block;font-family:var(--mono);font-size:22px;font-weight:500;font-variant-numeric:tabular-nums}
+.fact span{font-size:13px;color:var(--muted)}
+.sheet{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:20px}
+.legend{display:flex;flex-wrap:wrap;gap:14px 22px;font-size:13px;color:var(--muted);margin:6px 0 14px}
+.legend i{display:inline-block;width:14px;height:14px;border-radius:3px;vertical-align:-2px;margin-right:6px;border:1px solid transparent}
+.svgbox{overflow-x:auto}
+svg text{font-family:var(--mono);font-size:11px;fill:var(--muted)}
+svg .lbl{font-family:var(--sans);font-size:12px;fill:var(--ink);font-weight:500}
+svg .big{font-size:14px;font-weight:600;fill:var(--ink)}
+.walls{display:grid;grid-template-columns:1fr;gap:28px}
+.wall h3{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.wall h3 small{font-weight:400;color:var(--muted);font-family:var(--mono);font-size:12px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500}
+td.n,th.n{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.sum td{font-weight:600;border-top:2px solid var(--line-strong);border-bottom:0}
+.tag{display:inline-block;font-size:12px;padding:1px 8px;border-radius:999px;font-weight:500;white-space:nowrap}
+.t-hang{background:var(--hang-bg);color:var(--hang)} .t-drawer{background:var(--drawer-bg);color:var(--drawer)} .t-shoe{background:var(--shoe-bg);color:var(--shoe)} .t-box{background:var(--box-bg);color:var(--box)}
+.t-eli{background:var(--eli-bg);color:var(--eli)} .t-mezi{background:var(--mezi-bg);color:var(--mezi)} .t-shared{background:var(--shared-bg);color:var(--shared)} .t-seen{background:var(--grid);color:var(--muted)}
+.note{background:var(--warn-bg);color:var(--warn);border-radius:8px;padding:12px 14px;font-size:14px}
+.note p{color:inherit;margin:0}
+ol,ul{margin:0;padding-left:20px;max-width:70ch} li{margin-bottom:6px}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px}
+.tbl{overflow-x:auto}
+.foot{color:var(--muted);font-size:13px}
+.who{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-top:14px}
+.who div{border-radius:10px;padding:14px 16px}
+.who h3{margin-bottom:8px}
+.who ul{padding-left:18px;font-size:14px}
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Walk-in wardrobe · 193 × 296 × 389 cm · IKEA PAX + KOMPLEMENT · revision 4</div>
+    <h1>Walk-in PAX Plan</h1>
+    <p class="lede">Seven PAX frames on the ground and six cut to 148 cm stacked on top, split into an Eli section at the back and a Mezi section at the front, with one shared frame between them. The attic door is placed from your measurement, and a rail ladder serves the second level. There is also an <a href="3d.html">interactive 3D model</a> of this layout. Lengths in centimetres, prices in shekels.</p>
+    <div class="facts">
+      <div class="fact"><b>600 cm</b><span>hanging rail, 100 of it long hanging in A2 on the second level</span></div>
+      <div class="fact"><b>36 pairs</b><span>trousers on 3 pull-out hangers in C</span></div>
+      <div class="fact"><b>15</b><span>drawers: 9 deep, 6 shallow, plus three trouser hangers and an accessories tray</span></div>
+      <div class="fact"><b>32 pairs</b><span>shoes on 8 KOMPLEMENT shoe shelves in F, plus two boot bays</span></div>
+      <div class="fact"><b>100 cm</b><span>walkway between the two long walls</span></div>
+      <div class="fact"><b>384 cm</b><span>top of the second level, 5 cm under the ceiling</span></div>
+    </div>
+    <div class="who">
+      <div style="background:var(--eli-bg)"><h3 style="color:var(--eli)">Eli · back half</h3><ul style="color:var(--eli)"><li>A: double hanging, 200 cm of rail. A2 above it: long hanging, rail at 142 in the 148 cm frame, for coats and dresses</li><li>G: 5 glass-front drawers under the glass shelf, a rail and a top shelf above, behind the mirror doors</li><li>D, now 75 wide: six shelves of folded clothes over a boot bay. No drawers: in the corner, anything pulled out would hit the side of G</li></ul></div>
+      <div style="background:var(--mezi-bg)"><h3 style="color:var(--mezi)">Mezi · front half</h3><ul style="color:var(--mezi)"><li>B: double hanging, 200 cm of rail, with a sliding drawer between the rails</li><li>C: 3 big drawers, the accessories tray, and three 75 cm pull-out trouser hangers, 36 pairs</li><li>F: shoe tower, 32 pairs, a boot bay and 2 drawers</li></ul></div>
+      <div style="background:var(--shared-bg)"><h3 style="color:var(--shared)">Shared · middle of the right wall</h3><ul style="color:var(--shared)"><li>E, now 100 wide: 4 shallow drawers, your 100 × 35 pick, two each, for socks and underwear</li><li>4 shelves above for bags and knitwear; E is 201 tall under the attic door</li><li>Second level: duvets and seasonal boxes. Suitcases go up through the attic door</li></ul></div>
+    </div>
+  </header>
+
+  <section class="sheet">
+    <div class="eyebrow">Sheet 1</div>
+    <h2>Floor plan</h2>
+    <div class="legend"><span><i style="background:var(--hang-bg);border-color:var(--hang)"></i>hanging</span><span><i style="background:var(--drawer-bg);border-color:var(--drawer)"></i>drawers</span><span><i style="background:var(--shoe-bg);border-color:var(--shoe)"></i>shoes and boots</span><span><i style="background:var(--warn-bg);border-color:var(--warn)"></i>attic door</span><span><i style="background:var(--paper);border-color:var(--line-strong)"></i>wall</span></div>
+    <div class="svgbox" id="plan"></div>
+    <p class="foot">Left wall frames are 58 cm deep, right wall frames 35 cm deep, so 193 − 58 − 35 leaves exactly 100 cm for the walkway and exactly 100 cm for frame G on the back wall. Each long run is 275 cm, pushed flush against the entrance wall; the 21 cm left over sits in the two back corners as sealed pockets beside G, and each pocket hides a lighting driver. The right run is D 75, E 100, F 100 so the front attic leaf clears D. The attic door is a pair of leaves in the right wall above wardrobe height, 83 cm in all, starting 70.5 cm from the back wall. The back leaf is covered by the second-level frame D2 and stays shut; the front leaf, 112 to 153.5 cm from the back wall, stays in use and swings in the 75 cm gap above E. Door swing is not drawn; confirm the door clears frame C or F.</p>
+  </section>
+
+  <section class="sheet">
+    <div class="eyebrow">Sheet 2</div>
+    <h2>Wall elevations</h2>
+    <p>Each wall as you see it standing in the walkway. The ground level is standard 236 cm PAX. The second level is the same PAX frames bought at 201 cm and cut down to 148 cm, assembled in place on top. On the right wall the second level stops either side of the attic door so the door can open and hang down.</p>
+    <div class="legend"><span><i style="background:var(--hang-bg);border-color:var(--hang)"></i>rail</span><span><i style="background:var(--drawer-bg);border-color:var(--drawer)"></i>drawer 16 cm</span><span><i style="background:var(--shoe-bg);border-color:var(--shoe)"></i>slanted shoe shelf</span><span><i style="background:var(--box-bg);border-color:var(--box)"></i>second level, boxes and luggage</span><span><i style="background:var(--warn-bg);border-color:var(--warn)"></i>attic door swing, nothing built</span></div>
+    <div class="walls" id="walls"></div>
+  </section>
+
+  <section class="sheet">
+    <div class="eyebrow">Sheet 3</div>
+    <h2>What goes in each frame</h2>
+    <div class="tbl"><table>
+      <thead><tr><th>Frame</th><th>Whose</th><th>Size</th><th>Ground level, 236 cm</th><th>Second level, 148 cm</th></tr></thead>
+      <tbody>
+        <tr><td><b>A</b> left, at the back</td><td><span class="tag t-eli">Eli</span></td><td>100 × 58</td><td><span class="tag t-hang">hanging</span> Top shelf at 214 with a 20 cm compartment above it, upper rail at 210, lower rail at 100, nothing between them. No drawer here: A is in the corner and a drawer would hit the side of G. Light strips under the top panel and at mid height.</td><td>A2, long hanging: one rail at 142 cm inside the 148 cm frame, 134 cm of drop for coats and dresses, reached from the ladder. Suitcases go up into the attic.</td></tr>
+        <tr><td><b>G</b> back wall</td><td><span class="tag t-eli">Eli</span></td><td>100 × 58</td><td><span class="tag t-drawer">drawers</span> <span class="tag t-hang">hanging</span> 5 glass-front drawers from the floor to 100 with the glass shelf at 102 directly on top of them, so you see into the top drawer. Rail at 210 with 104 cm drop for shirts and jackets, top shelf at 214 with a 20 cm compartment above. Two ÅHEIM mirror doors in front, so the mirror you have now moves here.</td><td>G2, five shelves, six HEMMAFIXARE 69 cm cases.</td></tr>
+        <tr><td><b>D</b> right, at the back</td><td><span class="tag t-eli">Eli</span></td><td>75 × 35</td><td>Boot bay on the floor to 50, then 6 shelves 30 cm apart for folded clothes, knitwear and jeans. Nothing that pulls out: D stands in the corner and the back 58 cm of any drawer would run into the side of frame G. 75 wide so that it ends at 96 cm, 16 cm before the front attic leaf.</td><td>D2, 75 wide over D, four shelves 30 cm apart, five bays of folded clothes. It covers most of the back leaf of the attic door; the rest of that leaf stays shut above E.</td></tr>
+        <tr><td><b>B</b> left, middle</td><td><span class="tag t-mezi">Mezi</span></td><td>100 × 58</td><td><span class="tag t-hang">hanging</span> <span class="tag t-drawer">drawer</span> Same as A: top shelf at 214, rails at 210 and 100, sliding drawer between them.</td><td>B2, five shelves, six HEMMAFIXARE 69 cm cases. Duvets, pillows, blankets.</td></tr>
+        <tr><td><b>C</b> left, by the door</td><td><span class="tag t-mezi">Mezi</span></td><td>75 × 58</td><td><span class="tag t-drawer">drawers</span> <span class="tag t-drawer">pull-outs</span> 3 drawers from the floor to 60, pull-out tray with the accessories insert at 64, then three 75 cm pull-out trouser hangers at 120, 166 and 212, 6 arms each, 36 pairs in all. Shelf at 214 with a 20 cm compartment above. No rail.</td><td>C2, five shelves, twelve HEMMAFIXARE 34 cm cases, two per shelf.</td></tr>
+        <tr><td><b>F</b> right, by the door</td><td><span class="tag t-mezi">Mezi</span></td><td>100 × 35</td><td><span class="tag t-drawer">drawers</span> <span class="tag t-shoe">shoes</span> 2 drawers to 40, boot bay 44 to 90, then 8 KOMPLEMENT shoe shelves, 32 pairs.</td><td>F2, six shelves 19 cm apart, 28 SKUBB shoe boxes, off-season shoes above the shoe tower.</td></tr>
+        <tr><td><b>E</b> right, middle</td><td><span class="tag t-shared">shared</span></td><td>100 × 35, 201 tall</td><td><span class="tag t-drawer">drawers</span> 4 drawers from the floor to 80, your 100 × 35 pick, two per person, then 4 shelves 30 cm apart for bags and knitwear. Built 201 cm tall, not 236, so the attic door's sill at 202 clears it. Spans 96 to 196, so the whole front leaf is above it.</td><td>None. Above E, from 201 up, is the open leaf's swing zone, with the plywood step board on E's top at 201, one centimetre under the sill.</td></tr>
+      </tbody>
+    </table></div>
+    <div class="note" style="margin-top:14px"><p><b>Attic door, two leaves.</b> A pair of doors in the right wall above wardrobe height, 83 cm in all, starting 70.5 cm from the back wall, so each leaf is about 41.5 cm. The back leaf, 70.5 to 112, stays shut behind the second-level frame D2, which now runs the full 100 cm over D. The front leaf, 112 to 153.5, stays in use: hinge it on its front edge at 153.5 so it swings into the 100 cm gap above E, 42 cm clear of F2. A 41.5 cm opening passes a person sideways and a suitcase on its edge; if it feels tight, the alternative is to keep both leaves and go back to a 50 cm D2. Getting in: climb the ladder to about 170 cm, step onto the board on top of E at 201 and go through the leaf, whose sill is at 202. The PAX top panel is not made to stand on, so the step is an 18 to 21 mm plywood board, 96 × 35 cm, resting on E's two side panels and screwed down into them, plus an L-bracket to the wall. Headroom above the board is 177 cm to the ladder rail. The sill is at 202 cm, so frame E is built at 201 cm instead of 236 and the leaf swings clear above it. One measurement still matters: the top edge of the leaves, which must stay below about 375 cm to swing under the ladder rail.</p></div>
+  </section>
+
+  <section class="sheet">
+    <div class="eyebrow">Sheet 4</div>
+    <h2>Shopping list</h2>
+    <p>Every price below was read from ikea.com/il on 15 November 2026 unless marked estimate. Lines marked <span class="tag" style="background:var(--hang-bg);color:var(--hang)">your pick</span> are the article numbers you sent; where your pick is a different width than the frame it goes in, the matching width is listed and the note says so.</p>
+    <div class="tbl"><table>
+      <thead><tr><th>Product</th><th>Article</th><th>Size</th><th class="n">Qty</th><th class="n">Unit ₪</th><th class="n">Total ₪</th><th>Where</th></tr></thead>
+      <tbody>
+        <tr><td colspan="7" style="font-weight:600;background:var(--bg)">Ground level frames, 236 cm</td></tr>
+        <tr><td>PAX frame, white</td><td>804.582.07</td><td>100 × 58 × 236</td><td class="n">3</td><td class="n">545</td><td class="n">1,635</td><td>A, B, G</td></tr>
+        <tr><td>PAX frame, white</td><td>904.582.35</td><td>75 × 58 × 236</td><td class="n">1</td><td class="n">495</td><td class="n">495</td><td>C</td></tr>
+        <tr><td>PAX frame, white</td><td>704.581.99</td><td>100 × 35 × 236</td><td class="n">1</td><td class="n">495</td><td class="n">495</td><td>F</td></tr>
+        <tr><td>PAX frame, white</td><td>604.582.27</td><td>75 × 35 × 236</td><td class="n">1</td><td class="n">445</td><td class="n">445</td><td>D</td></tr>
+        <tr><td>PAX frame, white</td><td></td><td>100 × 35 × 201</td><td class="n">1</td><td class="n">445</td><td class="n">445</td><td>E, 201 tall so the attic door clears it. Estimate</td></tr>
+        <tr><td colspan="7" style="font-weight:600;background:var(--bg)">Hanging</td></tr>
+        <tr><td>KOMPLEMENT clothes rail <span class="tag t-mezi" style="background:var(--hang-bg);color:var(--hang)">your pick</span></td><td>302.568.91</td><td>100</td><td class="n">6</td><td class="n">30</td><td class="n">180</td><td>A ×2, B ×2, G, A2</td></tr>
+        <tr><td>KOMPLEMENT pull-out trouser hanger, grey-beige <span class="tag t-mezi" style="background:var(--hang-bg);color:var(--hang)">your pick</span></td><td>305.090.68</td><td>75 × 58</td><td class="n">3</td><td class="n">175</td><td class="n">525</td><td>C, 6 arms and 12 pairs each. White is 704.465.40</td></tr>
+        <tr><td colspan="7" style="font-weight:600;background:var(--bg)">Drawers, trays, baskets</td></tr>
+        <tr><td>KOMPLEMENT drawer with glass front, grey-beige <span class="tag t-mezi" style="background:var(--hang-bg);color:var(--hang)">your pick</span></td><td>205.090.83</td><td>100 × 58</td><td class="n">5</td><td class="n">200</td><td class="n">1,000</td><td>G. White version is 202.467.08; plain white drawer 902.463.52 is 165</td></tr>
+        <tr><td>KOMPLEMENT drawer, white</td><td>902.463.52</td><td>100 × 58</td><td class="n">1</td><td class="n">165</td><td class="n">165</td><td>B, between the two rails. Not in A, the corner blocks it</td></tr>
+        <tr><td>KOMPLEMENT drawer, white</td><td>102.463.32</td><td>75 × 58</td><td class="n">3</td><td class="n">140</td><td class="n">420</td><td>C, bottom three</td></tr>
+        <tr><td>KOMPLEMENT drawer, white <span class="tag t-mezi" style="background:var(--hang-bg);color:var(--hang)">your pick</span></td><td>702.467.58</td><td>100 × 35</td><td class="n">6</td><td class="n">140</td><td class="n">840</td><td>E ×4, two per person. F ×2 under the boot bay. None in D, the corner blocks them</td></tr>
+        <tr><td>KOMPLEMENT pull-out tray, white <span class="tag t-mezi" style="background:var(--hang-bg);color:var(--hang)">your pick</span></td><td>302.463.74</td><td>75 × 58</td><td class="n">1</td><td class="n">150</td><td class="n">150</td><td>C, above the trouser hanger</td></tr>
+        <tr><td>KOMPLEMENT insert for pull-out tray, light grey <span class="tag t-mezi" style="background:var(--hang-bg);color:var(--hang)">your pick</span></td><td>692.778.16</td><td>75 × 58</td><td class="n">1</td><td class="n">265</td><td class="n">265</td><td>C, in the tray. Watches, glasses, belts</td></tr>
+        <tr><td>KOMPLEMENT mesh basket with pull-out rail <span class="tag t-mezi" style="background:var(--hang-bg);color:var(--hang)">your pick</span></td><td>190.109.85 / 790.109.87</td><td>100 × 35 / 50 × 35</td><td class="n">0</td><td class="n">70 / 50</td><td class="n">0</td><td>Replaced by drawers in E at your request. Swap back any time, the 75 × 35 basket is 60</td></tr>
+        <tr><td>SKUBB box with compartments, dark grey <span class="tag t-mezi" style="background:var(--hang-bg);color:var(--hang)">your pick</span></td><td>504.000.05</td><td>44 × 34 × 11</td><td class="n">4</td><td class="n">49</td><td class="n">196</td><td>Inside the E drawers and the bottom drawers of F. Socks and underwear</td></tr>
+        <tr><td colspan="7" style="font-weight:600;background:var(--bg)">Shelves</td></tr>
+        <tr><td>KOMPLEMENT glass shelf, white <span class="tag t-mezi" style="background:var(--hang-bg);color:var(--hang)">your pick</span></td><td>702.576.38</td><td>100 × 58</td><td class="n">1</td><td class="n">140</td><td class="n">140</td><td>G, directly on the top drawer, under the light strip</td></tr>
+        <tr><td>KOMPLEMENT shelf, white</td><td>002.779.89</td><td>100 × 58</td><td class="n">3</td><td class="n">65</td><td class="n">195</td><td>A, B, G top shelves</td></tr>
+        <tr><td>KOMPLEMENT shelf, white</td><td>702.779.95</td><td>75 × 58</td><td class="n">2</td><td class="n">110</td><td class="n">110</td><td>C. 55 each</td></tr>
+        <tr><td>KOMPLEMENT shelf, white</td><td>702.779.95</td><td>75 × 35</td><td class="n">6</td><td class="n">40</td><td class="n">240</td><td>D, six folded-clothes shelves. Estimate</td></tr>
+        <tr><td>KOMPLEMENT shelf, white</td><td>002.779.89</td><td>100 × 35</td><td class="n">5</td><td class="n">45</td><td class="n">225</td><td>E ×4. F ×1: boot bay floor</td></tr>
+        <tr><td colspan="7" style="font-weight:600;background:var(--bg)">Shoes</td></tr>
+        <tr><td>KOMPLEMENT shoe shelf, white <span class="tag t-mezi" style="background:var(--hang-bg);color:var(--hang)">your pick</span></td><td>502.572.53</td><td>100 × 35</td><td class="n">8</td><td class="n">70</td><td class="n">560</td><td>F ×8. 4 pairs each</td></tr>
+        <tr><td>KOMPLEMENT shoe shelf, white <span class="tag t-mezi" style="background:var(--hang-bg);color:var(--hang)">your pick</span></td><td>802.572.61 / 602.572.57</td><td>75 × 35 / 50 × 35</td><td class="n">0</td><td class="n">60 / 50</td><td class="n">0</td><td>Only if a tower changes width. 3 pairs and 2 pairs</td></tr>
+        <tr><td>KOMPLEMENT pull-out shoe shelf, white <span class="tag t-mezi" style="background:var(--hang-bg);color:var(--hang)">your pick</span></td><td>802.574.64</td><td>50 × 58</td><td class="n">0</td><td class="n">145</td><td class="n">0</td><td>Needs a 50 × 58 frame, none in this layout. The 75 × 58 version (170) would fit C instead of one drawer</td></tr>
+        <tr><td colspan="7" style="font-weight:600;background:var(--bg)">Mirror doors on G</td></tr>
+        <tr><td>ÅHEIM mirror door</td><td>804.100.55</td><td>50 × 229</td><td class="n">2</td><td class="n">475</td><td class="n">950</td><td>VIKEDAL is not sold in Israel; ÅHEIM is the mirror door in the range</td></tr>
+        <tr><td>KOMPLEMENT soft-closing hinge, 3 pack</td><td>002.145.05</td><td></td><td class="n">2</td><td class="n">50</td><td class="n">100</td><td>G doors</td></tr>
+        <tr><td colspan="7" style="font-weight:600;background:var(--bg)">Lighting</td></tr>
+        <tr><td>ÖVERSIDAN LED strip with sensor, white <span class="tag t-mezi" style="background:var(--hang-bg);color:var(--hang)">your pick</span></td><td>205.894.85</td><td>71 cm</td><td class="n">14</td><td class="n">69</td><td class="n">966</td><td>Two per ground frame, top and mid height</td></tr>
+        <tr><td>TRÅDFRI driver, 30 W</td><td>603.426.56</td><td></td><td class="n">2</td><td class="n">145</td><td class="n">290</td><td>Driver L for A, B, C at 21 W; driver R for D, E, F, G at 28 W. See Sheet 7</td></tr>
+        <tr><td>FÖRNIMMA power cable</td><td></td><td>3.5 m</td><td class="n">2</td><td class="n">25</td><td class="n">50</td><td>One per driver</td></tr>
+        <tr><td>Extension leads, 5 m and 2 m, plus a 2-way block</td><td></td><td></td><td class="n">1</td><td class="n">90</td><td class="n">90</td><td>Socket to the left pocket behind the plinths, block in the pocket, 2 m behind G to the right pocket. Estimate</td></tr>
+        <tr><td>YTBERG LED cabinet light <span class="tag t-mezi" style="background:var(--hang-bg);color:var(--hang)">your pick</span></td><td></td><td></td><td class="n">0</td><td class="n"></td><td class="n"></td><td>A spot rather than a strip; same driver. Optional for the mirror frame G</td></tr>
+        <tr class="sum"><td colspan="5">Ground level</td><td class="n">11,082</td><td></td></tr>
+      </tbody>
+    </table></div>
+    <div class="tbl" style="margin-top:22px"><table>
+      <thead><tr><th>Product</th><th>Article</th><th>Size</th><th class="n">Qty</th><th class="n">Unit ₪</th><th class="n">Total ₪</th><th>Where</th></tr></thead>
+      <tbody>
+        <tr><td colspan="7" style="font-weight:600;background:var(--bg)">Second level, bought at 201 cm and cut to 148 cm</td></tr>
+        <tr><td>PAX frame, white</td><td>704.582.03</td><td>100 × 58 × 201</td><td class="n">3</td><td class="n">495</td><td class="n">1,485</td><td>A2, B2, G2</td></tr>
+        <tr><td>PAX frame, white</td><td>804.582.31</td><td>75 × 58 × 201</td><td class="n">1</td><td class="n">445</td><td class="n">445</td><td>C2</td></tr>
+        <tr><td>PAX frame, white</td><td></td><td>100 × 35 × 201</td><td class="n">1</td><td class="n">445</td><td class="n">445</td><td>F2. Estimate, page not reached</td></tr>
+        <tr><td>PAX frame, white</td><td>304.582.24</td><td>75 × 35 × 201</td><td class="n">1</td><td class="n">395</td><td class="n">395</td><td>D2</td></tr>
+        <tr><td>KOMPLEMENT shelf, white</td><td>002.779.89</td><td>100 × 58</td><td class="n">10</td><td class="n">65</td><td class="n">650</td><td>B2, G2, five each, 23 cm apart</td></tr>
+        <tr><td>KOMPLEMENT shelf, white</td><td>702.779.95</td><td>75 × 58</td><td class="n">5</td><td class="n">55</td><td class="n">275</td><td>C2</td></tr>
+        <tr><td>KOMPLEMENT shelf, white</td><td>002.779.89</td><td>100 × 35</td><td class="n">6</td><td class="n">45</td><td class="n">270</td><td>F2, at 19 cm for shoe boxes</td></tr>
+        <tr><td>KOMPLEMENT shelf, white</td><td>702.779.95</td><td>75 × 35</td><td class="n">4</td><td class="n">40</td><td class="n">160</td><td>D2, at 30 cm for folded clothes. Estimate</td></tr>
+        <tr><td>HEMMAFIXARE storage case <span class="tag t-mezi" style="background:var(--hang-bg);color:var(--hang)">your pick</span></td><td>705.039.17</td><td>69 × 51 × 19</td><td class="n">12</td><td class="n">95</td><td class="n">1,140</td><td>B2, G2, one per shelf. 51 cm deep fits the 58 cm frames only</td></tr>
+        <tr><td>HEMMAFIXARE storage case <span class="tag t-mezi" style="background:var(--hang-bg);color:var(--hang)">your pick</span></td><td>905.039.21</td><td>34 × 51 × 19</td><td class="n">12</td><td class="n">49</td><td class="n">588</td><td>C2, two per shelf. Seasonal clothes</td></tr>
+        <tr><td>SKUBB shoe box, 4 pack, dark grey <span class="tag t-mezi" style="background:var(--hang-bg);color:var(--hang)">your pick</span></td><td>804.000.04</td><td>22 × 34 × 16</td><td class="n">7</td><td class="n">49</td><td class="n">343</td><td>F2, four per shelf, 28 boxes. 34 cm deep fits the 35 cm frame</td></tr>
+        <tr><td>Panel-saw cutting, edge banding, screws</td><td></td><td></td><td class="n">1</td><td class="n">250</td><td class="n">250</td><td>Carpentry shop. Estimate</td></tr>
+        <tr><td>Plywood step board 96 × 35 × 2 cm</td><td></td><td></td><td class="n">1</td><td class="n">80</td><td class="n">80</td><td>On top of E at 201, screwed into E's side panels. Estimate</td></tr>
+        <tr class="sum"><td colspan="5">Second level</td><td class="n">6,596</td><td></td></tr>
+        <tr class="sum"><td colspan="5">Everything</td><td class="n">17,678</td><td>Your planner design was 6,920 with no drawers, lighting or second level</td></tr>
+      </tbody>
+    </table></div>
+    <p class="foot" style="margin-top:12px">Frame prices on ikea.com/il are higher than the ones your planner showed in the session, by 50 to 100 per frame; the planner may have been showing a promotion. Check the cart total before ordering. Not included: the library ladder on Sheet 6, a step stool, and FORSAND doors for the second level if you decide to close it. The second level is shelved every 22 cm over the 58 cm frames with one layer of cases per shelf, every 30 cm in D2 for folded clothes and every 19 cm in F2 for shoe boxes: 25 shelves, 24 cases and 28 shoe boxes, plus the long-hanging rail in A2. Stacking boxes two high on half the shelves would save about ₪900 in shelves but means lifting a box off at 3 m to reach the one under it.</p>
+  </section>
+
+  <section class="sheet">
+    <div class="eyebrow">Sheet 5</div>
+    <h2>Cutting and stacking the second level</h2>
+    <div class="cols">
+      <div>
+        <h3>Cutting</h3>
+        <ol>
+          <li>Buy the 201 cm frames. Before cutting, measure the dowel and cam-lock holes at the top end of each side panel and note their distance from the top edge.</li>
+          <li>Cut 53 cm off the top end of both side panels, so the finished panel is 148 cm. Keep the bottom end intact. A carpentry shop panel saw gives a chip-free cut; a hand saw will chip the melamine.</li>
+          <li>Mark the hole positions you noted from the new top edge and drill them. Use the offcut as a template so the top panel fits exactly as before.</li>
+          <li>Cut the thin back panel to the same length. Iron white edge banding onto the cut edges.</li>
+        </ol>
+      </div>
+      <div>
+        <h3>Stacking</h3>
+        <ol>
+          <li>Build and anchor all seven ground frames first, screwed to each other side by side.</li>
+          <li>A 148 × 58 frame cannot be tipped upright on top of the base, because its diagonal is 159 cm and there is only 153 cm of headroom. Assemble each upper frame in place, standing on a stepladder, or have two people lift a pre-built frame straight up above 236 cm.</li>
+          <li>Screw every upper frame down through its bottom panel into the top panel of the frame below, four screws per frame, and fix each upper frame to the wall with the PAX wall brackets. D2 stands in front of the shut back leaf of the attic door, so anchor it to the wall beside the door, not through it.</li>
+          <li>Keep the second level for light things: luggage, bedding, boxes. IKEA does not rate PAX for stacking, so the upper row carries little weight and relies on the wall anchors.</li>
+        </ol>
+      </div>
+    </div>
+    <h3 style="margin-top:18px">Cut diagram, one side panel</h3>
+    <div class="legend"><span><i style="background:var(--paper);border-color:var(--ink)"></i>PAX side panel, 201 cm, bought</span><span><i style="background:var(--warn-bg);border-color:var(--warn)"></i>53 cm offcut</span><span><i style="background:var(--paper);border-color:#c0392b;border-style:dashed"></i>cut line at 148 from the bottom</span><span><i style="background:var(--drawer-bg);border-color:var(--drawer);border-radius:50%"></i>top-panel holes to copy and re-drill</span></div>
+    <div class="svgbox" id="cut"></div>
+    <p class="foot">Both side panels of each upper frame are cut the same way, so the frame keeps its full depth and all its shelf-pin holes below the cut. The holes in blue are the ones the top panel locks into: measure their position from the old top edge before cutting, mark the same positions from the new top edge, and drill with 8 mm and 15 mm bits. The thin back panel is cut 53 cm shorter too.</p>
+    <h3 style="margin-top:18px">What the offcuts can become</h3>
+    <div class="tbl"><table>
+      <thead><tr><th>Offcut</th><th class="n">Pieces</th><th>Use</th></tr></thead>
+      <tbody>
+        <tr><td>Side panel 53 × 58 cm, white, 1.8 cm, with shelf-pin holes</td><td class="n">8</td><td>Rip into 12 cm strips: 32 drawer dividers for the glass-front drawers in G and the drawers in B, C and F, 52 cm long to fit a 58 cm drawer. Four strips also make lids for the two corner pockets, 21 × 58 and 21 × 35, so the pockets close at the top under the second level.</td></tr>
+        <tr><td>Side panel 53 × 35 cm, white, 1.8 cm</td><td class="n">4</td><td>Cut to 21 × 35: eight small shelves for the 42 cm wall strip beside the attic door, on the right wall between the open leaf and F2, screwed into F2's side panel. Spare hangers, shoe care, vacuum bags.</td></tr>
+        <tr><td>Back panel strip, 3 mm hardboard, 53 cm tall by frame width</td><td class="n">6</td><td>Rip into 5 cm strips and paint white: a fascia that closes the 5 cm gap between the second level and the ceiling along all three walls, about 6.5 m in all. Fix with double-sided tape to the top panels.</td></tr>
+        <tr><td>Top-panel edge after cutting</td><td></td><td>Nothing to reuse; the sawn edge gets iron-on white melamine edge banding, 2 m roll, about ₪20.</td></tr>
+      </tbody>
+    </table></div>
+    <p class="foot">Nothing from the offcuts can become a PAX shelf: the longest piece is 53 cm and the narrowest frame needs 71.4 cm. Dividers, the door-strip shelves and the ceiling fascia use almost all of it; the rest is kerf and edge waste.</p>
+  </section>
+
+  <section class="sheet">
+    <div class="eyebrow">Sheet 6</div>
+    <h2>Ladder</h2>
+    <p>A fixed-length hook-on library ladder is the right tool for this room: no folding, one hand to move it, and it cannot slip because its hooks sit on a rail. The numbers below are what the room allows.</p>
+    <div class="tbl"><table>
+      <thead><tr><th>Item</th><th class="n">Value</th><th>Why</th></tr></thead>
+      <tbody>
+        <tr><td>Rail height</td><td class="n">380 cm</td><td>Fixed along the top edge of the second-level frames, not the ceiling, so it never crosses the attic door.</td></tr>
+        <tr><td>Rails</td><td class="n">2 × 275 cm</td><td>One continuous rail on each long wall. On the right it is fixed to D2 and F2 and bridges the 125 cm door gap as a free span, so the ladder slides the whole length and parks at the attic door. The door's top edge must stay below about 375 cm to swing under the rail; check this when you measure the door.</td></tr>
+        <tr><td>Ladder length</td><td class="n">about 392 cm</td><td>Hooks at 380 cm, feet 88 cm out from the frame face.</td></tr>
+        <tr><td>Angle</td><td class="n">77°</td><td>Steeper than a bookshop ladder (usually 65 to 72°) because the feet must stay inside the 100 cm walkway. Comfortable with a hand on the stiles, and the reason to insist on weight-braked wheels or rubber feet.</td></tr>
+        <tr><td>Weight</td><td class="n">12 to 20 kg</td><td>Aluminium is lighter, oak looks better. Either lifts off the rail and moves to the other wall in one go.</td></tr>
+        <tr><td>Attic access</td><td class="n">slide to the door</td><td>Slide the ladder along the right rail to the door, open the door and step through at shelf height. Far easier than a ceiling hatch.</td></tr>
+      </tbody>
+    </table></div>
+    <h3 style="margin-top:16px">Where to buy</h3>
+    <ul>
+      <li><b>Hardware kit plus a made-to-length ladder.</b> Rolling-hook kits with rails, hooks and wheels are sold by <a href="https://www.libraryladdersinternational.com/rolling-hook">Library Ladders International</a> and as cheaper kits on <a href="https://www.amazon.com/rolling-library-ladder/s?k=rolling+library+ladder">Amazon</a>, including 3.5 m hardware sets such as the <a href="https://www.amazon.com/-/he/%D7%97%D7%95%D7%9E%D7%A8%D7%94-%D7%9C%D7%A1%D7%95%D7%9C%D7%9D-%D7%A1%D7%A4%D7%A8%D7%99%D7%99%D7%94-%D7%9E%D7%AA%D7%92%D7%9C%D7%92%D7%9C%D7%AA-%D7%A8%D7%95%D7%9C%D7%A8%D7%99%D7%9D/dp/B0B3MQZ64Q">DIYHD kit</a>. Kits usually come without the ladder or with a 2 m one; a carpentry shop makes the 392 cm ladder from the kit's drawings.</li>
+      <li><b>Israeli suppliers.</b> <a href="https://bitter.co.il/product/%D7%A2%D7%A8%D7%9B%D7%94-%D7%9C%D7%A1%D7%95%D7%9C%D7%9D-%D7%A1%D7%A4%D7%A8%D7%99%D7%94-%D7%A2%D7%9D-%D7%A1%D7%95%D7%9C%D7%9D-2-%D7%9E%D7%98%D7%A8/">Ahim Bitter</a> sells a library ladder kit with a 2 m ladder, and <a href="https://www.ofekagencies.co.il/products_cat/%D7%A1%D7%95%D7%9C%D7%9E%D7%95%D7%AA-%D7%A0%D7%99%D7%99%D7%93%D7%99%D7%9D/">Ofek Agencies</a> imports Italscale rail ladders to the EN-131 standard. Ask both for a rail ladder cut to 392 cm with a 77° working angle.</li>
+      <li><b>Fallback without rails.</b> An industrial rolling platform ladder with five steps and a handrail, platform at about 125 cm, reaches 384 cm and rolls on casters that lock under load. It never folds, but it is about 55 by 90 cm on the floor and has to park by the door.</li>
+    </ul>
+    <p class="foot">Budget roughly ₪1,500 to ₪3,500 for rails, hardware and a made-to-length ladder. Not included in the totals on Sheet 4.</p>
+  </section>
+
+  <section class="sheet">
+    <div class="eyebrow">Sheet 7</div>
+    <h2>Lighting and power</h2>
+    <p>Fourteen ÖVERSIDAN strips, two per ground frame at mid depth: one under the top panel for the upper rail, one under the drawer or shelf nearest mid height, for example under the drawer at 102 in A and B, for the lower rail, drawers and pull-outs. The strips clip to the panel or shelf with their brackets. Each strip has a built-in motion sensor and a 3.5 m cord, so no switch is needed and the cord length sets where the drivers can be.</p>
+    <div class="tbl"><table>
+      <thead><tr><th>Driver</th><th>Where</th><th>Feeds</th><th class="n">Load</th><th>Cord runs</th><th>Power</th></tr></thead>
+      <tbody>
+        <tr><td>Driver L, TRÅDFRI 30 W</td><td>In the sealed 21 cm pocket in the back-left corner, between A's end panel and the side of G, at about 225 cm, reached from above through the ceiling gap</td><td>A, B, C, 6 strips</td><td class="n">21 W</td><td>Behind the back panels at 225 cm toward the back, through 12 mm holes in the shared side panels between C and B, B and A, and into the pocket through A's end panel. Longest cord, C's mid strip, about 3.4 m</td><td>A 5 m lead from the socket left of the entrance: a few centimetres along the skirting, through a hole at the floor in C's end panel, then behind the plinths of C, B and A into the pocket, where a 2-way block feeds the driver</td></tr>
+        <tr><td>Driver R, TRÅDFRI 30 W</td><td>In the matching pocket in the back-right corner, between D's end panel and the side of G</td><td>D, E, F, G, 8 strips</td><td class="n">28 W</td><td>D, E, F behind their back panels toward the back, through holes between frames and into the pocket through D's end panel; F's mid strip is the longest at 3.3 m. G's cords run behind G's back panel and enter the pocket through G's right side panel, under 2.3 m</td><td>A 2 m lead from the block in the left pocket, behind G's plinth through holes in both of G's side panels at the floor, into the right pocket</td></tr>
+      </tbody>
+    </table></div>
+    <ul style="margin-top:12px">
+      <li>Why two drivers: a 30 W driver takes at most 10 lights and 30 W, so 14 strips at 3.5 W need two. The split also keeps every cord under 3 m, within the 3.5 m they come with. Both drivers sit just under their limits, so a 15th strip would need a third driver.</li>
+      <li>One socket for everything, and nothing visible: the 5 m lead from the socket runs behind the plinths to the left pocket, the block sits in the pocket, and a 2 m lead runs behind G's plinth to the right pocket. Both pockets are open to the ceiling gap, so a driver can be lifted out from a ladder if it ever fails. The whole lighting load is 49 W.</li>
+      <li>Holes: one 12 mm hole at the rear top corner of each shared side panel, 1 cm from the back edge at 225 cm, hidden in the channel behind the back panels. A carpenter or you with a drill, ten minutes.</li>
+      <li>The drivers are Zigbee. Add a TRÅDFRI remote or a DIRIGERA hub only if you want dimming or an app; the sensors switch the strips on and off by themselves.</li>
+      <li>Keep the second-level frames unlit. Boxes do not need light, and the strips would be at 3.8 m.</li>
+    </ul>
+    <h3 style="margin-top:18px">Wiring diagram</h3>
+    <div class="legend"><span><i style="background:#f2c94c;border-color:#8a5a0b"></i>ÖVERSIDAN strip, top and mid height</span><span><i style="background:var(--paper);border-color:#e07b00;border-style:dashed"></i>strip cord behind the back panels at 225 cm</span><span><i style="background:var(--paper);border-color:#8a5a0b;border-radius:50%"></i>12 mm hole through a side panel</span><span><i style="background:#8a8f93"></i>TRÅDFRI 30 W driver</span><span><i style="background:#185fa5"></i>5 m lead from the socket, behind the plinths</span><span><i style="background:var(--paper);border-color:#185fa5;border-style:dashed"></i>2 m lead behind G to driver R</span><span><i style="background:var(--warn-bg);border-color:var(--warn);border-style:dashed"></i>21 cm corner pocket</span></div>
+    <div class="svgbox" id="wiring"></div>
+    <p class="foot">Walls unfolded flat, seen from the walkway. Each frame's two strips drop to the channel behind the back panel and run along it at 225 cm to the driver, through one hole per shared side panel. G's cords cross the corner into D's channel. Cord lengths are from the strip to the driver; every one is under the 3.5 m supplied. One socket serves everything through leads behind the plinths: 5 m to the left pocket, where a block feeds driver L, and 2 m behind G to driver R in the right pocket. Cord lengths are shown per frame as top strip / mid strip.</p>
+  </section>
+
+  <section class="sheet">
+    <div class="eyebrow">Open points</div>
+    <h2>Before ordering</h2>
+    <ul>
+      <li>Attic door: the top edge of the leaves must be below about 375 cm for the ladder rail. The sill at 202 is in the plan. Confirm you are happy with a single 41.5 cm leaf as the opening.</li>
+      <li>Door swing at the entrance: which side it hinges on and whether it clears a 58 cm frame at C or a 35 cm frame at F. If it is in the way, shorten that run by one 50 cm frame.</li>
+      <li>The socket is on the left of the entrance wall, as you said; the 5 m lead starts there. With C and F now flush against the entrance wall, check that the entrance door's architrave does not reach into the first 58 cm on the left or the first 35 cm on the right of that wall.</li>
+      <li>Ceiling height at all four corners. 389 cm was measured once; old ceilings vary by a few centimetres, and the cut height follows the lowest point.</li>
+      <li>Eli and Mezi sections are the same size, so if one of you needs more hanging or more shoes, swap the labels rather than the frames.</li>
+      <li>Check the drawer, shoe shelf and mirror door prices in the IKEA Israel app. Those lines are estimates.</li>
+    </ul>
+  </section>
+</div>
+
+<script>
+(function(){
+  var S = 1.3;
+  var plan = [];
+  var W=193, L=296, ox=70, oy=40;
+  var pw = W*S, pl = L*S;
+  plan.push('<svg viewBox="0 0 '+(pw+190)+' '+(pl+110)+'" width="'+(pw+190)+'" style="max-width:100%;height:auto;display:block;margin:0 auto">');
+  plan.push('<rect x="'+(ox-6)+'" y="'+(oy-6)+'" width="'+(pw+12)+'" height="'+(pl+6)+'" fill="none" stroke="var(--line-strong)" stroke-width="6"/>');
+  function fr(x,y,w,h,cls,label,sub,who){
+    var fill = cls==='hang'?'var(--hang-bg)':cls==='drawer'?'var(--drawer-bg)':'var(--shoe-bg)';
+    var st = cls==='hang'?'var(--hang)':cls==='drawer'?'var(--drawer)':'var(--shoe)';
+    var wc = who==='Eli'?'var(--eli)':who==='Mezi'?'var(--mezi)':'var(--shared)';
+    plan.push('<rect x="'+(ox+x*S)+'" y="'+(oy+y*S)+'" width="'+(w*S)+'" height="'+(h*S)+'" fill="'+fill+'" stroke="'+st+'" stroke-width="1"/>');
+    var cx = ox+(x+w/2)*S, cy = oy+(y+h/2)*S;
+    plan.push('<text class="big" x="'+cx+'" y="'+(cy-6)+'" text-anchor="middle" style="fill:'+st+'">'+label+'</text>');
+    plan.push('<text x="'+cx+'" y="'+(cy+8)+'" text-anchor="middle" style="fill:'+wc+'">'+who+'</text>');
+    if(sub) plan.push('<text x="'+cx+'" y="'+(cy+22)+'" text-anchor="middle" style="fill:'+st+'">'+sub+'</text>');
+  }
+  fr(0,21,58,100,'hang','A','100&times;58','Eli');
+  fr(0,121,58,100,'hang','B','100&times;58','Mezi');
+  fr(0,221,58,75,'drawer','C','75&times;58','Mezi');
+  fr(58,0,100,58,'hang','G','100&times;58','Eli');
+  fr(158,21,35,75,'drawer','D','','Eli');
+  fr(158,96,35,100,'drawer','E','','shared');
+  fr(158,196,35,100,'shoe','F','','Mezi');
+  plan.push('<line x1="'+(ox+158*S)+'" y1="'+(oy+58*S)+'" x2="'+(ox+58*S)+'" y2="'+(oy+58*S)+'" stroke="var(--hang)" stroke-width="2.5"/>');
+  plan.push('<text x="'+(ox+108*S)+'" y="'+(oy+58*S+14)+'" text-anchor="middle">mirror doors</text>');
+  plan.push('<rect x="'+(ox+193*S-4)+'" y="'+(oy+70.5*S)+'" width="10" height="'+(41.5*S)+'" fill="var(--grid)" stroke="var(--warn)" stroke-dasharray="3 2"/>');
+  plan.push('<rect x="'+(ox+193*S-4)+'" y="'+(oy+112*S)+'" width="10" height="'+(41.5*S)+'" fill="var(--warn-bg)" stroke="var(--warn)"/>');
+  plan.push('<path d="M '+(ox+193*S)+' '+(oy+153.5*S)+' A '+(41.5*S)+' '+(41.5*S)+' 0 0 1 '+(ox+151.5*S)+' '+(oy+153.5*S)+'" fill="none" stroke="var(--warn)" stroke-dasharray="4 3"/>');
+  plan.push('<text class="lbl" x="'+(ox+150*S)+'" y="'+(oy+100*S)+'" text-anchor="middle" style="fill:var(--warn)">attic door, 2 leaves</text>');
+  plan.push('<text x="'+(ox+150*S)+'" y="'+(oy+110*S)+'" text-anchor="middle" style="fill:var(--warn)">back leaf covered by D2</text>');
+  plan.push('<text x="'+(ox+150*S)+'" y="'+(oy+120*S)+'" text-anchor="middle" style="fill:var(--warn)">front leaf kept, hinge at 153.5</text>');
+  var sy = oy+137.5*S;
+  plan.push('<line x1="'+(ox+60*S)+'" y1="'+sy+'" x2="'+(ox+131*S)+'" y2="'+sy+'" stroke="var(--line-strong)" stroke-dasharray="6 4"/>');
+  plan.push('<text class="lbl" x="'+(ox+95*S)+'" y="'+(sy-10)+'" text-anchor="middle" style="fill:var(--eli)">Eli</text>');
+  plan.push('<text class="lbl" x="'+(ox+95*S)+'" y="'+(sy+18)+'" text-anchor="middle" style="fill:var(--mezi)">Mezi</text>');
+  plan.push('<text class="lbl" x="'+(ox+108*S)+'" y="'+(oy+240*S)+'" text-anchor="middle">walkway 100</text>');
+  plan.push('<rect x="'+(ox+45*S)+'" y="'+(oy+pl-4)+'" width="'+(90*S)+'" height="8" fill="var(--paper)" stroke="var(--line-strong)" stroke-dasharray="3 3"/>');
+  plan.push('<text class="lbl" x="'+(ox+90*S)+'" y="'+(oy+pl+26)+'" text-anchor="middle">entrance, door swing not drawn</text>');
+  plan.push('<text x="'+(ox+pw/2)+'" y="'+(oy-16)+'" text-anchor="middle">193</text>');
+  plan.push('<text x="'+(ox-22)+'" y="'+(oy+pl/2)+'" text-anchor="middle" transform="rotate(-90 '+(ox-22)+' '+(oy+pl/2)+')">296</text>');
+  plan.push('<text x="'+(ox+29*S)+'" y="'+(oy+13*S)+'" text-anchor="middle">21</text>');
+  plan.push('<text x="'+(ox+175*S)+'" y="'+(oy+13*S)+'" text-anchor="middle">21</text>');
+  var hx = ox+pw+16;
+  plan.push('<text x="'+hx+'" y="'+(oy+8)+'">from back wall</text>');
+  [['0',0],['21',21],['70.5',70.5],['96',96],['153.5',153.5],['196',196],['296',296]].forEach(function(m){ plan.push('<line x1="'+(hx-4)+'" y1="'+(oy+m[1]*S)+'" x2="'+(hx+2)+'" y2="'+(oy+m[1]*S)+'" stroke="var(--line-strong)"/>'); plan.push('<text x="'+(hx+6)+'" y="'+(oy+m[1]*S+4)+'">'+m[0]+'</text>'); });
+  plan.push('<text x="'+hx+'" y="'+(oy+230*S)+'">D 75&times;35</text>');
+  plan.push('<text x="'+hx+'" y="'+(oy+240*S)+'">E 100&times;35</text>');
+  plan.push('<text x="'+hx+'" y="'+(oy+250*S)+'">F 100&times;35</text>');
+  plan.push('</svg>');
+  document.getElementById('plan').innerHTML = plan.join('');
+
+  var K = 1.15, TOP=20, BOT=46, LM=42, RM=16, CEIL=389, G=236, T=148;
+  function py(cm){ return TOP + (CEIL-cm)*K; }
+  function wall(name, sub, frames, tops, flip, gaps){
+    var total = frames.reduce(function(a,f){return a+f.w},0);
+    var width = total*K + LM + RM, height = py(0)+BOT;
+    function px(x,w){ return flip ? LM + (total - x - w)*K : LM + x*K; }
+    var s=[];
+    s.push('<svg viewBox="0 0 '+width+' '+height+'" width="'+width+'" style="max-width:100%;height:auto;display:block">');
+    s.push('<line x1="'+LM+'" y1="'+py(CEIL)+'" x2="'+(LM+total*K)+'" y2="'+py(CEIL)+'" stroke="var(--line-strong)" stroke-width="3"/>');
+    s.push('<line x1="'+LM+'" y1="'+py(0)+'" x2="'+(LM+total*K)+'" y2="'+py(0)+'" stroke="var(--line-strong)" stroke-width="3"/>');
+    [0,G,G+T].forEach(function(h){ s.push('<text x="'+(LM-6)+'" y="'+(py(h)+4)+'" text-anchor="end">'+h+'</text>'); s.push('<line x1="'+(LM-3)+'" y1="'+py(h)+'" x2="'+LM+'" y2="'+py(h)+'" stroke="var(--line-strong)"/>'); });
+    s.push('<text x="'+(LM+total*K)+'" y="'+(py(CEIL)-6)+'" text-anchor="end">ceiling 389</text>');
+    function items(f, x0, x1, base){
+      var ix0=x0+3, ix1=x1-3;
+      (f.items||[]).forEach(function(it){
+        var y = function(v){ return py(base+v); };
+        if(it.t==='shelf'){ s.push('<line x1="'+ix0+'" y1="'+y(it.y)+'" x2="'+ix1+'" y2="'+y(it.y)+'" stroke="var(--ink)" stroke-width="2"/>'); }
+        if(it.t==='rail'){ var yy=y(it.y); s.push('<line x1="'+ix0+'" y1="'+yy+'" x2="'+ix1+'" y2="'+yy+'" stroke="var(--hang)" stroke-width="3"/>');
+          var n=Math.max(3,Math.floor(f.w/14)); for(var i=0;i<n;i++){ var hx=ix0+(i+0.5)*(ix1-ix0)/n; s.push('<line x1="'+hx+'" y1="'+(yy+2)+'" x2="'+hx+'" y2="'+(yy+(it.drop||60)*K)+'" stroke="var(--hang)" stroke-width="1" opacity=".55"/>'); } }
+        if(it.t==='drawers'){ for(var d=0; d<it.n; d++){ var yb=it.y+d*20, yt=yb+16; s.push('<rect x="'+ix0+'" y="'+y(yt)+'" width="'+(ix1-ix0)+'" height="'+(16*K)+'" fill="var(--drawer-bg)" stroke="var(--drawer)" stroke-width="1"/>'); s.push('<line x1="'+((ix0+ix1)/2-10)+'" y1="'+y(yb+8)+'" x2="'+((ix0+ix1)/2+10)+'" y2="'+y(yb+8)+'" stroke="var(--drawer)" stroke-width="2"/>'); } }
+        if(it.t==='shoes'){ for(var k=0;k<it.n;k++){ var ys=it.y+k*it.pitch; s.push('<line x1="'+ix0+'" y1="'+y(ys)+'" x2="'+ix1+'" y2="'+y(ys+9)+'" stroke="var(--shoe)" stroke-width="2.2"/>'); } }
+        if(it.t==='boot'){ s.push('<rect x="'+ix0+'" y="'+y(it.y+it.h)+'" width="'+(ix1-ix0)+'" height="'+(it.h*K)+'" fill="var(--shoe-bg)" stroke="none"/>'); s.push('<text x="'+((ix0+ix1)/2)+'" y="'+(y(it.y+it.h/2)+4)+'" text-anchor="middle" style="fill:var(--shoe)">boots</text>'); }
+        if(it.t==='tr'){ var ty=y(it.y); s.push('<line x1="'+ix0+'" y1="'+ty+'" x2="'+ix1+'" y2="'+ty+'" stroke="var(--drawer)" stroke-width="2.5"/>'); var na=Math.max(4,Math.floor(f.w/12)); for(var a2=0;a2<na;a2++){ var ax2=ix0+(a2+0.5)*(ix1-ix0)/na; s.push('<line x1="'+ax2+'" y1="'+(ty+2)+'" x2="'+ax2+'" y2="'+(ty+40*K)+'" stroke="var(--drawer)" stroke-width="1.2" opacity=".6"/>'); } }
+        if(it.t==='txt'){ s.push('<text x="'+((ix0+ix1)/2)+'" y="'+(y(it.y)+4)+'" text-anchor="middle" style="fill:var(--box)">'+it.s+'</text>'); }
+        if(it.t==='mirror'){ s.push('<line x1="'+((x0+x1)/2)+'" y1="'+py(G)+'" x2="'+((x0+x1)/2)+'" y2="'+py(0)+'" stroke="var(--ink)" stroke-width="1"/>'); for(var m=0;m<8;m++){ var mx=x0+8+m*(x1-x0-16)/7; s.push('<line x1="'+mx+'" y1="'+(py(G)+8)+'" x2="'+(mx-14)+'" y2="'+(py(G)+34)+'" stroke="var(--hang)" stroke-width="1" opacity=".5"/>'); } }
+      });
+    }
+    (gaps||[]).forEach(function(gp){ var gx0=px(gp.x,gp.w), gx1=gx0+gp.w*K, gy0=gp.y0||G; s.push('<rect x="'+gx0+'" y="'+py(G+T)+'" width="'+(gx1-gx0)+'" height="'+((G+T-gy0)*K)+'" fill="var(--warn-bg)" stroke="var(--warn)" stroke-dasharray="5 4"/>'); s.push('<text class="lbl" x="'+((gx0+gx1)/2)+'" y="'+(py(G+T/2))+'" text-anchor="middle" style="fill:var(--warn)">'+gp.s+'</text>'); s.push('<text x="'+((gx0+gx1)/2)+'" y="'+(py(G+T/2)+16)+'" text-anchor="middle" style="fill:var(--warn)">'+gp.s2+'</text>'); });
+    var x = 0;
+    frames.forEach(function(f){
+      var x0 = px(x,f.w), x1 = x0 + f.w*K;
+      var fh = f.h || G;
+      s.push('<rect x="'+x0+'" y="'+py(fh)+'" width="'+(x1-x0)+'" height="'+(fh*K)+'" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.2"/>');
+      if (f.step){ s.push('<rect x="'+x0+'" y="'+(py(fh)-3)+'" width="'+(x1-x0)+'" height="3" fill="var(--warn)"/>'); }
+      items(f, x0, x1, 0);
+      var wc = f.who==='Eli'?'var(--eli)':f.who==='Mezi'?'var(--mezi)':'var(--shared)';
+      s.push('<text class="big" x="'+((x0+x1)/2)+'" y="'+(py(0)+16)+'" text-anchor="middle">'+f.id+'</text>');
+      s.push('<text x="'+((x0+x1)/2)+'" y="'+(py(0)+29)+'" text-anchor="middle" style="fill:'+wc+'">'+f.who+'</text>');
+      s.push('<text x="'+((x0+x1)/2)+'" y="'+(py(0)+42)+'" text-anchor="middle">'+f.w+'</text>');
+      x += f.w;
+    });
+    (tops||[]).forEach(function(t){
+      var x0 = px(t.x,t.w), x1 = x0 + t.w*K;
+      s.push('<rect x="'+x0+'" y="'+py(G+T)+'" width="'+(x1-x0)+'" height="'+(T*K)+'" fill="var(--box-bg)" stroke="var(--ink)" stroke-width="1.2"/>');
+      items(t, x0, x1, G);
+      s.push('<text x="'+((x0+x1)/2)+'" y="'+(py(G+T)-5)+'" text-anchor="middle">'+t.id+' · '+t.w+'</text>');
+    });
+    s.push('</svg>');
+    return '<div class="wall"><h3><span>'+name+'</span><small>'+sub+'</small></h3><div class="svgbox">'+s.join('')+'</div></div>';
+  }
+  var A={id:'A',w:100,who:'Eli',items:[{t:'shelf',y:214},{t:'rail',y:210,drop:84},{t:'rail',y:100,drop:90}]};
+  var B={id:'B',w:100,who:'Mezi',items:[{t:'shelf',y:214},{t:'rail',y:210,drop:84},{t:'drawers',y:102,n:1},{t:'rail',y:100,drop:90}]};
+  var C={id:'C',w:75,who:'Mezi',items:[{t:'shelf',y:214},{t:'drawers',y:0,n:3},{t:'shelf',y:64},{t:'shelf',y:70},{t:'tr',y:120},{t:'tr',y:166},{t:'tr',y:212}]};
+  var Gf={id:'G',w:100,who:'Eli',items:[{t:'shelf',y:214},{t:'rail',y:210,drop:104},{t:'shelf',y:102},{t:'drawers',y:0,n:5},{t:'mirror'}]};
+  var D={id:'D',w:75,who:'Eli',items:[{t:'boot',y:0,h:50},{t:'shelf',y:50},{t:'shelf',y:80},{t:'shelf',y:110},{t:'shelf',y:140},{t:'shelf',y:170},{t:'shelf',y:200}]};
+  var E={id:'E',w:100,who:'shared',h:201,step:true,items:[{t:'drawers',y:0,n:4},{t:'shelf',y:85},{t:'shelf',y:115},{t:'shelf',y:145},{t:'shelf',y:175}]};
+  var F={id:'F',w:100,who:'Mezi',items:[{t:'drawers',y:0,n:2},{t:'shelf',y:42},{t:'boot',y:44,h:46},{t:'shoes',y:92,n:8,pitch:19.5}]};
+  function deepTop(id,x,w){ var it=[]; [23,46,69,92,115].forEach(function(y){ it.push({t:'shelf',y:y}); }); [11,34,57,80,103,128].forEach(function(y){ it.push({t:'txt',y:y,s:'box'}); }); return {id:id,x:x,w:w,items:it}; }
+  function shoeTop(id,x,w){ var it=[]; [19,38,57,76,95,114].forEach(function(y){ it.push({t:'shelf',y:y}); }); [9,47,85,123].forEach(function(y){ it.push({t:'txt',y:y,s:'shoe boxes'}); }); return {id:id,x:x,w:w,items:it}; }
+  function foldTop(id,x,w){ var it=[]; [30,60,90,120].forEach(function(y){ it.push({t:'shelf',y:y}); }); [15,45,75,105,133].forEach(function(y){ it.push({t:'txt',y:y,s:'folded'}); }); return {id:id,x:x,w:w,items:it}; }
+  var A2={id:'A2',x:0,w:100,items:[{t:'rail',y:142,drop:130}]};
+  var B2=deepTop('B2',100,100);
+  var C2=deepTop('C2',200,75);
+  var G2=deepTop('G2',0,100);
+  var D2=foldTop('D2',0,75);
+  var F2=shoeTop('F2',175,100);
+  var html = '';
+  html += wall('Left wall, 58 cm deep', 'back wall on the left · A B C, 21 to 296 cm from the back wall, flush with the entrance wall', [A,B,C], [A2,B2,C2], false);
+  html += wall('Back wall', 'frame G between the two runs · 100 cm · mirror doors', [Gf], [G2], false);
+  html += wall('Right wall, 35 cm deep', 'back wall on the right · D 75, E 100, F 100, 21 to 296 from the back wall · attic door leaves 70.5 to 112 (covered) and 112 to 153.5 (in use) · sill 202 · E is 201 tall', [D,E,F], [D2,F2], true, [{x:75,w:100,y0:201,s:'front leaf, sill 202',s2:'step board on E at 201'}]);
+  document.getElementById('walls').innerHTML = html;
+
+  (function(){
+    var K=1.05, top=30, left=60;
+    function panel(x0, depth, label){
+      var w=depth*K, h=201*K, y0=top;
+      var s='';
+      s+='<rect x="'+x0+'" y="'+y0+'" width="'+w+'" height="'+h+'" fill="var(--paper)" stroke="var(--ink)" stroke-width="1"/>';
+      s+='<rect x="'+x0+'" y="'+y0+'" width="'+w+'" height="'+(53*K)+'" fill="var(--warn-bg)" stroke="none"/>';
+      s+='<line x1="'+(x0-10)+'" y1="'+(y0+53*K)+'" x2="'+(x0+w+10)+'" y2="'+(y0+53*K)+'" stroke="#c0392b" stroke-width="1.5" stroke-dasharray="5 3"/>';
+      s+='<line x1="'+(x0+w-1.2*K)+'" y1="'+y0+'" x2="'+(x0+w-1.2*K)+'" y2="'+(y0+h)+'" stroke="var(--line-strong)" stroke-width="1" stroke-dasharray="2 2"/>';
+      for (var yy=8; yy<196; yy+=3.2){ if (yy < 53 || yy > 58){ s+='<circle cx="'+(x0+3.7*K)+'" cy="'+(y0+yy*K)+'" r="0.9" fill="var(--muted)"/>'; s+='<circle cx="'+(x0+w-4.9*K)+'" cy="'+(y0+yy*K)+'" r="0.9" fill="var(--muted)"/>'; } }
+      [[3.7,2.2],[depth-4.9,2.2]].forEach(function(p){ s+='<circle cx="'+(x0+p[0]*K)+'" cy="'+(y0+p[1]*K)+'" r="2.4" fill="var(--drawer-bg)" stroke="var(--drawer)" stroke-width="1"/>'; s+='<circle cx="'+(x0+p[0]*K)+'" cy="'+(y0+(53+p[1])*K)+'" r="2.4" fill="var(--drawer-bg)" stroke="var(--drawer)" stroke-width="1" stroke-dasharray="2 1.5"/>'; });
+      s+='<text x="'+(x0+w/2)+'" y="'+(y0+h+16)+'" text-anchor="middle">'+label+'</text>';
+      s+='<text x="'+(x0+w/2)+'" y="'+(y0+28*K)+'" text-anchor="middle" style="fill:var(--warn)">offcut 53</text>';
+      s+='<text x="'+(x0+w/2)+'" y="'+(y0+120*K)+'" text-anchor="middle">148</text>';
+      s+='<text x="'+(x0+w/2)+'" y="'+(y0+132*K)+'" text-anchor="middle">keep</text>';
+      return s;
+    }
+    var s=[]; var Wd=left+58*K+40+35*K+260, Hd=top+201*K+40;
+    s.push('<svg viewBox="0 0 '+Wd+' '+Hd+'" width="'+Wd+'" style="max-width:100%;height:auto;display:block">');
+    s.push(panel(left, 58, '58 deep, A2 B2 C2 G2'));
+    s.push(panel(left+58*K+40, 35, '35 deep, D2 F2'));
+    var tx = left+58*K+40+35*K+30;
+    s.push('<text x="'+tx+'" y="'+(top+2.2*K+4)+'" style="fill:var(--drawer)">old top-panel holes: measure</text>');
+    s.push('<text x="'+tx+'" y="'+(top+55.2*K+4)+'" style="fill:var(--drawer)">new holes: same offsets from the new top</text>');
+    s.push('<text x="'+tx+'" y="'+(top+53*K-6)+'" style="fill:#c0392b">cut here, 53 cm from the top</text>');
+    s.push('<text x="'+tx+'" y="'+(top+100*K)+'">shelf-pin holes every 3.2 cm, all kept</text>');
+    s.push('<text x="'+tx+'" y="'+(top+114*K)+'">back-panel groove 1 cm from the rear edge</text>');
+    s.push('<text x="'+tx+'" y="'+(top+128*K)+'">bottom end untouched: feet and bottom panel</text>');
+    s.push('<text x="'+tx+'" y="'+(top+150*K)+'">finished panel 148 cm; frame 148 tall on top of 236 = 384</text>');
+    s.push('<text x="'+tx+'" y="'+(top+164*K)+'">cut with a panel saw, tape the line, edge-band the cut</text>');
+    s.push('</svg>');
+    document.getElementById('cut').innerHTML = s.join('');
+  })();
+
+  (function(){
+    var LBL = {strips:'2 strips', each:'each', corner:'corner', drvL:'driver L', drvR:'driver R', pocket:'21 cm pocket', w30:'30 W', socket:'socket', lead5:'5 m lead behind the plinths', lead2:'2 m lead behind G', left:'left wall, unfolded', right:'right wall, unfolded', back:'back wall', c225:'225 cm', entrance:'entrance'};
+    var K=0.72, top=44, M=58;
+    var fr=[{id:'C',w:75,h:236,mid:118,x:21},{id:'B',w:100,h:236,mid:100,x:96},{id:'A',w:100,h:236,mid:118,x:196},
+            {id:'G',w:100,h:236,mid:102,x:337},
+            {id:'D',w:75,h:236,mid:118,x:478},{id:'E',w:100,h:201,mid:100,x:553},{id:'F',w:100,h:236,mid:118,x:653}];
+    var cords={C:'2.4 / 3.4',B:'1.6 / 2.6',A:'0.6 / 1.6',G:'1.3 / 2.3',D:'0.5 / 1.5',E:'1.6 / 2.5',F:'2.3 / 3.3'};
+    function px(cm){ return M + cm*K; } function py(cm){ return top + (236-cm)*K; }
+    var s=[]; var W=px(753)+40, H=py(0)+70;
+    s.push('<svg viewBox="0 0 '+W+' '+H+'" width="'+W+'" style="max-width:100%;height:auto;display:block">');
+    s.push('<line x1="'+px(0)+'" y1="'+py(0)+'" x2="'+px(753)+'" y2="'+py(0)+'" stroke="var(--line-strong)" stroke-width="2"/>');
+    fr.forEach(function(f){
+      var x0=px(f.x), x1=px(f.x+f.w);
+      s.push('<rect x="'+x0+'" y="'+py(f.h)+'" width="'+(x1-x0)+'" height="'+(f.h*K)+'" fill="var(--paper)" stroke="var(--ink)" stroke-width="1"/>');
+      s.push('<text class="big" x="'+((x0+x1)/2)+'" y="'+(py(0)+16)+'" text-anchor="middle">'+f.id+'</text>');
+      s.push('<text x="'+((x0+x1)/2)+'" y="'+(py(0)+30)+'" text-anchor="middle">'+LBL.strips+', '+cords[f.id]+' m</text>');
+      [f.h-4, f.mid].forEach(function(y){
+        s.push('<rect x="'+(x0+6)+'" y="'+(py(y)-2)+'" width="'+(x1-x0-12)+'" height="4" fill="#f2c94c" stroke="#8a5a0b" stroke-width=".5"/>');
+        s.push('<line x1="'+((x0+x1)/2)+'" y1="'+py(y)+'" x2="'+((x0+x1)/2)+'" y2="'+py(225)+'" stroke="#e07b00" stroke-width="1.2"/>');
+      });
+    });
+    function chan(xa,xb){ s.push('<line x1="'+px(xa)+'" y1="'+py(225)+'" x2="'+px(xb)+'" y2="'+py(225)+'" stroke="#e07b00" stroke-width="1.6" stroke-dasharray="6 3"/>'); }
+    chan(21,306); chan(337,437); chan(468,753);
+    s.push('<path d="M '+px(437)+' '+py(225)+' C '+px(445)+' '+py(260)+' '+px(460)+' '+py(260)+' '+px(468)+' '+py(225)+'" fill="none" stroke="#e07b00" stroke-width="1.6" stroke-dasharray="6 3"/>');
+    s.push('<text x="'+px(452)+'" y="'+(py(260)+4)+'" text-anchor="middle">'+LBL.corner+'</text>');
+    [96,196,296,337,478,553,653].forEach(function(x){ s.push('<circle cx="'+px(x)+'" cy="'+py(225)+'" r="3.5" fill="var(--paper)" stroke="#8a5a0b" stroke-width="1.2"/>'); });
+    [[296,316],[458,478]].forEach(function(p){ s.push('<rect x="'+px(p[0])+'" y="'+py(236)+'" width="'+((p[1]-p[0])*K)+'" height="'+(236*K)+'" fill="var(--warn-bg)" stroke="var(--warn)" stroke-dasharray="3 2"/>'); s.push('<text x="'+px(p[0]+10)+'" y="'+(py(120))+'" text-anchor="middle" style="font-size:9px;fill:var(--warn)">'+LBL.pocket+'</text>'); });
+    s.push('<rect x="'+(px(306)-6)+'" y="'+(py(232))+'" width="12" height="'+(11*K)+'" fill="#8a8f93" stroke="var(--ink)" stroke-width=".5"/>');
+    s.push('<text class="lbl" x="'+px(306)+'" y="'+(py(232)-8)+'" text-anchor="middle">'+LBL.drvL+'</text>');
+    s.push('<rect x="'+(px(468)-6)+'" y="'+(py(227))+'" width="12" height="'+(11*K)+'" fill="#8a8f93" stroke="var(--ink)" stroke-width=".5"/>');
+    s.push('<text class="lbl" x="'+px(468)+'" y="'+(py(227)-8)+'" text-anchor="middle">'+LBL.drvR+'</text>');
+    s.push('<rect x="'+(px(0))+'" y="'+(py(30))+'" width="12" height="10" fill="#185fa5"/>');
+    s.push('<text x="'+(px(0)+6)+'" y="'+(py(30)+24)+'" text-anchor="middle">'+LBL.socket+'</text>');
+    s.push('<path d="M '+(px(0)+6)+' '+py(30)+' L '+(px(0)+6)+' '+py(12)+' L '+px(306)+' '+py(12)+' L '+px(306)+' '+py(221)+'" fill="none" stroke="#185fa5" stroke-width="1.6"/>');
+    s.push('<text x="'+px(160)+'" y="'+(py(12)-6)+'" text-anchor="middle" style="fill:#185fa5">'+LBL.lead5+'</text>');
+    s.push('<path d="M '+px(306)+' '+py(221)+' L '+px(306)+' '+py(6)+' L '+px(468)+' '+py(6)+' L '+px(468)+' '+py(216)+'" fill="none" stroke="#185fa5" stroke-width="1.6" stroke-dasharray="3 3"/>');
+    s.push('<text x="'+px(387)+'" y="'+(py(6)+16)+'" text-anchor="middle" style="fill:#185fa5">'+LBL.lead2+'</text>');
+    s.push('<text x="'+px(160)+'" y="'+(py(236)-8)+'" text-anchor="middle">'+LBL.left+'</text>');
+    s.push('<text x="'+px(387)+'" y="'+(py(236)-8)+'" text-anchor="middle">'+LBL.back+'</text>');
+    s.push('<text x="'+px(610)+'" y="'+(py(236)-8)+'" text-anchor="middle">'+LBL.right+'</text>');
+    s.push('<text x="'+(px(21)-4)+'" y="'+(py(225)+4)+'" text-anchor="end" style="font-size:10px">'+LBL.c225+'</text>');
+    s.push('<text x="'+(px(0)+6)+'" y="'+(py(0)+16)+'" text-anchor="middle">'+LBL.entrance+'</text>');
+    s.push('</svg>');
+    document.getElementById('wiring').innerHTML = s.join('');
+  })();
+})();
+</script>
+
+</body>
+</html>

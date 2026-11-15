@@ -1,0 +1,571 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Walk-in PAX 3D</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{--bg:#eef0ed;--paper:#ffffff;--ink:#1d2327;--muted:#5b6469;--line:#d5d9d6;--accent:#185fa5;--accent-bg:#e3eefb;--warn:#8a5a0b;--warn-bg:#f8ecd3;
+  --eli:#1d6fa3;--eli-bg:#dcecf8;--mezi:#a0346b;--mezi-bg:#f7e1ec;--shared:#5f6a6e;--shared-bg:#e6eaea;
+  --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;--mono:"IBM Plex Mono",ui-monospace,Consolas,monospace}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#14181a;--paper:#1f2426;--ink:#e8ebe9;--muted:#a4adaf;--line:#343c3f;--accent:#85b7eb;--accent-bg:#12314d;--warn:#fac775;--warn-bg:#3f2d0c;--eli:#7db8e6;--eli-bg:#143550;--mezi:#e68cc0;--mezi-bg:#4a1f38;--shared:#aab4b8;--shared-bg:#2c3336}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#14181a;--paper:#1f2426;--ink:#e8ebe9;--muted:#a4adaf;--line:#343c3f;--accent:#85b7eb;--accent-bg:#12314d;--warn:#fac775;--warn-bg:#3f2d0c;--eli:#7db8e6;--eli-bg:#143550;--mezi:#e68cc0;--mezi-bg:#4a1f38;--shared:#aab4b8;--shared-bg:#2c3336}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.55;padding-inline:16px;padding-block:22px 48px}
+.wrap{max-width:1160px;margin:0 auto;display:grid;gap:14px}
+h1{font-size:24px;font-weight:600;margin:0;letter-spacing:-.01em}
+.sub{color:var(--muted);margin:0;max-width:78ch}
+.sub a{color:var(--accent)}
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:stretch}
+.grp{display:flex;flex-wrap:wrap;gap:6px;align-items:center;align-content:flex-start;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--paper)}
+.lab{flex:0 0 100%;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 2px}
+#app.full .bars .bar{flex-direction:column;align-items:stretch;gap:8px}
+#app.full .grp{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+#app.full .lab{grid-column:1/-1}
+#app.full button.v,#app.full label.t{width:100%;justify-content:flex-start;text-align:left}
+
+button.v,button.l{font:inherit;font-size:13px;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer}
+button.v:hover,button.l:hover{border-color:var(--accent)} button.v:focus-visible,button.l:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+button.v.on,button.l.on{background:var(--accent-bg);color:var(--accent);border-color:var(--accent)}
+label.t{display:inline-flex;align-items:center;gap:6px;font-size:13px;padding:5px 10px;border-radius:999px;border:1px solid var(--line);background:var(--paper);cursor:pointer}
+label.t input{accent-color:var(--accent);margin:0}
+.view{display:flex;gap:12px;align-items:stretch}
+.view .stage{flex:1;min-width:0}
+#info{width:300px;flex:none;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:16px;font-size:14px;overflow:auto}
+#info h3{margin:0 0 4px;font-size:16px;font-weight:600}
+#info .art{font-family:var(--mono);font-size:12px;color:var(--muted)}
+#info .price{font-family:var(--mono);font-size:22px;font-weight:500;margin:10px 0 2px}
+#info .row{display:flex;justify-content:space-between;gap:8px;border-top:1px solid var(--line);padding:6px 0;font-size:13px}
+#info .row span:first-child{color:var(--muted)}
+#info a{color:var(--accent)}
+#info .hint2{color:var(--muted)}
+#info button{font:inherit;font-size:12px;margin-top:10px;padding:4px 10px;border-radius:999px;border:1px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer}
+@media (max-width:820px){.view{flex-direction:column}#info{width:auto}}
+#app.full{position:fixed;inset:0;z-index:50;background:var(--bg);padding:10px;display:grid;grid-template-columns:330px 1fr;grid-template-rows:auto 1fr;gap:10px;direction:ltr}
+#app.full{grid-template-rows:52vh 1fr}
+#app.full .bars{grid-column:1;grid-row:1;overflow:auto;display:flex;flex-direction:column;gap:6px;height:52vh;padding-right:4px}
+#app.full .bars .stats{display:none}
+#app.full .bars .desc{display:none}
+#app.full .view{display:contents}
+#app.full .stage{grid-column:2;grid-row:1 / span 2;height:auto;min-height:0}
+#app.full #info{grid-column:1;grid-row:2;width:auto;min-height:0;overflow:auto}
+.stage{position:relative;background:var(--paper);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.stage canvas{display:block;width:100%;height:100%;touch-action:none;cursor:grab}
+.stage canvas:active{cursor:grabbing}
+.hint{position:absolute;left:12px;bottom:10px;font-size:12px;color:var(--muted);background:var(--paper);padding:3px 8px;border-radius:6px;opacity:.9;pointer-events:none}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.stat{background:var(--paper);padding:10px 14px}
+.stat b{display:block;font-family:var(--mono);font-size:18px;font-weight:500;font-variant-numeric:tabular-nums}
+.stat span{font-size:12px;color:var(--muted)}
+.desc{font-size:14px;color:var(--muted);margin:0;max-width:90ch}
+.desc b{color:var(--ink);font-weight:600}
+.legend{display:flex;flex-wrap:wrap;gap:8px 20px;font-size:13px;color:var(--muted)}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-1px;margin-right:6px;border:1px solid var(--line)}
+.err{padding:16px;color:var(--warn);background:var(--warn-bg);border-radius:8px}
+.foot{font-size:13px;color:var(--muted);max-width:90ch}
+.foot a{color:var(--accent)}
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+  <div>
+    <h1>Walk-in PAX 3D</h1>
+    <p class="sub">193 × 296 cm room, 389 cm ceiling. Your KOMPLEMENT products drawn in place: glass-front drawers, the pull-out trouser hanger and accessories tray, mesh baskets, shoe shelves, SKUBB and HEMMAFIXARE boxes, light strips, ÅHEIM mirror doors. The attic door in the right wall is a pair of leaves with its sill at 202 cm; the back leaf is covered by D2, the front leaf stays in use, and frame E under it is 201 cm tall. Drag to orbit, scroll to zoom, shift-drag to pan. Measurements and the shopping list are on the <a href="plan.html">plan sheets</a>.</p>
+  </div>
+  <div id="app"><div class="bars">
+  <div class="bar">
+    <div class="grp" id="layouts" style="display:none"><span class="lab">Layout</span></div>
+  </div>
+  <div class="stats" id="stats"></div>
+  <p class="desc" id="desc"></p>
+  <div class="bar">
+    <div class="grp"><span class="lab">View</span>
+      <button class="v on" data-view="dollL" type="button">Dollhouse, left wall</button>
+      <button class="v" data-view="dollR" type="button">Dollhouse, right wall</button>
+      <button class="v" data-view="door" type="button">From the door</button>
+      <button class="v" data-view="inside" type="button">Standing inside</button>
+      <button class="v" data-view="left" type="button">Left wall</button>
+      <button class="v" data-view="back" type="button">Back wall</button>
+      <button class="v" data-view="right" type="button">Right wall</button>
+      <button class="v" data-view="top" type="button">Top</button>
+      <button class="v" data-view="spread" type="button">Spread out</button>
+    </div>
+    <div class="grp"><span class="lab">Walls</span>
+      <label class="t"><input type="checkbox" id="tgLeft" checked> left wall</label>
+      <label class="t"><input type="checkbox" id="tgBack" checked> back wall</label>
+      <label class="t"><input type="checkbox" id="tgRight" checked> right wall</label>
+      <label class="t"><input type="checkbox" id="tgDoor" checked> attic doors</label>
+    </div>
+    <div class="grp"><span class="lab">Show</span>
+      <label class="t"><input type="checkbox" id="tgLevel2" checked> second level</label>
+      <label class="t"><input type="checkbox" id="tgClothes" checked> clothes and products</label>
+      <label class="t"><input type="checkbox" id="tgLabels" checked> labels</label>
+      <label class="t"><input type="checkbox" id="tgLadder" checked> library ladder</label>
+      <label class="t"><input type="checkbox" id="tgCeiling"> ceiling</label>
+      <label class="t"><input type="checkbox" id="tgLights"> lights on</label>
+      <label class="t"><input type="checkbox" id="tgMirror" checked> mirror doors</label>
+      <label class="t"><input type="checkbox" id="tgWiring"> wiring</label>
+    </div>
+    <div class="grp"><span class="lab">Measure</span>
+      <button class="v" id="btnMeasure" type="button">Measure</button>
+      <button class="v" id="btnMeasureClear" type="button">Clear measurements</button>
+    </div>
+    <div class="grp"><span class="lab">Screen</span><button class="v" id="btnFull" type="button">Full screen</button></div>
+  </div>
+  </div>
+  <div class="view"><div class="stage" id="stage"><div class="hint">drag to orbit &middot; scroll to zoom &middot; shift-drag to pan &middot; click a part for details, click a drawer to slide it &middot; Measure: click two points</div></div>
+  <aside id="info"><h3>Product details</h3><p class="hint2">Click any frame, shelf, rail, drawer, box, light or door in the model to see what it is, its article number, price and how many the selected layout uses.</p></aside></div></div>
+  <div class="legend">
+    <span><i style="background:#1d6fa3"></i>Eli</span><span><i style="background:#a0346b"></i>Mezi</span><span><i style="background:#5f6a6e"></i>shared</span>
+    <span><i style="background:#f7d9a8"></i>attic door in the right wall, two leaves, 83 cm in all, 70.5 cm from the back wall; the front leaf stays in use</span>
+    <span><i style="background:#c9d9e3"></i>ÅHEIM mirror doors</span>
+    <span><i style="background:#8a8f93"></i>TRÅDFRI drivers, hidden in the 21 cm pockets in the back corners</span>
+    <span><i style="background:#ff7a00"></i>strip cords behind the back panels, with the wiring switch</span>
+    <span><i style="background:#2b7bd6"></i>leads from the one socket left of the entrance, behind the plinths, to both drivers</span>
+  </div>
+  <p class="foot">Hanging lengths count rail length. Short hanging is a rail with about 95 cm below it, for shirts, jackets and trousers folded over the hanger. Long hanging is a rail with 130 cm or more below it, for dresses and coats. Shoe pairs follow IKEA's figure of 4 pairs per 100 cm shoe shelf and 3 per 75 cm. The second level is 201 cm PAX cut to 148 cm; on the right wall D2 holds folded clothes on shelves 30 cm apart and F2 holds SKUBB shoe boxes above the shoe tower, D2 covers the back leaf of the attic door, and the 75 cm above E stays open for the front leaf. The ladder rail runs the full 275 cm on both walls; on the right it bridges the door gap at 380 cm, so the door's top edge must stay below about 375 cm. A plywood step board on top of E at 201 cm, one centimetre under the door sill, is where you step off the ladder and go through the leaf. The second level is shelved every 22 cm so every box is on its own shelf, no stacking. The wall switches hide or show each run of frames, and <b>attic doors</b>, <b>mirror doors</b> and <b>library ladder</b> have their own switches. Wall and dollhouse views preset them so nothing stands in front of the frames, and you can override any of them. The spread-out view unfolds the two side walls flat beside the back wall, so every frame is seen front-on at once; the walls hinge at the back corners. Click a drawer, basket, the tray or the trouser hanger and it slides out; click again to close it. Clicking anything shows its product details on the side. The Measure button turns clicks into a tape measure: two clicks on any surfaces give the distance, with height, across-room and along-room parts in the panel. Switch on <b>lights on</b> to see the fourteen ÖVERSIDAN strips, one under the top panel and one at mid height in every frame, at mid depth, with the room light dimmed.</p>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+  var stage = document.getElementById('stage');
+  if (typeof THREE === 'undefined') { stage.innerHTML = '<div class="err">The 3D library did not load. Reload the page, or open it in a browser that allows scripts from cdnjs.cloudflare.com.</div>'; return; }
+
+  var W=193, L=296, HC=389, HG=236, HT=148, T=1.8, R=Math.PI/2;
+  var DOOR = {z0:70.5, w:83, y0:202, h:130};
+  var css = getComputedStyle(document.documentElement);
+  function cssColor(name, fb){ var v = css.getPropertyValue(name).trim(); return v || fb; }
+
+  var scene = new THREE.Scene();
+  scene.background = new THREE.Color(cssColor('--paper', '#ffffff'));
+  var camera = new THREE.PerspectiveCamera(46, 1, 5, 6000);
+  var renderer = new THREE.WebGLRenderer({antialias:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1, 2));
+  stage.insertBefore(renderer.domElement, stage.firstChild);
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x9a9a9a, 0.9));
+  var d1 = new THREE.DirectionalLight(0xffffff, 0.6); d1.position.set(400, 700, 700); scene.add(d1);
+  var d2 = new THREE.DirectionalLight(0xffffff, 0.3); d2.position.set(-400, 500, -300); scene.add(d2);
+
+  var M = {
+    panel: new THREE.MeshLambertMaterial({color:0xf3f3f0}),
+    front: new THREE.MeshLambertMaterial({color:0xe4e6e1}),
+    glass: new THREE.MeshPhongMaterial({color:0xdfeef5, transparent:true, opacity:0.35, shininess:120, specular:0xffffff}),
+    glassFrame: new THREE.MeshLambertMaterial({color:0xcfd3cf}),
+    floor: new THREE.MeshLambertMaterial({color:0xb48c66}),
+    wall: new THREE.MeshLambertMaterial({color:0xf5f4f0}),
+    ceil: new THREE.MeshLambertMaterial({color:0xf5f4f0, transparent:true, opacity:0.5}),
+    rail: new THREE.MeshStandardMaterial({color:0xbfc3c7, metalness:0.75, roughness:0.3}),
+    mirror: new THREE.MeshPhongMaterial({color:0xc9d9e3, specular:0xffffff, shininess:160}),
+    door: new THREE.MeshLambertMaterial({color:0xf7d9a8}),
+    hemma: new THREE.MeshLambertMaterial({color:0xe9e7e0}),
+    hemmaStripe: new THREE.MeshLambertMaterial({color:0xb9bdb9}),
+    skubb: new THREE.MeshLambertMaterial({color:0x4a4f55}),
+    skubbWin: new THREE.MeshLambertMaterial({color:0xa9adb3}),
+    insert: new THREE.MeshLambertMaterial({color:0xd9dbd7}),
+    light: new THREE.MeshBasicMaterial({color:0xfff3d6}),
+    steel: new THREE.MeshStandardMaterial({color:0x8a8f93, metalness:0.6, roughness:0.4}),
+    wood: new THREE.MeshLambertMaterial({color:0x9c7a52}),
+    sole: new THREE.MeshLambertMaterial({color:0x2a2a2a})
+  };
+  var edgeMat = new THREE.LineBasicMaterial({color:0x7d8484, transparent:true, opacity:0.5});
+  var wireMat = new THREE.LineBasicMaterial({color:0xb5b9bc});
+  var clothPal = [0x3b4a5a,0x8c6b5d,0xd9d2c5,0x56707a,0x2f2f33,0xb7a58a,0x7a8c6e,0xe8e2d8,0x9a5c5c,0x4b5b7a,0xcfc0a8,0xe3b7c2,0x6d5b7b];
+  var clothMats = clothPal.map(function(c){ return new THREE.MeshLambertMaterial({color:c}); });
+  var shoePal = [0x2b2b2b,0xe5e1d8,0x8a6a4e,0x5a6d7a,0xb84a3a,0xf0e9dd,0x1f3a5a];
+  var shoeMats = shoePal.map(function(c){ return new THREE.MeshLambertMaterial({color:c}); });
+  var seed = 11; function rnd(){ seed = (seed*9301+49297)%233280; return seed/233280; }
+  function pick(a){ return a[Math.floor(rnd()*a.length)]; }
+
+
+  var PRODUCTS = {
+    'frame_100x58x236': {name:'PAX wardrobe frame, white', art:'804.582.07', size:'100 × 58 × 236 cm', price:545, url:'https://www.ikea.com/il/he/p/pax-wardrobe-frame-white-80458207/'},
+    'frame_75x58x236': {name:'PAX wardrobe frame, white', art:'904.582.35', size:'75 × 58 × 236 cm', price:495, url:'https://www.ikea.com/il/he/p/pax-wardrobe-frame-white-90458235/'},
+    'frame_50x58x236': {name:'PAX wardrobe frame, white', art:'', size:'50 × 58 × 236 cm', price:445, est:true},
+    'frame_100x35x236': {name:'PAX wardrobe frame, white', art:'704.581.99', size:'100 × 35 × 236 cm', price:495, url:'https://www.ikea.com/il/he/p/pax-wardrobe-frame-white-70458199/'},
+    'frame_75x35x236': {name:'PAX wardrobe frame, white', art:'604.582.27', size:'75 × 35 × 236 cm', price:445, url:'https://www.ikea.com/il/he/p/pax-wardrobe-frame-white-60458227/'},
+    'frame_75x35x201': {name:'PAX wardrobe frame, white', art:'304.582.24', size:'75 × 35 × 201 cm', price:395, url:'https://www.ikea.com/il/he/p/pax-wardrobe-frame-white-30458224/', note:'Built 201 tall so the attic door sill at 202 clears it.'},
+    'frame_100x58x148': {name:'PAX frame 100 × 58 × 201, cut to 148', art:'704.582.03', size:'100 × 58 × 201 cm, cut to 148', price:495, url:'https://www.ikea.com/il/he/p/pax-wardrobe-frame-white-70458203/', note:'Side panels cut 53 cm at the top, holes re-drilled. See Sheet 5.'},
+    'frame_75x58x148': {name:'PAX frame 75 × 58 × 201, cut to 148', art:'804.582.31', size:'75 × 58 × 201 cm, cut to 148', price:445, url:'https://www.ikea.com/il/he/p/pax-wardrobe-frame-white-80458231/', note:'Side panels cut 53 cm at the top, holes re-drilled.'},
+    'frame_75x35x148': {name:'PAX frame 75 × 35 × 201, cut to 148', art:'304.582.24', size:'75 × 35 × 201 cm, cut to 148', price:395, url:'https://www.ikea.com/il/he/p/pax-wardrobe-frame-white-30458224/', note:'Side panels cut 53 cm at the top, holes re-drilled.'},
+    'frame_100x35x148': {name:'PAX frame 100 × 35 × 201, cut to 148', art:'', size:'100 × 35 × 201 cm, cut to 148', price:445, est:true, note:'Side panels cut 53 cm at the top, holes re-drilled.'},
+    'frame_50x35x148': {name:'PAX frame 50 × 35 × 201, cut to 148', art:'204.582.10', size:'50 × 35 × 201 cm, cut to 148', price:345, url:'https://www.ikea.com/il/he/p/pax-wardrobe-frame-white-20458210/'},
+    'shelf_100x58': {name:'KOMPLEMENT shelf, white', art:'002.779.89', size:'100 × 58 cm', price:65, url:'https://www.ikea.com/il/he/p/komplement-shelf-white-70277957/'},
+    'shelf_75x58': {name:'KOMPLEMENT shelf, white', art:'702.779.95', size:'75 × 58 cm', price:55, url:'https://www.ikea.com/il/he/p/komplement-shelf-white-90277961/'},
+    'shelf_50x58': {name:'KOMPLEMENT shelf, white', art:'402.779.92', size:'50 × 58 cm', price:45, url:'https://www.ikea.com/il/he/p/komplement-shelf-white-30277959/'},
+    'shelf_100x35': {name:'KOMPLEMENT shelf, white', art:'', size:'100 × 35 cm', price:45, url:'https://www.ikea.com/il/he/p/komplement-shelf-white-00277989/'},
+    'shelf_75x35': {name:'KOMPLEMENT shelf, white', art:'', size:'75 × 35 cm', price:40, est:true, url:'https://www.ikea.com/il/he/p/komplement-shelf-white-70277995/'},
+    'shelf_50x35': {name:'KOMPLEMENT shelf, white', art:'', size:'50 × 35 cm', price:35, est:true},
+    'glassshelf_100x58': {name:'KOMPLEMENT glass shelf, white', art:'702.576.38', size:'100 × 58 cm', price:140, url:'https://www.ikea.com/il/he/p/-70257638/', note:'Sits directly on the top drawer so you see into it from above, with the light strip over it.'},
+    'rail_100': {name:'KOMPLEMENT clothes rail, white', art:'302.568.91', size:'100 cm, for 58 cm deep frames', price:30, url:'https://www.ikea.com/il/he/p/-30256891/', note:'Holds about 40 shirts, 38 kg max.'},
+    'rail_75': {name:'KOMPLEMENT clothes rail, white', art:'', size:'75 cm', price:25, est:true},
+    'rail_50': {name:'KOMPLEMENT clothes rail, white', art:'', size:'50 cm', price:20, est:true},
+    'drawer_100x58': {name:'KOMPLEMENT drawer, white', art:'902.463.52', size:'100 × 58 cm', price:165, url:'https://www.ikea.com/il/he/p/komplement-drawer-white-90246352/'},
+    'drawer_75x58': {name:'KOMPLEMENT drawer, white', art:'102.463.32', size:'75 × 58 cm', price:140, url:'https://www.ikea.com/il/he/p/komplement-drawer-white-10246332/', note:'About 12 pairs of folded trousers or 20 T-shirts.'},
+    'drawer_100x35': {name:'KOMPLEMENT drawer, white', art:'702.467.58', size:'100 × 35 cm', price:140, url:'https://www.ikea.com/il/he/p/-70246758/', note:'Your pick. About 15 T-shirts.'},
+    'drawer_75x35': {name:'KOMPLEMENT drawer, white', art:'702.467.44', size:'75 × 35 cm', price:115, url:'https://www.ikea.com/il/he/p/komplement-drawer-white-70246744/'},
+    'drawer_50x35': {name:'KOMPLEMENT drawer, white', art:'302.467.22', size:'50 × 35 cm', price:90, url:'https://www.ikea.com/il/he/p/-30246722/'},
+    'glassdrawer_100x58': {name:'KOMPLEMENT drawer with glass front', art:'205.090.83', size:'100 × 58 cm, grey-beige', price:200, url:'https://www.ikea.com/il/he/p/komplement-drawer-with-glass-front-grey-beige-20509083/', note:'Your pick. White version is 202.467.08. About 18 pairs of trousers or 30 T-shirts.'},
+    'basket_100x35': {name:'KOMPLEMENT mesh basket with pull-out rail', art:'190.109.85', size:'100 × 35 cm', price:70, url:'https://www.ikea.com/il/he/p/-19010985/'},
+    'basket_75x35': {name:'KOMPLEMENT mesh basket with pull-out rail', art:'S39010989', size:'75 × 35 cm', price:60, url:'https://www.ikea.com/il/he/p/komplement-mesh-basket-with-pull-out-rail-white-s39010989/'},
+    'basket_50x35': {name:'KOMPLEMENT mesh basket with pull-out rail', art:'790.109.87', size:'50 × 35 cm', price:50, url:'https://www.ikea.com/il/he/p/-79010987/'},
+    'basket_100x58': {name:'KOMPLEMENT mesh basket with pull-out rail', art:'', size:'100 × 58 cm', price:80, est:true},
+    'basket_50x58': {name:'KOMPLEMENT mesh basket with pull-out rail', art:'', size:'50 × 58 cm', price:60, est:true},
+    'shoeshelf_100x35': {name:'KOMPLEMENT shoe shelf, white', art:'502.572.53', size:'100 × 35 cm, steel', price:70, url:'https://www.ikea.com/il/he/p/komplement-shoe-shelf-white-50257253/', note:'Your pick. 4 pairs per shelf.'},
+    'shoeshelf_75x35': {name:'KOMPLEMENT shoe shelf, white', art:'802.572.61', size:'75 × 35 cm', price:60, url:'https://www.ikea.com/il/he/p/komplement-shoe-shelf-white-80257261/', note:'3 pairs per shelf.'},
+    'shoeshelf_50x35': {name:'KOMPLEMENT shoe shelf, white', art:'602.572.57', size:'50 × 35 cm', price:50, url:'https://www.ikea.com/il/he/p/-60257257/', note:'2 pairs per shelf.'},
+    'trouser_75x58': {name:'KOMPLEMENT pull-out trouser hanger', art:'305.090.68', size:'75 × 58 cm, grey-beige, 6 arms', price:175, url:'https://www.ikea.com/il/he/p/-30509068/', note:'Your pick. 12 pairs. White version is 704.465.40.'},
+    'trouser_100x58': {name:'KOMPLEMENT pull-out trouser hanger, white', art:'004.465.34', size:'100 × 58 cm, 9 arms', price:195, url:'https://www.ikea.com/il/he/p/komplement-pull-out-trouser-hanger-white-00446534/', note:'18 pairs. Soft-closing.'},
+    'tray_75x58': {name:'KOMPLEMENT pull-out tray, white', art:'302.463.74', size:'75 × 58 cm', price:150, url:'https://www.ikea.com/il/he/p/-30246374/', note:'Your pick.'},
+    'insert_75x58': {name:'KOMPLEMENT insert for pull-out tray, light grey', art:'692.778.16', size:'two 25 × 53 and one 15 × 53 cm, 4 compartments each', price:265, url:'https://www.ikea.com/il/he/p/-s69277816/', note:'Your pick. Watches, glasses, belts.'},
+    'mirror': {name:'ÅHEIM mirror door', art:'804.100.55', size:'50 × 229 cm', price:475, url:'https://www.ikea.com/il/he/p/aheim-door-mirror-glass-80410055/', note:'Two per frame G. Hinges sold separately, KOMPLEMENT soft-closing hinge 3 pack, 50.'},
+    'light': {name:'ÖVERSIDAN LED strip with sensor, white', art:'205.894.85', size:'71 cm, 3.5 W, 3.5 m cord', price:69, url:'https://www.ikea.com/il/he/p/-20589485/', note:'Your pick. Two per frame, top and under the mid shelf. Motion sensor built in. Needs a TRÅDFRI driver.'},
+    'driver': {name:'TRÅDFRI driver, 30 W', art:'603.426.56', size:'up to 10 lights, 30 W', price:145, url:'https://www.ikea.com/il/he/p/tradfri-driver-for-wireless-control-grey-60342656/', note:'Two in the plan, each hidden in a 21 cm pocket in a back corner: L behind A runs the 6 left-wall strips at 21 W, R behind D runs D, E, F and G at 28 W. Every cord is under 3.5 m. One socket left of the entrance feeds both through leads behind the plinths.'},
+    'socket': {name:'Socket, existing, left of the entrance', art:'', size:'the one socket for all the lighting', price:0, note:'A 5 m lead runs from it behind the left-wall plinths to the left back pocket, where a 2-way block feeds driver L and a 2 m lead behind G to driver R in the right pocket.'},
+    'hemmaL': {name:'HEMMAFIXARE storage case', art:'705.039.17', size:'69 × 51 × 19 cm', price:95, url:'https://www.ikea.com/il/he/p/hemmafixare-storage-case-fabric-striped-white-grey-70503917/', note:'Your pick. Duvets, blankets, seasonal clothes.'},
+    'hemma': {name:'HEMMAFIXARE storage case', art:'905.039.21', size:'34 × 51 × 19 cm', price:49, url:'https://www.ikea.com/il/he/p/hemmafixare-storage-case-fabric-striped-white-grey-90503921/', note:'Your pick.'},
+    'shoebox': {name:'SKUBB shoe box, 4 pack, dark grey', art:'804.000.04', size:'22 × 34 × 16 cm each', price:49, url:'https://www.ikea.com/il/he/p/-80400004/', note:'Your pick. Price per pack of 4.'},
+    'skubb': {name:'SKUBB box with compartments, dark grey', art:'504.000.05', size:'44 × 34 × 11 cm', price:49, url:'https://www.ikea.com/il/he/p/-50400005/', note:'Your pick. Socks and underwear.'},
+    'ladder': {name:'Hook-on library ladder on rails', art:'', size:'about 392 cm, 77°, rails 2 × 275 cm', price:2500, est:true, note:'See Sheet 6 on the plan page for suppliers.'},
+    'step': {name:'Plywood step board', art:'', size:'73 × 35 × 2 cm on top of E', price:80, est:true, note:'Where you step off the ladder into the attic.'},
+    'door': {name:'Attic door, existing', art:'', size:'two leaves, 83 cm in all, sill at 202', price:0, note:'Back leaf covered by D2, front leaf kept in use.'}
+  };
+  var counts = {}, curTag = null, slides = [];
+  function slider(g, ext){ var pg = new THREE.Group(); g.add(pg); var pc = new THREE.Group(); pg.add(pc); clothesGroups.push(pc); pg.userData.pc = pc; pg.userData.slide = {ext:ext, out:false, target:0}; slides.push(pg); return pg; }
+  function tag(k, n){ curTag = k; if (k && n !== 0) counts[k] = (counts[k]||0) + (n||1); }
+  function box(parent,w,h,d,x,y,z,mat,edges){
+    var g = new THREE.BoxGeometry(w,h,d); var m = new THREE.Mesh(g,mat); if (curTag) m.userData.product = curTag;
+    m.position.set(x+w/2, y+h/2, z+d/2); parent.add(m);
+    if (edges !== false){ var e = new THREE.LineSegments(new THREE.EdgesGeometry(g), edgeMat); m.add(e); }
+    return m;
+  }
+  function wire(parent,w,h,d,x,y,z){ var g = new THREE.BoxGeometry(w,h,d); var e = new THREE.LineSegments(new THREE.EdgesGeometry(g), wireMat); e.position.set(x+w/2,y+h/2,z+d/2); parent.add(e); return e; }
+
+  var floor = new THREE.Mesh(new THREE.PlaneGeometry(W, L), M.floor); floor.rotation.x = -R; floor.position.set(W/2, 0, L/2); scene.add(floor);
+  var back = new THREE.Mesh(new THREE.PlaneGeometry(W, HC), M.wall); back.position.set(W/2, HC/2, 0); scene.add(back);
+  var left = new THREE.Mesh(new THREE.PlaneGeometry(L, HC), M.wall); left.rotation.y = R; left.position.set(0, HC/2, L/2); scene.add(left);
+  var right = new THREE.Mesh(new THREE.PlaneGeometry(L, HC), M.wall); right.rotation.y = -R; right.position.set(W, HC/2, L/2); scene.add(right);
+  var ceil = new THREE.Mesh(new THREE.PlaneGeometry(W, L), M.ceil); ceil.rotation.x = R; ceil.position.set(W/2, HC, L/2); ceil.visible = false; scene.add(ceil);
+  var doorG = new THREE.Group(); scene.add(doorG);
+  var LEAF = DOOR.w/2; tag('door', 0);
+  box(doorG, 2.2, DOOR.h, LEAF-0.5, W-2.2, DOOR.y0, DOOR.z0, M.door);
+  box(doorG, 2.2, DOOR.h, LEAF-0.5, W-2.2, DOOR.y0, DOOR.z0+LEAF+0.5, M.door);
+  box(doorG, 2, 2, 8, W-4.5, DOOR.y0+DOOR.h/2, DOOR.z0+LEAF+3, M.steel, false); curTag = null;
+  var swing = new THREE.Mesh(new THREE.RingGeometry(LEAF-1, LEAF, 24, 1, 0, R), new THREE.MeshBasicMaterial({color:0xd9a84e, side:THREE.DoubleSide, transparent:true, opacity:0.7}));
+  swing.position.set(W, DOOR.y0+0.5, DOOR.z0+DOOR.w); swing.rotation.set(-R, 0, Math.PI); doorG.add(swing);
+  var zones = [];
+  var power = new THREE.Group(); scene.add(power);
+  tag('driver', 0); box(power, 2.6, 11, 4.5, 1, 221, 7, M.steel);
+  box(power, 2.6, 11, 4.5, W-3.6, 216, 7, M.steel);
+  tag('socket', 0); box(power, 8, 8, 1.2, 12, 26, L-1.2, M.panel); curTag = null; var pl3 = sprite('socket', '#5f6a6e', 0.7); pl3.position.set(16, 42, L-2); power.add(pl3);
+  var pl1 = sprite('driver L', '#5f6a6e', 0.75); pl1.position.set(8, 240, 10); power.add(pl1);
+  var pl2 = sprite('driver R', '#5f6a6e', 0.75); pl2.position.set(W-8, 240, 10); power.add(pl2);
+  tag('step', 0); box(doorG, 35, 2.5, 96, 158, 201, 98, M.wood); curTag = null;
+  var stepLabel = sprite('step board', '#8a5a0b', 0.8); stepLabel.position.set(170, 213, 137); doorG.add(stepLabel);
+
+  function sprite(text, color, scale){
+    var c = document.createElement('canvas'); c.width = 256; c.height = 128; var x = c.getContext('2d');
+    x.fillStyle = color || '#1d2327'; x.beginPath(); if (x.roundRect) x.roundRect(28, 18, 200, 92, 24); else x.rect(28,18,200,92); x.fill();
+    x.fillStyle = '#ffffff'; x.font = '600 60px IBM Plex Sans, Arial, sans-serif'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText(text, 128, 66);
+    var tex = new THREE.CanvasTexture(c); tex.minFilter = THREE.LinearFilter;
+    var s = new THREE.Sprite(new THREE.SpriteMaterial({map:tex, depthTest:false, transparent:true, sizeAttenuation:false})); var k = scale || 1; s.scale.set(0.1*k, 0.05*k, 1); s.renderOrder = 10; return s;
+  }
+  var doorLabel = sprite('attic door', '#8a5a0b', 0.9); doorLabel.position.set(W-6, DOOR.y0+DOOR.h+10, DOOR.z0+DOOR.w/2); doorG.add(doorLabel);
+
+  var ground = new THREE.Group(), upper = new THREE.Group(), labels = new THREE.Group(), ladder = new THREE.Group(), wiring = new THREE.Group(); wiring.visible = false;
+  var wireLineMat = new THREE.LineBasicMaterial({color:0xff7a00}), fornMat = new THREE.LineBasicMaterial({color:0x2b7bd6});
+  function wireLine(pts, mat){ var geo = new THREE.BufferGeometry().setFromPoints(pts); var ln = new THREE.Line(geo, mat || wireLineMat); wiring.add(ln); return ln; }
+  function runToDriver(run, p){ var out = []; if (run === 'left'){ out.push(new THREE.Vector3(0.8, 225, p.z), new THREE.Vector3(0.8, 225, 10), new THREE.Vector3(2.3, 226, 10)); } else if (run === 'right'){ out.push(new THREE.Vector3(W-0.8, 225, p.z), new THREE.Vector3(W-0.8, 225, 10), new THREE.Vector3(W-2.3, 221, 10)); } else { out.push(new THREE.Vector3(p.x, 225, 0.8), new THREE.Vector3(W-0.8, 225, 0.8), new THREE.Vector3(W-0.8, 225, 10), new THREE.Vector3(W-2.3, 221, 10)); } return out; }
+  scene.add(ground); scene.add(upper); scene.add(labels); scene.add(ladder); scene.add(wiring);
+  var clothesGroups = [], frames = [], pointLights = [], mirrors = [], currentView = 'dollL';
+  var hemi = scene.children.filter(function(c){ return c.isHemisphereLight; })[0];
+
+  function garment(cg, x, railY, drop, width, d, mat, kind){
+    var s = new THREE.Shape(); var hw = width/2;
+    if (kind === 'long'){ s.moveTo(-hw*0.75, 0); s.lineTo(hw*0.75, 0); s.lineTo(hw, -drop); s.lineTo(-hw, -drop); s.closePath(); }
+    else { s.moveTo(-hw, 0); s.lineTo(hw, 0); s.lineTo(hw*0.82, -drop); s.lineTo(-hw*0.82, -drop); s.closePath(); }
+    var g = new THREE.ExtrudeGeometry(s, {depth:1.5, bevelEnabled:false});
+    var m = new THREE.Mesh(g, mat); m.rotation.y = R; m.position.set(x, railY-2.5, -d/2); cg.add(m);
+    var hook = new THREE.Mesh(new THREE.TorusGeometry(2.2, 0.35, 6, 12, Math.PI), M.steel); hook.rotation.y = R; hook.position.set(x+0.7, railY+0.4, -d/2); cg.add(hook);
+  }
+  function stack(cg, x, y, z, w, d){
+    var n = 3 + Math.floor(rnd()*3), yy = y;
+    for (var i=0;i<n;i++){ var h = 2.2 + rnd()*1.2; box(cg, w - rnd()*4, h, d - 2 - rnd()*4, x + rnd()*2, yy, z + 1 + rnd()*2, pick(clothMats), false); yy += h; }
+  }
+  var spread = false;
+  function frame(o){
+    var g = new THREE.Group(); var px = o.pos[0], py = o.pos[1], pz = o.pos[2], ry = o.rotY;
+    if (spread && o.run === 'left'){ var nx = -pz, nz = px; px = nx; pz = nz; ry = ry - R; }
+    if (spread && o.run === 'right'){ var nx2 = W + pz, nz2 = W - px; px = nx2; pz = nz2; ry = ry + R; }
+    g.position.set(px, py, pz); g.rotation.y = ry; g.userData.run = o.run; frames.push(g);
+    var cg = new THREE.Group(); g.add(cg); clothesGroups.push(cg);
+    var w=o.w, d=o.d, h=o.h, mat = M.panel;
+    var fk = 'frame_'+w+'x'+d+'x'+h; if (!PRODUCTS[fk]) PRODUCTS[fk] = {name:'PAX wardrobe frame, white', art:'', size:w+' × '+d+' × '+h+' cm', price:0, est:true};
+    tag(fk);
+    box(g, T, h, d, 0, 0, -d, mat); box(g, T, h, d, w-T, 0, -d, mat);
+    box(g, w-2*T, T, d, T, 0, -d, mat);
+    var topG = new THREE.PlaneGeometry(w-2*T, d), topM = new THREE.Mesh(topG, mat); topM.rotation.x = R; topM.position.set(w/2, h-T, -d/2); g.add(topM);
+    var topE = new THREE.LineSegments(new THREE.EdgesGeometry(topG), edgeMat); topE.rotation.copy(topM.rotation); topE.position.copy(topM.position); g.add(topE);
+    var bkG = new THREE.PlaneGeometry(w-2*T, h-2*T), bkM = new THREE.Mesh(bkG, mat); bkM.position.set(w/2, h/2, -d+0.3); g.add(bkM); topM.userData.product = fk; bkM.userData.product = fk; curTag = null;
+    var topShelfY = 0, shelfYs = [];
+    (o.items||[]).forEach(function(it){
+      if (it.t === 'shelf'){ shelfYs.push(it.y); tag('shelf_'+w+'x'+d); box(g, w-2*T, T, d-2, T, it.y, -d+1, mat); curTag = null; if (it.y > topShelfY) topShelfY = it.y;
+        if (it.fold){ var sx = T+3; while (sx + 30 < w - T){ stack(cg, sx, it.y+T, -d+4, 28, d-8); sx += 33; } } }
+      if (it.t === 'glassShelf'){ tag('glassshelf_'+w+'x'+d); var gl = box(g, w-2*T-1, 0.8, d-3, T+0.5, it.y, -d+1.5, M.glass, false); curTag = null; if (it.fold){ var gx = T+3; while (gx + 30 < w - T){ stack(cg, gx, it.y+1, -d+4, 28, d-8); gx += 33; } } if (it.y > topShelfY) topShelfY = it.y; }
+      if (it.t === 'rail'){
+        var cyl = new THREE.Mesh(new THREE.CylinderGeometry(1.1, 1.1, w-2*T, 14), M.rail); cyl.rotation.z = R; cyl.position.set(w/2, it.y, -d/2); g.add(cyl); tag('rail_'+w); cyl.userData.product = curTag; curTag = null;
+        var x = T + 4, step = it.kind === 'long' ? 7 : 6; var width = Math.min(42, d - 8);
+        while (x < w - T - 3){ var dr = it.kind === 'long' ? it.drop*(0.8+rnd()*0.2) : it.drop*(0.72+rnd()*0.26); garment(cg, x, it.y, dr, width, d, pick(clothMats), it.kind); x += step; }
+      }
+      if (it.t === 'drawers'){ if (it.y > 60) shelfYs.push(it.y - 2); for (var k=0;k<it.n;k++){ var yb = it.y + k*20; tag((it.glass?'glassdrawer_':'drawer_')+w+'x'+d); var pg = slider(g, d-10), pc = pg.userData.pc;
+          if (it.glass){ box(pg, w-2*T-0.4, 16, T, T+0.2, yb+2, -T, M.glassFrame); box(pg, w-2*T-6, 11, 0.6, T+3, yb+4.5, -0.9, M.glass, false); box(pg, w-2*T-2, 14, d-6, T+1, yb+2.5, -d+3, M.front, false); curTag = null; var sx2=T+4; while (sx2+26 < w-T){ stack(pc, sx2, yb+3, -d+6, 24, d-12); sx2 += 28; } }
+          else { box(pg, w-2*T-0.4, 16, T, T+0.2, yb+2, -T, M.front); box(pg, w-2*T-2, 14, d-6, T+1, yb+2.5, -d+3, M.front, false); curTag = null; var sx5=T+4; while (sx5+26 < w-T){ stack(pc, sx5, yb+3, -d+6, 24, d-12); sx5 += 28; } } curTag = null; } }
+      if (it.t === 'baskets'){ for (var b=0;b<it.n;b++){ var yb2 = it.y + b*20; tag('basket_'+w+'x'+d); var pg2 = slider(g, d-9), pc2 = pg2.userData.pc; wire(pg2, w-2*T-2, 14, d-6, T+1, yb2+2, -d+3); box(pg2, w-2*T-2, 0.4, d-6, T+1, yb2+2, -d+3, M.front, false); curTag = null; var sx3=T+3; while (sx3+22 < w-T){ stack(pc2, sx3, yb2+2.6, -d+5, 20, d-10); sx3 += 24; } } }
+      if (it.t === 'shoes'){ for (var s=0;s<it.n;s++){ var sub = new THREE.Group(); sub.position.set(w/2, it.y + s*it.pitch, -d+3); sub.rotation.x = 0.26; g.add(sub);
+          tag('shoeshelf_'+w+'x'+d); box(sub, w-2*T, 1.5, d-5, -(w-2*T)/2, 0, 0, M.steel, false); curTag = null;
+          var csub = new THREE.Group(); csub.position.copy(sub.position); csub.rotation.copy(sub.rotation); cg.add(csub);
+          var sx4 = -(w-2*T)/2 + 3; while (sx4 + 19 < (w-2*T)/2 - 2){ var sm = pick(shoeMats), len = Math.min(26, d-8);
+            box(csub, 8, 1.4, len, sx4, 1.5, 2, M.sole, false); box(csub, 8, 1.4, len, sx4+9, 1.5, 2, M.sole, false);
+            box(csub, 7.4, 5.5, len-2, sx4+0.3, 2.9, 3, sm, false); box(csub, 7.4, 5.5, len-2, sx4+9.3, 2.9, 3, sm, false); sx4 += 21; } } }
+      if (it.t === 'boot'){ var bx = T+4, by = (it.y||0)+0.5; while (bx + 12 < w - T - 4){ var bm = pick(shoeMats); var bh = 30 + rnd()*14; box(cg, 10, bh, Math.min(28, d-6), bx, by, -d+4, bm, false); bx += 14; } }
+      if (it.t === 'mirror'){ tag('mirror', 2); var m1 = box(g, 49.6, 229, T, 0.2, 3, 0, M.mirror), m2 = box(g, 49.6, 229, T, 50.2, 3, 0, M.mirror); mirrors.push(m1, m2); curTag = null; }
+      if (it.t === 'trouser'){ tag('trouser_'+w+'x'+d); var pg4 = slider(g, d-14), pc4 = pg4.userData.pc; box(pg4, w-2*T-2, 2, 4, T+1, it.y, -d+2, M.steel, false); var ax = T+4; while (ax + 4 < w - T - 3){ box(pg4, 1.2, 1.2, d-10, ax, it.y+1, -d+4, M.steel, false); box(pc4, 1.6, 40, Math.min(30, d-14), ax-0.2, it.y-39, -d/2-12, pick(clothMats), false); ax += 6; } curTag = null; }
+      if (it.t === 'tray'){ tag('tray_'+w+'x'+d); var pg3 = slider(g, d-12); box(pg3, w-2*T-1, 3, d-4, T+0.5, it.y, -d+2, M.front); tag('insert_'+w+'x'+d); var ix = T+2; [25,25,15].forEach(function(iw){ if (ix+iw < w-T){ box(pg3, iw-1, 5, d-6, ix, it.y+3, -d+3, M.insert); wire(pg3, iw-1, 5, d-6, ix, it.y+3, -d+3); for (var q=1;q<4;q++) box(pg3, iw-2, 4.6, 0.3, ix+0.5, it.y+3.2, -d+3+q*(d-6)/4, M.panel, false); ix += iw; } }); curTag = null; }
+      if (it.t === 'boxes'){ tag(it.kind, 0);
+        if (it.kind === 'hemma'){ var bw = 34, bd = 51, bh2 = 19; var bxx = T+2; while (bxx + bw < w - T){ counts.hemma = (counts.hemma||0)+1; box(cg, bw, bh2, bd, bxx, it.y+T+0.3, -d+(d-bd)/2, M.hemma); box(cg, bw-0.4, 4, bd-0.4, bxx+0.2, it.y+T+8, -d+(d-bd)/2+0.2, M.hemmaStripe, false); bxx += bw+3; } }
+        if (it.kind === 'hemmaL'){ var bxl = T+2; if (bxl + 69 < w - T){ counts.hemmaL = (counts.hemmaL||0)+1; box(cg, 69, 19, 51, bxl, it.y+T+0.3, -d+3, M.hemma); box(cg, 68.6, 4, 50.6, bxl+0.2, it.y+T+8, -d+3.2, M.hemmaStripe, false); } }
+        if (it.kind === 'shoebox'){ var sbx = T+2; while (sbx + 22 < w - T){ counts.shoebox = (counts.shoebox||0)+1; box(cg, 22, 16, 34, sbx, it.y+T+0.3, -d+0.5, M.skubb); box(cg, 12, 8, 0.4, sbx+5, it.y+T+4, -d+34.6, M.skubbWin, false); sbx += 24; } }
+        if (it.kind === 'skubb'){ var kx = T+2; while (kx + 44 < w - T){ counts.skubb = (counts.skubb||0)+1; box(cg, 44, 11, 34, kx, it.y+T+0.3, -d+1, M.skubb); kx += 46; } }
+        curTag = null;
+      }
+    });
+    if (o.light !== false && !o.level2){ counts.light = (counts.light||0)+2; var ly = Math.round(h/2); shelfYs.forEach(function(sy){ if (Math.abs(sy - h/2) < 40 && Math.abs(sy - h/2) < Math.abs(ly - h/2) + 1) ly = sy - 2; }); [h - T - 2, ly].forEach(function(yy){ tag('light', 0); box(g, w-2*T-8, 1, 2.5, T+4, yy, -d/2-1.25, M.light, false); curTag = null; var pl = new THREE.PointLight(0xffe4b8, 0, 160, 2); pl.position.set(w/2, yy-3, -d/2); g.add(pl); pointLights.push(pl);
+        if (!spread){ g.updateMatrixWorld(true); var sp0 = g.localToWorld(new THREE.Vector3(w/2, yy, -d/2)), sp1 = g.localToWorld(new THREE.Vector3(w/2, yy, -d+0.3)); var pts = [sp0, sp1, new THREE.Vector3(sp1.x, 225, sp1.z)].concat(runToDriver(o.run, sp1)); wireLine(pts); } }); }
+    (o.level2 ? upper : ground).add(g);
+    g.updateMatrixWorld(true);
+    var ownerCol = o.who === 'Eli' ? '#1d6fa3' : o.who === 'Mezi' ? '#a0346b' : '#5f6a6e';
+    if (o.id){ var p = g.localToWorld(new THREE.Vector3(w/2, o.level2 ? 80 : 150, 10)); var sp = sprite(o.id, o.level2 ? '#5b6469' : ownerCol, o.level2 ? 0.75 : 1); sp.position.copy(p); sp.userData.run = o.run; sp.userData.l2 = !!o.level2; labels.add(sp); }
+    return g;
+  }
+
+  function zone(x,z,w,l,c){ var m = new THREE.Mesh(new THREE.PlaneGeometry(w,l), new THREE.MeshBasicMaterial({color:c, transparent:true, opacity:0.35})); m.rotation.x = -R; m.position.set(x+w/2, 0.4, z+l/2); scene.add(m); zones.push(m); }
+
+  var ELI=0x1d6fa3, MEZI=0xa0346b, SH=0x5f6a6e;
+  function deepUpper(id, pos, rotY, w, large){
+    var items = [], kind = large ? 'hemmaL' : 'hemma';
+    [0,23,46,69,92,115].forEach(function(y,i){ if (i>0) items.push({t:'shelf',y:y}); items.push({t:'boxes',y:y,kind:kind}); });
+    return {id:id, run: rotY===0?'back':'left', w:w, d:58, h:HT, pos:pos, rotY:rotY, level2:true, items:items};
+  }
+  function shallowUpper(id, pos, w, shoes){
+    var items = [];
+    if (shoes) [0,19,38,57,76,95,114].forEach(function(y,i){ if (i>0) items.push({t:'shelf',y:y}); items.push({t:'boxes',y:y,kind:'shoebox'}); });
+    else [0,30,60,90,120].forEach(function(y,i){ if (i>0) items.push({t:'shelf',y:y,fold:true}); else items.push({t:'shelf',y:0.2,fold:true}); });
+    return {id:id, run:'right', w:w, d:35, h:HT, pos:pos, rotY:-R, level2:true, items:items};
+  }
+  var U = {
+    A2: {id:'A2', run:'left', w:100, d:58, h:HT, pos:[58,HG,121], rotY:R, level2:true, items:[{t:'rail',y:142,drop:134,kind:'long'}]},
+    B2: deepUpper('B2', [58,HG,221], R, 100, true),
+    C2: deepUpper('C2', [58,HG,296], R, 75, false),
+    G2: deepUpper('G2', [58,HG,58], 0, 100, true),
+    D2: shallowUpper('D2', [158,HG,21], 75),
+    F2: shallowUpper('F2', [158,HG,196], 100, true)
+  };
+  var upperAll = [U.A2,U.B2,U.C2,U.G2,U.D2,U.F2];
+  function dbl(id,who,run,pos,rotY,w,d){ var corner = (id === 'A'); return {id:id, who:who, run:run, w:w||100, d:d||58, h:HG, pos:pos, rotY:rotY, items:corner?[{t:'shelf',y:214,fold:true},{t:'rail',y:210,drop:84,kind:'short'},{t:'rail',y:100,drop:90,kind:'short'}]:[{t:'shelf',y:214,fold:true},{t:'rail',y:210,drop:84,kind:'short'},{t:'drawers',y:102,n:1},{t:'rail',y:100,drop:90,kind:'short'}]}; }
+  function longDr(id,who,run,pos,rotY,n,glass){ return {id:id, who:who, run:run, w:100, d:58, h:HG, pos:pos, rotY:rotY, items:(glass?[{t:'shelf',y:214,fold:true},{t:'rail',y:210,drop:104,kind:'short'},{t:'glassShelf',y:n*20+2},{t:'drawers',y:0,n:n,glass:true},{t:'mirror'}]:[{t:'shelf',y:200,fold:true},{t:'rail',y:196,drop:112,kind:'long'},{t:'drawers',y:0,n:n,glass:false}])}; }
+  function cDress(who){ return {id:'C', who:who, run:'left', w:75, d:58, h:HG, pos:[58,0,296], rotY:R, items:[{t:'drawers',y:0,n:3},{t:'tray',y:64},{t:'trouser',y:120},{t:'trouser',y:166},{t:'trouser',y:212},{t:'shelf',y:214,fold:true}]}; }
+  function aTrousers(who){ return {id:'A', who:who, run:'left', w:100, d:58, h:HG, pos:[58,0,100], rotY:R, items:[{t:'shelf',y:222,fold:true},{t:'rail',y:212,drop:92,kind:'short'},{t:'trouser',y:110},{t:'trouser',y:62}]}; }
+  function shoeTower(id,who,w,z){ return {id:id, who:who, run:'right', w:w, d:35, h:HG, pos:[158,0,z], rotY:-R, items:[{t:'drawers',y:0,n:2},{t:'shelf',y:42},{t:'boot',y:44},{t:'shoes',y:92,n:8,pitch:19.5}]}; }
+  function foldTower(id,who,w,z){ return {id:id, who:who, run:'right', w:w, d:35, h:HG, pos:[158,0,z], rotY:-R, items:[{t:'boot',y:0},{t:'shelf',y:50,fold:true},{t:'shelf',y:80,fold:true},{t:'shelf',y:110,fold:true},{t:'shelf',y:140,fold:true},{t:'shelf',y:170,fold:true},{t:'shelf',y:200,fold:true}]}; }
+  function eShared(){ return {id:'E', who:'shared', run:'right', w:100, d:35, h:201, pos:[158,0,96], rotY:-R, items:[{t:'drawers',y:0,n:4},{t:'shelf',y:85,fold:true},{t:'shelf',y:115,fold:true},{t:'shelf',y:145,fold:true},{t:'shelf',y:175,fold:true}]}; }
+
+  var LAYOUTS = {
+    balanced: { name:'1 · Balanced split', desc:'<b>The plan as drawn.</b> A and B are double hanging, one each. B has a sliding drawer between the rails; A, in the corner next to G, has nothing between them. A2 above A is long hanging, a rail at 142 cm inside the 148 cm frame, for coats and dresses reached from the ladder. Both runs sit flush against the entrance wall; the 21 cm left over is a sealed pocket in each back corner that hides a lighting driver. The right run is D 75, E 100, F 100 so the front attic leaf clears D. Mezi’s trousers go on three 75 cm pull-out hangers in C above the drawers and the tray. D is Eli’s folded clothes over a boot bay, with no pull-outs because the corner of G blocks them; F is the shoe tower. G has five glass-front drawers under the glass shelf with a rail above, E is shared with four drawers, and F has two drawers at the bottom.',
+      ground:[dbl('A','Eli','left',[58,0,121],R), dbl('B','Mezi','left',[58,0,221],R), cDress('Mezi'), longDr('G','Eli','back',[58,0,58],0,5,true), foldTower('D','Eli',75,21), eShared(), shoeTower('F','Mezi',100,196)],
+      upper:upperAll, zones:[[0,21,58,100,ELI],[58,0,100,58,ELI],[158,21,35,75,ELI],[0,121,58,175,MEZI],[158,196,35,100,MEZI],[158,96,35,100,SH]] },
+  };
+
+  var current = 'balanced';
+  function clearGroup(gr){ while (gr.children.length){ var c = gr.children.pop(); gr.remove(c); } }
+  function build(key){
+    current = key; var Lk = LAYOUTS[key];
+    clearGroup(ground); clearGroup(upper); clearGroup(labels); clearGroup(wiring); clothesGroups = []; frames = []; pointLights = []; mirrors = []; slides = []; counts = {}; counts.driver = 2; counts.light = 0; counts.door = 1; counts.step = 1; counts.ladder = 1; counts.socket = 1; deselect();
+    zones.forEach(function(z){ scene.remove(z); }); zones = [];
+    seed = 11;
+    Lk.ground.forEach(frame); Lk.upper.forEach(frame);
+    if (!spread){ wireLine([new THREE.Vector3(14, 30, L-1.5), new THREE.Vector3(56, 30, L-1.5), new THREE.Vector3(0.8, 30, L-3), new THREE.Vector3(0.8, 30, 10), new THREE.Vector3(2.3, 221, 10)], fornMat); wireLine([new THREE.Vector3(2.3, 221, 10), new THREE.Vector3(2.3, 30, 10), new THREE.Vector3(60, 30, 0.8), new THREE.Vector3(156, 30, 0.8), new THREE.Vector3(W-2.3, 30, 10), new THREE.Vector3(W-2.3, 216, 10)], fornMat); }
+    Lk.zones.forEach(function(z){ zone(z[0],z[1],z[2],z[3],z[4]); });
+    stats(Lk); document.getElementById('desc').innerHTML = Lk.desc;
+    document.querySelectorAll('button.l').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-l') === key); });
+    applyVisibility();
+  }
+  function stats(Lk){
+    var s = {Eli:{short:0,long:0,dr:0,shoes:0,tr:0}, Mezi:{short:0,long:0,dr:0,shoes:0,tr:0}, shared:{short:0,long:0,dr:0,shoes:0,tr:0}}, baskets=0, boots=0, hangers=0;
+    Lk.ground.concat(Lk.upper||[]).forEach(function(f){ var o = s[f.who] || (f.id === 'A2' ? s.Eli : s.shared); (f.items||[]).forEach(function(it){
+      if (it.t==='rail'){ if (it.kind==='long') o.long += f.w; else o.short += f.w; }
+      if (it.t==='drawers') o.dr += it.n;
+      if (it.t==='baskets') baskets += it.n;
+      if (it.t==='shoes') o.shoes += it.n * (f.w>=100?4:f.w>=75?3:2);
+      if (it.t==='boot') boots++;
+      if (it.t==='trouser'){ hangers++; o.tr += f.w>=100 ? 18 : 12; }
+    }); });
+    var tShort = s.Eli.short+s.Mezi.short+s.shared.short, tLong = s.Eli.long+s.Mezi.long+s.shared.long, tDr = s.Eli.dr+s.Mezi.dr+s.shared.dr, tSh = s.Eli.shoes+s.Mezi.shoes+s.shared.shoes;
+    function who(k){ return k==='Eli'?'Eli ':k==='Mezi'?'Mezi ':''; }
+    var html = '';
+    html += '<div class="stat"><b>'+(tShort+tLong)+' cm</b><span>rail in total</span></div>';
+    html += '<div class="stat"><b>'+tLong+' cm</b><span>long hanging'+(tLong?' &middot; Eli '+s.Eli.long+', Mezi '+s.Mezi.long:'')+'</span></div>';
+    html += '<div class="stat"><b>'+tShort+' cm</b><span>short hanging'+(s.Eli.short||s.Mezi.short?' &middot; Eli '+s.Eli.short+', Mezi '+s.Mezi.short:'')+'</span></div>';
+    html += '<div class="stat"><b>'+tDr+(baskets?' + '+baskets:'')+'</b><span>drawers'+(baskets?' + pull-out baskets':'')+(tDr?' &middot; Eli '+s.Eli.dr+', Mezi '+s.Mezi.dr:'')+'</span></div>';
+    var tTr = s.Eli.tr+s.Mezi.tr+s.shared.tr; if (hangers) html += '<div class="stat"><b>'+tTr+' pairs</b><span>trousers on '+hangers+' pull-out hangers &middot; Eli '+s.Eli.tr+', Mezi '+s.Mezi.tr+'</span></div>';
+    html += '<div class="stat"><b>'+tSh+' pairs</b><span>shoes on shelves'+(boots?' + '+boots+' boot bays':'')+(tSh?' &middot; Eli '+s.Eli.shoes+', Mezi '+s.Mezi.shoes:'')+'</span></div>';
+    document.getElementById('stats').innerHTML = html;
+  }
+  var lrow = document.getElementById('layouts');
+  Object.keys(LAYOUTS).forEach(function(k){ var b = document.createElement('button'); b.className = 'l'; b.type = 'button'; b.setAttribute('data-l', k); b.textContent = LAYOUTS[k].name; b.addEventListener('click', function(){ build(k); }); lrow.appendChild(b); });
+
+  tag('ladder', 0); box(ladder, 3, 3, 275, 54.5, HG+HT-4, 21, M.steel, false);
+  box(ladder, 3, 3, 275, 158.5, HG+HT-4, 21, M.steel, false);
+  box(ladder, 3, 3, 4, 158.5, HG+HT-8, 94, M.steel, false); box(ladder, 3, 3, 4, 158.5, HG+HT-8, 196, M.steel, false);
+  var lad = new THREE.Group(); lad.position.set(144, 0, 150); lad.rotation.z = Math.asin(88/394); ladder.add(lad);
+  box(lad, 4, 392, 3, -2, 0, 0, M.wood, false); box(lad, 4, 392, 3, -2, 0, 40, M.wood, false);
+  for (var r = 1; r*28 < 390; r++){ var rg = new THREE.Mesh(new THREE.CylinderGeometry(1.4, 1.4, 40, 10), M.wood); rg.rotation.x = R; rg.position.set(0, r*28, 21.5); lad.add(rg); }
+  box(lad, 6, 6, 50, -3, 387, -5, M.steel, false); lad.children.forEach(function(c){ c.userData.product = 'ladder'; }); curTag = null;
+
+  var target = new THREE.Vector3(), sph = {r:600, theta:0, phi:1.1};
+  var views = {
+    dollL:  {t:[70,175,130], r:520, th:0.62, ph:1.08, hide:'right'},
+    dollR:  {t:[130,175,130], r:520, th:-0.62, ph:1.08, hide:'left'},
+    door:   {t:[96,165,110], r:470, th:0, ph:1.32},
+    inside: {t:[96,150,60], r:230, th:0, ph:1.52},
+    left:   {t:[29,175,140], r:440, th:R, ph:1.5, hide:'right'},
+    back:   {t:[96,175,30], r:340, th:0, ph:1.47},
+    right:  {t:[164,175,140], r:440, th:-R, ph:1.5, hide:'left'},
+    top:    {t:[96,0,148], r:720, th:0, ph:0.04},
+    spread: {t:[96,170,30], r:980, th:0, ph:1.36}
+  };
+  var hiddenRun = null;
+  function applyVisibility(){
+    var l2on = document.getElementById('tgLevel2').checked, con = document.getElementById('tgClothes').checked;
+    frames.forEach(function(f){ f.visible = f.userData.run !== hiddenRun; });
+    labels.children.forEach(function(s){ var ok = s.userData.run ? s.userData.run !== hiddenRun : true; if (s.userData.l2 && !l2on) ok = false; s.visible = ok; });
+    upper.visible = l2on; clothesGroups.forEach(function(g){ g.visible = con; });
+    var runOn = {left: document.getElementById('tgLeft').checked, back: document.getElementById('tgBack').checked, right: document.getElementById('tgRight').checked};
+    hiddenRun = null;
+    frames.forEach(function(f){ f.visible = runOn[f.userData.run] !== false; });
+    labels.children.forEach(function(s){ var ok = s.userData.run ? runOn[s.userData.run] !== false : true; if (s.userData.l2 && !l2on) ok = false; s.visible = ok; });
+    var labOn = document.getElementById('tgLabels').checked; labels.visible = labOn; [doorLabel, stepLabel, pl1, pl2, pl3].forEach(function(t){ t.visible = labOn; }); ladder.visible = document.getElementById('tgLadder').checked; doorG.visible = document.getElementById('tgDoor').checked; power.visible = runOn.right; ceil.visible = document.getElementById('tgCeiling').checked;
+    var mon = document.getElementById('tgMirror').checked; mirrors.forEach(function(m){ m.visible = mon; });
+    wiring.visible = document.getElementById('tgWiring').checked && !spread;
+    left.visible = !spread; right.visible = !spread; zones.forEach(function(z){ z.visible = !spread; }); if (spread){ power.visible = false; doorG.visible = false; }
+    var lon = document.getElementById('tgLights').checked; hemi.intensity = lon ? 0.22 : 0.9; d1.intensity = lon ? 0.12 : 0.6; d2.intensity = lon ? 0.06 : 0.3; pointLights.forEach(function(p){ p.intensity = lon ? 1.1 : 0; });
+  }
+  function updateCam(){ camera.position.set(target.x + sph.r*Math.sin(sph.phi)*Math.sin(sph.theta), target.y + sph.r*Math.cos(sph.phi), target.z + sph.r*Math.sin(sph.phi)*Math.cos(sph.theta)); camera.lookAt(target); }
+  function setView(k){ var v = views[k]; currentView = k; var wantSpread = (k === 'spread'); if (wantSpread !== spread){ spread = wantSpread; build(current); } target.set(v.t[0], v.t[1], v.t[2]); sph.r = v.r; sph.theta = v.th; sph.phi = v.ph;
+    var side = (k === 'left' || k === 'right' || k === 'dollL' || k === 'dollR');
+    document.getElementById('tgLeft').checked = v.hide !== 'left'; document.getElementById('tgRight').checked = v.hide !== 'right'; document.getElementById('tgBack').checked = true;
+    document.getElementById('tgDoor').checked = !side && !wantSpread; document.getElementById('tgLadder').checked = !side && !wantSpread;
+    applyVisibility(); updateCam(); }
+
+  var el = renderer.domElement;
+  var selected = null, selectedMat = null, selMat = new THREE.MeshLambertMaterial({color:0xffd166, emissive:0x8a5a0b, emissiveIntensity:0.5});
+  function deselect(){ if (selected){ selected.material = selectedMat; selected = null; selectedMat = null; } }
+  function showInfo(key){
+    var p = PRODUCTS[key], box = document.getElementById('info'); if (!p){ return; }
+    var n = counts[key] || 0; var perPack = key === 'shoebox' ? 4 : 1; var packs = Math.ceil(n / perPack);
+    var h = '<h3>'+p.name+'</h3><div class="art">'+(p.art ? 'Article '+p.art : 'No IKEA article')+'</div>';
+    h += '<div class="price">'+(p.price ? '₪'+p.price.toLocaleString() : 'existing')+(p.est ? ' <span class="art">estimate</span>' : '')+'</div>';
+    h += '<div class="row"><span>Size</span><span>'+p.size+'</span></div>';
+    if (n) h += '<div class="row"><span>In this layout</span><span>'+n+(perPack>1 ? ' boxes, '+packs+' packs' : '')+'</span></div>';
+    if (n && p.price) h += '<div class="row"><span>Line total</span><span>₪'+(p.price*packs).toLocaleString()+'</span></div>';
+    if (p.note) h += '<p style="margin:10px 0 0">'+p.note+'</p>';
+    if (p.url) h += '<p style="margin:8px 0 0"><a href="'+p.url+'">Open on ikea.com/il</a></p>';
+    h += '<button type="button" id="infoClose">Clear selection</button>';
+    box.innerHTML = h; document.getElementById('infoClose').addEventListener('click', function(){ deselect(); resetInfo(); });
+  }
+  function resetInfo(){ document.getElementById('info').innerHTML = '<h3>Product details</h3><p class="hint2">Click any frame, shelf, rail, drawer, box, light or door in the model to see what it is, its article number, price and how many the selected layout uses.</p>'; }
+  var measuring = false, mPts = [], mGroup = new THREE.Group(); scene.add(mGroup);
+  var mMat = new THREE.MeshBasicMaterial({color:0xd9a84e}), mLine = new THREE.LineBasicMaterial({color:0xd9a84e, linewidth:2});
+  function fmt(v){ return (Math.round(v*10)/10).toFixed(1); }
+  function addMeasurePoint(pt){
+    var s = new THREE.Mesh(new THREE.SphereGeometry(1.6, 12, 12), mMat); s.position.copy(pt); s.renderOrder = 9; mGroup.add(s); mPts.push(pt.clone());
+    if (mPts.length === 2){
+      var a = mPts[0], b = mPts[1], d = a.distanceTo(b);
+      var geo = new THREE.BufferGeometry().setFromPoints([a, b]); var ln = new THREE.Line(geo, mLine); mGroup.add(ln);
+      var lab = sprite(fmt(d)+' cm', '#8a5a0b', 1.1); lab.position.copy(a).lerp(b, 0.5); mGroup.add(lab);
+      var box = document.getElementById('info');
+      box.innerHTML = '<h3>Measurement</h3><div class="price">'+fmt(d)+' cm</div>'
+        + '<div class="row"><span>Height difference</span><span>'+fmt(Math.abs(b.y-a.y))+' cm</span></div>'
+        + '<div class="row"><span>Across the room</span><span>'+fmt(Math.abs(b.x-a.x))+' cm</span></div>'
+        + '<div class="row"><span>Along the room</span><span>'+fmt(Math.abs(b.z-a.z))+' cm</span></div>'
+        + '<div class="row"><span>Point 1</span><span>x '+fmt(a.x)+', h '+fmt(a.y)+', z '+fmt(a.z)+'</span></div>'
+        + '<div class="row"><span>Point 2</span><span>x '+fmt(b.x)+', h '+fmt(b.y)+', z '+fmt(b.z)+'</span></div>'
+        + '<p class="hint2" style="margin-top:10px">x is distance from the left wall, h is height from the floor, z is distance from the back wall. Click two more points for another measurement.</p>';
+      mPts = [];
+    } else {
+      document.getElementById('info').innerHTML = '<h3>Measurement</h3><p class="hint2">First point set at x '+fmt(pt.x)+', h '+fmt(pt.y)+', z '+fmt(pt.z)+'. Click the second point.</p>';
+    }
+  }
+  function clearMeasure(){ while (mGroup.children.length) mGroup.remove(mGroup.children[0]); mPts = []; }
+  document.getElementById('btnMeasure').addEventListener('click', function(){ measuring = !measuring; this.classList.toggle('on', measuring); el.style.cursor = measuring ? 'crosshair' : ''; if (measuring){ deselect(); document.getElementById('info').innerHTML = '<h3>Measurement</h3><p class="hint2">Click a first point on any surface, then a second. The distance between them is shown on the model. Click Measure again to go back to selecting products.</p>'; } else resetInfo(); });
+  document.getElementById('btnMeasureClear').addEventListener('click', function(){ clearMeasure(); if (!measuring) resetInfo(); });
+  var ray = new THREE.Raycaster(), ndc = new THREE.Vector2(), downAt = null;
+  function pickAt(cx, cy){
+    var r = el.getBoundingClientRect(); ndc.x = ((cx - r.left)/r.width)*2 - 1; ndc.y = -((cy - r.top)/r.height)*2 + 1;
+    ray.setFromCamera(ndc, camera); var hits = ray.intersectObjects(scene.children, true);
+    for (var i=0;i<hits.length;i++){ var o = hits[i].object; if (o.isSprite || o.isLineSegments || o.isLine || o.parent === mGroup) continue; var vis = true, q = o; while (q){ if (q.visible === false){ vis = false; break; } q = q.parent; } if (!vis) continue;
+      if (measuring){ addMeasurePoint(hits[i].point); return; }
+      var key = o.userData.product; if (!key) continue; deselect(); if (o.isMesh && o.material){ selected = o; selectedMat = o.material; o.material = selMat; }
+      var sg = o; while (sg && !(sg.userData && sg.userData.slide)) sg = sg.parent; if (sg){ var sl = sg.userData.slide; sl.out = !sl.out; sl.target = sl.out ? sl.ext : 0; }
+      showInfo(key); return; }
+  }
+  var pointers = {}, last = null, pinch = 0;
+  function dist(a,b){ return Math.hypot(a.x-b.x, a.y-b.y); }
+  el.addEventListener('contextmenu', function(e){ e.preventDefault(); });
+  el.addEventListener('pointerdown', function(e){ downAt = {x:e.clientX, y:e.clientY, t:Date.now()}; el.setPointerCapture(e.pointerId); pointers[e.pointerId] = {x:e.clientX, y:e.clientY, b:e.button, shift:e.shiftKey}; last = {x:e.clientX, y:e.clientY}; var ids = Object.keys(pointers); if (ids.length === 2) pinch = dist(pointers[ids[0]], pointers[ids[1]]); });
+  el.addEventListener('pointermove', function(e){
+    if (!pointers[e.pointerId]) return;
+    pointers[e.pointerId].x = e.clientX; pointers[e.pointerId].y = e.clientY;
+    var ids = Object.keys(pointers);
+    if (ids.length >= 2){ var nd = dist(pointers[ids[0]], pointers[ids[1]]); if (pinch > 0) sph.r = Math.min(1600, Math.max(90, sph.r * pinch / nd)); pinch = nd; updateCam(); return; }
+    var dx = e.clientX - last.x, dy = e.clientY - last.y; last = {x:e.clientX, y:e.clientY};
+    var p = pointers[e.pointerId];
+    if (p.b === 2 || p.shift || p.b === 1){ var rv = new THREE.Vector3(), uv = new THREE.Vector3(); camera.matrix.extractBasis(rv, uv, new THREE.Vector3()); var k = sph.r*0.0016; target.addScaledVector(rv, -dx*k); target.addScaledVector(uv, dy*k); }
+    else { sph.theta -= dx*0.006; sph.phi = Math.min(1.56, Math.max(0.04, sph.phi - dy*0.006)); }
+    updateCam();
+  });
+  function up(e){ if (downAt && e.button === 0 && Math.hypot(e.clientX-downAt.x, e.clientY-downAt.y) < 6 && Date.now()-downAt.t < 600) pickAt(e.clientX, e.clientY); downAt = null; delete pointers[e.pointerId]; if (Object.keys(pointers).length < 2) pinch = 0; }
+  el.addEventListener('pointerup', up); el.addEventListener('pointercancel', up);
+  el.addEventListener('wheel', function(e){ e.preventDefault(); sph.r = Math.min(1600, Math.max(90, sph.r*(1 + e.deltaY*0.0012))); updateCam(); }, {passive:false});
+
+  document.querySelectorAll('button.v[data-view]').forEach(function(b){ b.addEventListener('click', function(){ document.querySelectorAll('button.v[data-view]').forEach(function(x){ x.classList.remove('on'); }); b.classList.add('on'); setView(b.getAttribute('data-view')); }); });
+  ['tgLevel2','tgClothes','tgLabels','tgLadder','tgCeiling','tgLights','tgMirror','tgLeft','tgBack','tgRight','tgDoor','tgWiring'].forEach(function(id){ document.getElementById(id).addEventListener('change', applyVisibility); });
+
+  var appEl = document.getElementById('app');
+  function isFull(){ return appEl.classList.contains('full'); }
+  function resize(){ var w = stage.clientWidth || 800; var h = isFull() ? Math.max(300, appEl.clientHeight - 20) : Math.max(440, Math.min(780, Math.round(window.innerHeight*0.72))); stage.style.height = h+'px'; renderer.setSize(w, h, false); camera.aspect = w/h; camera.updateProjectionMatrix(); }
+  resize(); window.addEventListener('resize', resize); if (window.ResizeObserver) new ResizeObserver(resize).observe(stage);
+  var btnFull = document.getElementById('btnFull');
+  function setFullLabel(){ btnFull.textContent = isFull() ? 'Exit full screen' : 'Full screen'; btnFull.classList.toggle('on', isFull()); setTimeout(resize, 50); setTimeout(resize, 300); }
+  function leaveFull(){ appEl.classList.remove('full'); if (document.fullscreenElement) document.exitFullscreen().catch(function(){}); setFullLabel(); }
+  btnFull.addEventListener('click', function(){
+    if (isFull()){ leaveFull(); return; }
+    appEl.classList.add('full'); setFullLabel();
+    if (appEl.requestFullscreen) appEl.requestFullscreen().catch(function(){});
+  });
+  document.addEventListener('fullscreenchange', function(){ if (!document.fullscreenElement && appEl.classList.contains('full')){ /* keep expanded layout even if browser fullscreen was refused or left via browser UI */ } setFullLabel(); });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && isFull()) leaveFull(); });
+  var mq = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)');
+  function theme(){ css = getComputedStyle(document.documentElement); scene.background = new THREE.Color(cssColor('--paper', '#ffffff')); }
+  if (mq && mq.addEventListener) mq.addEventListener('change', theme);
+  new MutationObserver(theme).observe(document.documentElement, {attributes:true, attributeFilter:['data-theme']});
+
+  build('balanced'); setView('dollL');
+  (function loop(){ slides.forEach(function(pg){ var sl = pg.userData.slide; var dz = sl.target - pg.position.z; if (Math.abs(dz) > 0.05) pg.position.z += dz*0.18; }); renderer.render(scene, camera); requestAnimationFrame(loop); })();
+})();
+</script>
+
+</body>
+</html>

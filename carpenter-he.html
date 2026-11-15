@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>דף לנגר PAX</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Hebrew:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#f3f4f1; --paper:#ffffff; --ink:#1d2327; --muted:#5b6469; --line:#d5d9d6; --line-strong:#9aa3a3;
+  --hang:#0f6e56; --hang-bg:#dff3ea; --drawer:#185fa5; --drawer-bg:#e3eefb; --shoe:#b34a1f; --shoe-bg:#f9e6dc;
+  --box:#6b5ea8; --box-bg:#ebe8f7; --warn:#8a5a0b; --warn-bg:#f8ecd3; --grid:#e6e9e6;
+  --eli:#1d6fa3; --eli-bg:#dcecf8; --mezi:#a0346b; --mezi-bg:#f7e1ec; --shared:#5f6a6e; --shared-bg:#e6eaea;
+  --sans:"IBM Plex Sans Hebrew","IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Arial,sans-serif; --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+}
+@media print{.sheet{break-inside:avoid;border:0;padding:0}body{padding:0}}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ color-scheme:dark;
+  --bg:#161a1c; --paper:#1f2426; --ink:#e8ebe9; --muted:#a4adaf; --line:#343c3f; --line-strong:#5a6468;
+  --hang:#5dcaa5; --hang-bg:#0f3d31; --drawer:#85b7eb; --drawer-bg:#12314d; --shoe:#f0997b; --shoe-bg:#4a2416;
+  --box:#afa9ec; --box-bg:#2b2650; --warn:#fac775; --warn-bg:#3f2d0c; --grid:#262c2f;
+  --eli:#7db8e6; --eli-bg:#143550; --mezi:#e68cc0; --mezi-bg:#4a1f38; --shared:#aab4b8; --shared-bg:#2c3336; } }
+:root[data-theme="dark"]{ color-scheme:dark;
+  --bg:#161a1c; --paper:#1f2426; --ink:#e8ebe9; --muted:#a4adaf; --line:#343c3f; --line-strong:#5a6468;
+  --hang:#5dcaa5; --hang-bg:#0f3d31; --drawer:#85b7eb; --drawer-bg:#12314d; --shoe:#f0997b; --shoe-bg:#4a2416;
+  --box:#afa9ec; --box-bg:#2b2650; --warn:#fac775; --warn-bg:#3f2d0c; --grid:#262c2f;
+  --eli:#7db8e6; --eli-bg:#143550; --mezi:#e68cc0; --mezi-bg:#4a1f38; --shared:#aab4b8; --shared-bg:#2c3336; }
+*{box-sizing:border-box}
+body{direction:rtl;margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.6;padding-inline:16px;padding-block:28px 60px}
+.wrap{max-width:1040px;margin:0 auto;display:grid;gap:36px}
+h1{font-size:30px;font-weight:600;letter-spacing:-.01em;margin:0 0 6px;text-wrap:balance}
+h2{font-size:19px;font-weight:600;margin:0 0 12px;text-wrap:balance}
+h3{font-size:15px;font-weight:600;margin:0 0 6px}
+p{margin:0 0 10px;max-width:68ch}
+.lede{color:var(--muted);max-width:70ch}
+.lede a{color:var(--drawer)}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-top:18px}
+.fact{background:var(--paper);padding:14px 16px}
+.fact b{display:block;font-family:var(--mono);font-size:22px;font-weight:500;font-variant-numeric:tabular-nums}
+.fact span{font-size:13px;color:var(--muted)}
+.sheet{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:20px}
+.legend{display:flex;flex-wrap:wrap;gap:14px 22px;font-size:13px;color:var(--muted);margin:6px 0 14px}
+.legend i{display:inline-block;width:14px;height:14px;border-radius:3px;vertical-align:-2px;margin-right:6px;border:1px solid transparent}
+.svgbox{overflow-x:auto;direction:ltr}
+svg text{font-family:var(--mono);font-size:11px;fill:var(--muted)}
+svg .lbl{font-family:var(--sans);font-size:12px;fill:var(--ink);font-weight:500}
+svg .big{font-size:14px;font-weight:600;fill:var(--ink)}
+.walls{display:grid;grid-template-columns:1fr;gap:28px}
+.wall h3{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.wall h3 small{font-weight:400;color:var(--muted);font-family:var(--mono);font-size:12px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:right;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500}
+td.n,th.n{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.sum td{font-weight:600;border-top:2px solid var(--line-strong);border-bottom:0}
+.tag{display:inline-block;font-size:12px;padding:1px 8px;border-radius:999px;font-weight:500;white-space:nowrap}
+.t-hang{background:var(--hang-bg);color:var(--hang)} .t-drawer{background:var(--drawer-bg);color:var(--drawer)} .t-shoe{background:var(--shoe-bg);color:var(--shoe)} .t-box{background:var(--box-bg);color:var(--box)}
+.t-eli{background:var(--eli-bg);color:var(--eli)} .t-mezi{background:var(--mezi-bg);color:var(--mezi)} .t-shared{background:var(--shared-bg);color:var(--shared)} .t-seen{background:var(--grid);color:var(--muted)}
+.note{background:var(--warn-bg);color:var(--warn);border-radius:8px;padding:12px 14px;font-size:14px}
+.note p{color:inherit;margin:0}
+ol,ul{margin:0;padding-right:20px;padding-left:0;max-width:70ch} li{margin-bottom:6px}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px}
+.tbl{overflow-x:auto}
+.foot{color:var(--muted);font-size:13px}
+.who{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-top:14px}
+.who div{border-radius:10px;padding:14px 16px}
+.who h3{margin-bottom:8px}
+.who ul{padding-right:18px;padding-left:0;font-size:14px}
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">דף לנגר · ארון הליכה · IKEA PAX · כל המידות בס"מ · גרסה 1</div>
+    <h1>דף עבודה לנגר</h1>
+    <p class="lede">חדר 193 רוחב × 296 אורך × 389 גובה. שבע מסגרות PAX רגילות על הרצפה ושש מסגרות PAX של 201 ס"מ שנחתכות ל-148 ומוערמות מעליהן. הדף הזה מרכז את מה שהנגר צריך: מיקום כל מסגרת, גובה כל מדף ומוט, החיתוך של הקומה השנייה, החורים לכבלים, והלוחות שצריך לייצר. הרכיבים עצמם הם מוצרי איקאה מהרשימה בתוכנית המלאה.</p>
+    <div class="facts">
+      <div class="fact"><b>193 × 296</b><span>רצפת החדר, הכניסה בקיר הקצר הקדמי</span></div>
+      <div class="fact"><b>389</b><span>גובה תקרה, למדוד בארבע פינות לפני החיתוך</span></div>
+      <div class="fact"><b>236 + 148 = 384</b><span>קומה תחתונה + קומה שנייה, 5 ס"מ מתחת לתקרה</span></div>
+      <div class="fact"><b>100</b><span>מעבר פנוי בין שני הקירות הארוכים</span></div>
+    </div>
+  </header>
+
+  <section class="sheet">
+    <div class="eyebrow">1</div>
+    <h2>מיקום המסגרות</h2>
+    <p>כל המרחקים לאורך הקירות נמדדים מהקיר האחורי. שתי השורות הארוכות צמודות לקיר הכניסה; בכל פינה אחורית נשאר כיס סגור של 21 ס"מ ליד G, שמשמש לדרייברים של התאורה. הקיר השמאלי בעומק 58, הקיר הימני בעומק 35, הקיר האחורי בעומק 58.</p>
+    <div class="tbl"><table>
+      <thead><tr><th>מסגרת</th><th>קיר</th><th>רוחב × עומק × גובה</th><th>מתחיל</th><th>מסתיים</th><th>הערה</th></tr></thead>
+      <tbody>
+        <tr><td><b>A</b></td><td>שמאל</td><td>100 × 58 × 236</td><td class="n">21</td><td class="n">121</td><td>בפינה. בלי פריטים נשלפים</td></tr>
+        <tr><td><b>B</b></td><td>שמאל</td><td>100 × 58 × 236</td><td class="n">121</td><td class="n">221</td><td></td></tr>
+        <tr><td><b>C</b></td><td>שמאל</td><td>75 × 58 × 236</td><td class="n">221</td><td class="n">296</td><td>צמודה לקיר הכניסה</td></tr>
+        <tr><td><b>G</b></td><td>אחורי</td><td>100 × 58 × 236</td><td class="n">58 מהקיר השמאלי</td><td class="n">158 מהקיר השמאלי</td><td>בין שתי השורות. שתי דלתות מראה ÅHEIM 50 × 229</td></tr>
+        <tr><td><b>D</b></td><td>ימין</td><td>75 × 35 × 236</td><td class="n">21</td><td class="n">96</td><td>בפינה. בלי פריטים נשלפים</td></tr>
+        <tr><td><b>E</b></td><td>ימין</td><td>100 × 35 × <b>201</b></td><td class="n">96</td><td class="n">196</td><td>נמוכה בכוונה: סף דלת עליית הגג ב-202</td></tr>
+        <tr><td><b>F</b></td><td>ימין</td><td>100 × 35 × 236</td><td class="n">196</td><td class="n">296</td><td>צמודה לקיר הכניסה</td></tr>
+        <tr><td colspan="6" style="font-weight:600;background:var(--bg)">קומה שנייה, מסגרות 201 חתוכות ל-148, עומדות על המסגרות שמתחת</td></tr>
+        <tr><td><b>A2</b></td><td>שמאל</td><td>100 × 58 × 148</td><td class="n">21</td><td class="n">121</td><td>מוט תלייה אחד ב-142 מתחתית המסגרת</td></tr>
+        <tr><td><b>B2</b></td><td>שמאל</td><td>100 × 58 × 148</td><td class="n">121</td><td class="n">221</td><td>5 מדפים</td></tr>
+        <tr><td><b>C2</b></td><td>שמאל</td><td>75 × 58 × 148</td><td class="n">221</td><td class="n">296</td><td>5 מדפים</td></tr>
+        <tr><td><b>G2</b></td><td>אחורי</td><td>100 × 58 × 148</td><td class="n">58</td><td class="n">158</td><td>5 מדפים</td></tr>
+        <tr><td><b>D2</b></td><td>ימין</td><td>75 × 35 × 148</td><td class="n">21</td><td class="n">96</td><td>4 מדפים. עומדת מול הכנף האחורית הסגורה של דלת עליית הגג</td></tr>
+        <tr><td>—</td><td>ימין</td><td>פנוי</td><td class="n">96</td><td class="n">196</td><td>שום דבר מעל E: כאן נפתחת הכנף הקדמית של דלת עליית הגג</td></tr>
+        <tr><td><b>F2</b></td><td>ימין</td><td>100 × 35 × 148</td><td class="n">196</td><td class="n">296</td><td>6 מדפים</td></tr>
+      </tbody>
+    </table></div>
+    <div class="note" style="margin-top:14px"><p><b>דלת עליית הגג.</b> זוג כנפיים בקיר הימני, 83 ס"מ יחד, מ-70.5 עד 153.5 מהקיר האחורי, סף בגובה 202. הכנף האחורית (70.5–112) נשארת סגורה מאחורי D2. הכנף הקדמית (112–153.5) נשארת בשימוש, ציר בקצה הקדמי שלה ב-153.5, ונפתחת לתוך החלל הפנוי מעל E. הקצה העליון של הכנפיים חייב להיות מתחת ל-375 בגלל מסילת הסולם. לפני תחילת העבודה: למדוד את גובה הקצה העליון של הדלת ולוודא שמשקוף דלת הכניסה לא נכנס ל-58 הס"מ הראשונים משמאל או ל-35 הראשונים מימין של קיר הכניסה.</p></div>
+  </section>
+
+  <section class="sheet">
+    <div class="eyebrow">2</div>
+    <h2>תוכנית רצפה</h2>
+    <div class="legend"><span><i style="background:var(--hang-bg);border-color:var(--hang)"></i>תלייה</span><span><i style="background:var(--drawer-bg);border-color:var(--drawer)"></i>מגירות</span><span><i style="background:var(--shoe-bg);border-color:var(--shoe)"></i>נעליים</span><span><i style="background:var(--warn-bg);border-color:var(--warn)"></i>דלת עליית הגג</span></div>
+    <div class="svgbox" id="plan"></div>
+  </section>
+
+  <section class="sheet">
+    <div class="eyebrow">3</div>
+    <h2>חזיתות ופנים המסגרות</h2>
+    <p>גבהים מהרצפה, בס"מ. מדפים ומוטות של KOMPLEMENT יושבים על פיני המדפים של PAX במרווח 3.2 ס"מ, לכן כל גובה מתעגל לחור הקרוב. מגירות ומגשים נשלפים על המסילות שלהם. בקומה השנייה הגבהים נמדדים מתחתית המסגרת העליונה (236 מהרצפה).</p>
+    <div class="legend"><span><i style="background:var(--hang-bg);border-color:var(--hang)"></i>מוט</span><span><i style="background:var(--drawer-bg);border-color:var(--drawer)"></i>מגירה 16 ס"מ</span><span><i style="background:var(--shoe-bg);border-color:var(--shoe)"></i>מדף נעליים משופע</span><span><i style="background:var(--box-bg);border-color:var(--box)"></i>קומה שנייה</span><span><i style="background:var(--warn-bg);border-color:var(--warn)"></i>פתיחת דלת עליית הגג, לא בונים</span></div>
+    <div class="walls" id="walls"></div>
+    <div class="tbl" style="margin-top:16px"><table>
+      <thead><tr><th>מסגרת</th><th>מהרצפה למעלה</th><th>פסי תאורה</th></tr></thead>
+      <tbody>
+        <tr><td><b>A</b> 100×58</td><td>מוט 100 · מוט 210 · מדף 214</td><td>232 ו-118, באמצע העומק</td></tr>
+        <tr><td><b>B</b> 100×58</td><td>מוט 100 · מגירה 102–118 · מוט 210 · מדף 214</td><td>232 ו-100, מתחת למגירה</td></tr>
+        <tr><td><b>C</b> 75×58</td><td>3 מגירות 0–60 · מגש נשלף 64 · מתלי מכנסיים נשלפים 120, 166, 212 · מדף 214 · בלי מוט</td><td>232 ו-118</td></tr>
+        <tr><td><b>G</b> 100×58</td><td>5 מגירות חזית זכוכית 0–100 · מדף זכוכית 102 · מוט 210 · מדף 214 · 2 דלתות מראה על צירים, ציר בקצה החיצוני של כל דלת</td><td>232 ו-100, מעל מדף הזכוכית</td></tr>
+        <tr><td><b>D</b> 75×35</td><td>תא מגפיים 0–50 · מדפים 50, 80, 110, 140, 170, 200</td><td>232 ו-110</td></tr>
+        <tr><td><b>E</b> 100×35, גובה 201</td><td>4 מגירות 0–80 · מדפים 85, 115, 145, 175 · לוח מדרגה מדיקט על גבי המסגרת ב-201</td><td>197 ו-85</td></tr>
+        <tr><td><b>F</b> 100×35</td><td>2 מגירות 0–40 · מדף 42, תא מגפיים עד 90 · 8 מדפי נעליים ב-92, 111.5, 131, 150.5, 170, 189.5, 209, 228.5</td><td>232 ו-118</td></tr>
+        <tr><td><b>A2</b></td><td>מוט אחד ב-142 מתחתית המסגרת (378 מהרצפה)</td><td>אין</td></tr>
+        <tr><td><b>B2, C2, G2</b></td><td>מדפים ב-23, 46, 69, 92, 115 מתחתית המסגרת</td><td>אין</td></tr>
+        <tr><td><b>D2</b></td><td>מדפים ב-30, 60, 90, 120</td><td>אין</td></tr>
+        <tr><td><b>F2</b></td><td>מדפים ב-19, 38, 57, 76, 95, 114</td><td>אין</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section class="sheet">
+    <div class="eyebrow">4</div>
+    <h2>הקומה השנייה: חיתוך והערמה</h2>
+    <div class="cols">
+      <div>
+        <h3>חיתוך, 12 לוחות צד</h3>
+        <ol>
+          <li>לכל מסגרת עליונה שני לוחות צד של 201. לפני החיתוך למדוד ולרשום את מיקום חורי הדיבלים וחורי הנעילה של הלוח העליון ביחס לקצה העליון.</li>
+          <li>לחתוך 53 ס"מ מהקצה <b>העליון</b> של כל לוח צד, כך שהלוח המוגמר 148. הקצה התחתון, עם חורי הלוח התחתון והרגליות, נשאר שלם.</li>
+          <li>לקדוח מחדש את חורי הלוח העליון באותם מרחקים מהקצה החדש: 8 מ"מ לדיבלים, 15 מ"מ לבתי הנעילה. להשתמש בחתיכה שנחתכה כתבנית.</li>
+          <li>לחתוך את לוח הגב הדק ב-53 ס"מ. קנט מלמין לבן בגיהוץ על כל הקצוות החתוכים.</li>
+          <li>חיתוך במסור לוחות עם סרט על קו החיתוך, לא במסור יד.</li>
+        </ol>
+      </div>
+      <div>
+        <h3>הערמה ועיגון</h3>
+        <ol>
+          <li>קודם כל שבע המסגרות התחתונות: מפולסות, מוברגות זו לזו בצד, ומעוגנות לקיר עם הזוויות של PAX.</li>
+          <li>מסגרת עליונה 148 × 58 אי אפשר להטות למצב זקוף על הבסיס (אלכסון 159, גובה פנוי 153). להרכיב כל מסגרת עליונה במקום, על הבסיס, או להרים אותה בנויה ישר למעלה בשני אנשים.</li>
+          <li>להבריג כל מסגרת עליונה דרך לוח התחתית שלה אל הלוח העליון של המסגרת מתחת, 4 ברגים, ולעגן לקיר עם זוויות PAX. את D2 לעגן לקיר ליד דלת עליית הגג, לא דרכה.</li>
+          <li>הקומה השנייה לדברים קלים בלבד.</li>
+        </ol>
+      </div>
+    </div>
+    <h3 style="margin-top:18px">תרשים חיתוך של לוח צד</h3>
+    <div class="legend"><span><i style="background:var(--paper);border-color:var(--ink)"></i>לוח צד 201</span><span><i style="background:var(--warn-bg);border-color:var(--warn)"></i>שארית 53</span><span><i style="background:var(--paper);border-color:#c0392b;border-style:dashed"></i>קו חיתוך</span><span><i style="background:var(--drawer-bg);border-color:var(--drawer);border-radius:50%"></i>חורי הלוח העליון להעתקה</span></div>
+    <div class="svgbox" id="cut"></div>
+  </section>
+
+  <section class="sheet">
+    <div class="eyebrow">5</div>
+    <h2>לייצר מעץ</h2>
+    <div class="tbl"><table>
+      <thead><tr><th>פריט</th><th>מידות</th><th>חומר</th><th>הערות</th></tr></thead>
+      <tbody>
+        <tr><td>לוח מדרגה על E</td><td>96 × 35 × 2</td><td>דיקט סנדוויץ' 18–21 מ"מ, קנט לבן</td><td>נשען על שני לוחות הצד של E ומוברג אליהם מלמעלה, זווית L לקיר. עליו דורכים כשעוברים לעליית הגג.</td></tr>
+        <tr><td>מכסים לכיסי הפינות</td><td>21 × 58 ו-21 × 35</td><td>מהשאריות של לוחות הצד</td><td>סוגרים את הכיסים מלמעלה בגובה 236, מתחת לקומה השנייה. נשלפים, כדי להגיע לדרייברים.</td></tr>
+        <tr><td>מחיצות למגירות</td><td>52 × 12, 32 יחידות</td><td>מהשאריות של לוחות הצד 53 × 58</td><td>למגירות בעומק 58. אופציונלי.</td></tr>
+        <tr><td>מדפים קטנים ליד דלת עליית הגג</td><td>21 × 35, 8 יחידות</td><td>מהשאריות 53 × 35</td><td>מוברגים ללוח הצד של F2, ברצועת הקיר 153.5–196 מעל E.</td></tr>
+        <tr><td>סינר לפער התקרה</td><td>רצועות 5 ס"מ, כ-6.5 מ'</td><td>מלוחות הגב שנחתכו, צבוע לבן</td><td>סוגר את 5 הס"מ בין 384 לתקרה לאורך שלושת הקירות. סרט דו-צדדי.</td></tr>
+        <tr><td>מסילות לסולם ספרייה</td><td>2 × 275, בגובה 380</td><td>מסילת ברזל של ערכת סולם ספרייה</td><td>לאורך הקצה העליון של מסגרות הקומה השנייה, משמאל ומימין, מ-21 עד 296. בימין המסילה מגשרת על 100 ס"מ פתוחים מעל E, עם תומכים ב-96 וב-196.</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section class="sheet">
+    <div class="eyebrow">6</div>
+    <h2>חורים לכבלים</h2>
+    <p>14 פסי לד ÖVERSIDAN, שניים בכל מסגרת תחתונה, עם כבל של 3.5 מ' כל אחד. שני דרייברים TRÅDFRI 30 וואט יושבים בכיסים הפינתיים האחוריים. הכבלים רצים בתעלה שמאחורי לוחות הגב, בגובה 225, אל הכיסים.</p>
+    <div class="tbl"><table>
+      <thead><tr><th>חור</th><th class="n">קוטר</th><th>איפה</th><th class="n">כמות</th></tr></thead>
+      <tbody>
+        <tr><td>מעבר כבלי תאורה בין מסגרות</td><td class="n">12 מ"מ</td><td>בפינה האחורית העליונה של כל לוח צד משותף: C|B, B|A, D|E, E|F. 1 ס"מ מהקצה האחורי, בגובה 225.</td><td class="n">4 זוגות</td></tr>
+        <tr><td>כניסה לכיס השמאלי</td><td class="n">12 מ"מ</td><td>לוח הקצה האחורי של A, בגובה 225, 1 ס"מ מהקצה האחורי.</td><td class="n">1</td></tr>
+        <tr><td>כניסה לכיס הימני</td><td class="n">12 מ"מ</td><td>לוח הקצה האחורי של D, בגובה 225, ולוח הצד הימני של G, בגובה 225, 1 ס"מ מהקצה האחורי.</td><td class="n">2</td></tr>
+        <tr><td>מאריך 5 מ' מהשקע</td><td class="n">15 מ"מ</td><td>לוח הקצה הקדמי של C ליד הרצפה, ואז בפינה האחורית התחתונה של לוחות הצד C|B ו-B|A, ואל הכיס דרך לוח הקצה של A. הכבל רץ מאחורי הבסיסים.</td><td class="n">4</td></tr>
+        <tr><td>מאריך 2 מ' מהכיס השמאלי לימני</td><td class="n">15 מ"מ</td><td>שני לוחות הצד של G ליד הרצפה, 1 ס"מ מהקצה האחורי.</td><td class="n">2</td></tr>
+      </tbody>
+    </table></div>
+    <h3 style="margin-top:18px">תרשים חיווט, הקירות פרושים</h3>
+    <div class="svgbox" id="wiring"></div>
+  </section>
+</div>
+
+<script>
+(function(){
+  function WHO(w){ return w==='Eli'?'אלי':w==='Mezi'?'מזי':w==='shared'?'משותף':w; }
+  var S = 1.3;
+  var plan = [];
+  var W=193, L=296, ox=70, oy=40;
+  var pw = W*S, pl = L*S;
+  plan.push('<svg viewBox="0 0 '+(pw+190)+' '+(pl+110)+'" width="'+(pw+190)+'" style="max-width:100%;height:auto;display:block;margin:0 auto">');
+  plan.push('<rect x="'+(ox-6)+'" y="'+(oy-6)+'" width="'+(pw+12)+'" height="'+(pl+6)+'" fill="none" stroke="var(--line-strong)" stroke-width="6"/>');
+  function fr(x,y,w,h,cls,label,sub,who){
+    var fill = cls==='hang'?'var(--hang-bg)':cls==='drawer'?'var(--drawer-bg)':'var(--shoe-bg)';
+    var st = cls==='hang'?'var(--hang)':cls==='drawer'?'var(--drawer)':'var(--shoe)';
+    var wc = who==='Eli'?'var(--eli)':who==='Mezi'?'var(--mezi)':'var(--shared)';
+    plan.push('<rect x="'+(ox+x*S)+'" y="'+(oy+y*S)+'" width="'+(w*S)+'" height="'+(h*S)+'" fill="'+fill+'" stroke="'+st+'" stroke-width="1"/>');
+    var cx = ox+(x+w/2)*S, cy = oy+(y+h/2)*S;
+    plan.push('<text class="big" x="'+cx+'" y="'+(cy-6)+'" text-anchor="middle" style="fill:'+st+'">'+label+'</text>');
+    plan.push('<text x="'+cx+'" y="'+(cy+8)+'" text-anchor="middle" style="fill:'+wc+'">'+WHO(who)+'</text>');
+    if(sub) plan.push('<text x="'+cx+'" y="'+(cy+22)+'" text-anchor="middle" style="fill:'+st+'">'+sub+'</text>');
+  }
+  fr(0,21,58,100,'hang','A','100&times;58','Eli');
+  fr(0,121,58,100,'hang','B','100&times;58','Mezi');
+  fr(0,221,58,75,'drawer','C','75&times;58','Mezi');
+  fr(58,0,100,58,'hang','G','100&times;58','Eli');
+  fr(158,21,35,75,'drawer','D','','Eli');
+  fr(158,96,35,100,'drawer','E','','shared');
+  fr(158,196,35,100,'shoe','F','','Mezi');
+  plan.push('<line x1="'+(ox+158*S)+'" y1="'+(oy+58*S)+'" x2="'+(ox+58*S)+'" y2="'+(oy+58*S)+'" stroke="var(--hang)" stroke-width="2.5"/>');
+  plan.push('<text x="'+(ox+108*S)+'" y="'+(oy+58*S+14)+'" text-anchor="middle">דלתות מראה</text>');
+  plan.push('<rect x="'+(ox+193*S-4)+'" y="'+(oy+70.5*S)+'" width="10" height="'+(41.5*S)+'" fill="var(--grid)" stroke="var(--warn)" stroke-dasharray="3 2"/>');
+  plan.push('<rect x="'+(ox+193*S-4)+'" y="'+(oy+112*S)+'" width="10" height="'+(41.5*S)+'" fill="var(--warn-bg)" stroke="var(--warn)"/>');
+  plan.push('<path d="M '+(ox+193*S)+' '+(oy+153.5*S)+' A '+(41.5*S)+' '+(41.5*S)+' 0 0 1 '+(ox+151.5*S)+' '+(oy+153.5*S)+'" fill="none" stroke="var(--warn)" stroke-dasharray="4 3"/>');
+  plan.push('<text class="lbl" x="'+(ox+150*S)+'" y="'+(oy+100*S)+'" text-anchor="middle" style="fill:var(--warn)">דלת עליית הגג, 2 כנפיים</text>');
+  plan.push('<text x="'+(ox+150*S)+'" y="'+(oy+110*S)+'" text-anchor="middle" style="fill:var(--warn)">הכנף האחורית מכוסה על ידי D2</text>');
+  plan.push('<text x="'+(ox+150*S)+'" y="'+(oy+120*S)+'" text-anchor="middle" style="fill:var(--warn)">הכנף הקדמית נשארת, ציר ב-153.5</text>');
+  var sy = oy+137.5*S;
+  plan.push('<line x1="'+(ox+60*S)+'" y1="'+sy+'" x2="'+(ox+131*S)+'" y2="'+sy+'" stroke="var(--line-strong)" stroke-dasharray="6 4"/>');
+  plan.push('<text class="lbl" x="'+(ox+95*S)+'" y="'+(sy-10)+'" text-anchor="middle" style="fill:var(--eli)">אלי</text>');
+  plan.push('<text class="lbl" x="'+(ox+95*S)+'" y="'+(sy+18)+'" text-anchor="middle" style="fill:var(--mezi)">מזי</text>');
+  plan.push('<text class="lbl" x="'+(ox+108*S)+'" y="'+(oy+240*S)+'" text-anchor="middle">מעבר 100</text>');
+  plan.push('<rect x="'+(ox+45*S)+'" y="'+(oy+pl-4)+'" width="'+(90*S)+'" height="8" fill="var(--paper)" stroke="var(--line-strong)" stroke-dasharray="3 3"/>');
+  plan.push('<text class="lbl" x="'+(ox+90*S)+'" y="'+(oy+pl+26)+'" text-anchor="middle">כניסה, פתיחת הדלת לא מצוירת</text>');
+  plan.push('<text x="'+(ox+pw/2)+'" y="'+(oy-16)+'" text-anchor="middle">193</text>');
+  plan.push('<text x="'+(ox-22)+'" y="'+(oy+pl/2)+'" text-anchor="middle" transform="rotate(-90 '+(ox-22)+' '+(oy+pl/2)+')">296</text>');
+  plan.push('<text x="'+(ox+29*S)+'" y="'+(oy+13*S)+'" text-anchor="middle">21</text>');
+  plan.push('<text x="'+(ox+175*S)+'" y="'+(oy+13*S)+'" text-anchor="middle">21</text>');
+  var hx = ox+pw+16;
+  plan.push('<text x="'+hx+'" y="'+(oy+8)+'">מהקיר האחורי</text>');
+  [['0',0],['21',21],['70.5',70.5],['96',96],['153.5',153.5],['196',196],['296',296]].forEach(function(m){ plan.push('<line x1="'+(hx-4)+'" y1="'+(oy+m[1]*S)+'" x2="'+(hx+2)+'" y2="'+(oy+m[1]*S)+'" stroke="var(--line-strong)"/>'); plan.push('<text x="'+(hx+6)+'" y="'+(oy+m[1]*S+4)+'">'+m[0]+'</text>'); });
+  plan.push('<text x="'+hx+'" y="'+(oy+230*S)+'">D 75&times;35</text>');
+  plan.push('<text x="'+hx+'" y="'+(oy+240*S)+'">E 100&times;35</text>');
+  plan.push('<text x="'+hx+'" y="'+(oy+250*S)+'">F 100&times;35</text>');
+  plan.push('</svg>');
+  document.getElementById('plan').innerHTML = plan.join('');
+
+  var K = 1.15, TOP=20, BOT=46, LM=42, RM=16, CEIL=389, G=236, T=148;
+  function py(cm){ return TOP + (CEIL-cm)*K; }
+  function wall(name, sub, frames, tops, flip, gaps){
+    var total = frames.reduce(function(a,f){return a+f.w},0);
+    var width = total*K + LM + RM, height = py(0)+BOT;
+    function px(x,w){ return flip ? LM + (total - x - w)*K : LM + x*K; }
+    var s=[];
+    s.push('<svg viewBox="0 0 '+width+' '+height+'" width="'+width+'" style="max-width:100%;height:auto;display:block">');
+    s.push('<line x1="'+LM+'" y1="'+py(CEIL)+'" x2="'+(LM+total*K)+'" y2="'+py(CEIL)+'" stroke="var(--line-strong)" stroke-width="3"/>');
+    s.push('<line x1="'+LM+'" y1="'+py(0)+'" x2="'+(LM+total*K)+'" y2="'+py(0)+'" stroke="var(--line-strong)" stroke-width="3"/>');
+    [0,G,G+T].forEach(function(h){ s.push('<text x="'+(LM-6)+'" y="'+(py(h)+4)+'" text-anchor="end">'+h+'</text>'); s.push('<line x1="'+(LM-3)+'" y1="'+py(h)+'" x2="'+LM+'" y2="'+py(h)+'" stroke="var(--line-strong)"/>'); });
+    s.push('<text x="'+(LM+total*K)+'" y="'+(py(CEIL)-6)+'" text-anchor="end">תקרה 389</text>');
+    function items(f, x0, x1, base){
+      var ix0=x0+3, ix1=x1-3;
+      (f.items||[]).forEach(function(it){
+        var y = function(v){ return py(base+v); };
+        if(it.t==='shelf'){ s.push('<line x1="'+ix0+'" y1="'+y(it.y)+'" x2="'+ix1+'" y2="'+y(it.y)+'" stroke="var(--ink)" stroke-width="2"/>'); }
+        if(it.t==='rail'){ var yy=y(it.y); s.push('<line x1="'+ix0+'" y1="'+yy+'" x2="'+ix1+'" y2="'+yy+'" stroke="var(--hang)" stroke-width="3"/>');
+          var n=Math.max(3,Math.floor(f.w/14)); for(var i=0;i<n;i++){ var hx=ix0+(i+0.5)*(ix1-ix0)/n; s.push('<line x1="'+hx+'" y1="'+(yy+2)+'" x2="'+hx+'" y2="'+(yy+(it.drop||60)*K)+'" stroke="var(--hang)" stroke-width="1" opacity=".55"/>'); } }
+        if(it.t==='drawers'){ for(var d=0; d<it.n; d++){ var yb=it.y+d*20, yt=yb+16; s.push('<rect x="'+ix0+'" y="'+y(yt)+'" width="'+(ix1-ix0)+'" height="'+(16*K)+'" fill="var(--drawer-bg)" stroke="var(--drawer)" stroke-width="1"/>'); s.push('<line x1="'+((ix0+ix1)/2-10)+'" y1="'+y(yb+8)+'" x2="'+((ix0+ix1)/2+10)+'" y2="'+y(yb+8)+'" stroke="var(--drawer)" stroke-width="2"/>'); } }
+        if(it.t==='shoes'){ for(var k=0;k<it.n;k++){ var ys=it.y+k*it.pitch; s.push('<line x1="'+ix0+'" y1="'+y(ys)+'" x2="'+ix1+'" y2="'+y(ys+9)+'" stroke="var(--shoe)" stroke-width="2.2"/>'); } }
+        if(it.t==='boot'){ s.push('<rect x="'+ix0+'" y="'+y(it.y+it.h)+'" width="'+(ix1-ix0)+'" height="'+(it.h*K)+'" fill="var(--shoe-bg)" stroke="none"/>'); s.push('<text x="'+((ix0+ix1)/2)+'" y="'+(y(it.y+it.h/2)+4)+'" text-anchor="middle" style="fill:var(--shoe)">מגפיים</text>'); }
+        if(it.t==='tr'){ var ty=y(it.y); s.push('<line x1="'+ix0+'" y1="'+ty+'" x2="'+ix1+'" y2="'+ty+'" stroke="var(--drawer)" stroke-width="2.5"/>'); var na=Math.max(4,Math.floor(f.w/12)); for(var a2=0;a2<na;a2++){ var ax2=ix0+(a2+0.5)*(ix1-ix0)/na; s.push('<line x1="'+ax2+'" y1="'+(ty+2)+'" x2="'+ax2+'" y2="'+(ty+40*K)+'" stroke="var(--drawer)" stroke-width="1.2" opacity=".6"/>'); } }
+        if(it.t==='txt'){ s.push('<text x="'+((ix0+ix1)/2)+'" y="'+(y(it.y)+4)+'" text-anchor="middle" style="fill:var(--box)">'+it.s+'</text>'); }
+        if(it.t==='mirror'){ s.push('<line x1="'+((x0+x1)/2)+'" y1="'+py(G)+'" x2="'+((x0+x1)/2)+'" y2="'+py(0)+'" stroke="var(--ink)" stroke-width="1"/>'); for(var m=0;m<8;m++){ var mx=x0+8+m*(x1-x0-16)/7; s.push('<line x1="'+mx+'" y1="'+(py(G)+8)+'" x2="'+(mx-14)+'" y2="'+(py(G)+34)+'" stroke="var(--hang)" stroke-width="1" opacity=".5"/>'); } }
+      });
+    }
+    (gaps||[]).forEach(function(gp){ var gx0=px(gp.x,gp.w), gx1=gx0+gp.w*K, gy0=gp.y0||G; s.push('<rect x="'+gx0+'" y="'+py(G+T)+'" width="'+(gx1-gx0)+'" height="'+((G+T-gy0)*K)+'" fill="var(--warn-bg)" stroke="var(--warn)" stroke-dasharray="5 4"/>'); s.push('<text class="lbl" x="'+((gx0+gx1)/2)+'" y="'+(py(G+T/2))+'" text-anchor="middle" style="fill:var(--warn)">'+gp.s+'</text>'); s.push('<text x="'+((gx0+gx1)/2)+'" y="'+(py(G+T/2)+16)+'" text-anchor="middle" style="fill:var(--warn)">'+gp.s2+'</text>'); });
+    var x = 0;
+    frames.forEach(function(f){
+      var x0 = px(x,f.w), x1 = x0 + f.w*K;
+      var fh = f.h || G;
+      s.push('<rect x="'+x0+'" y="'+py(fh)+'" width="'+(x1-x0)+'" height="'+(fh*K)+'" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.2"/>');
+      if (f.step){ s.push('<rect x="'+x0+'" y="'+(py(fh)-3)+'" width="'+(x1-x0)+'" height="3" fill="var(--warn)"/>'); }
+      items(f, x0, x1, 0);
+      var wc = f.who==='Eli'?'var(--eli)':f.who==='Mezi'?'var(--mezi)':'var(--shared)';
+      s.push('<text class="big" x="'+((x0+x1)/2)+'" y="'+(py(0)+16)+'" text-anchor="middle">'+f.id+'</text>');
+      s.push('<text x="'+((x0+x1)/2)+'" y="'+(py(0)+29)+'" text-anchor="middle" style="fill:'+wc+'">'+WHO(f.who)+'</text>');
+      s.push('<text x="'+((x0+x1)/2)+'" y="'+(py(0)+42)+'" text-anchor="middle">'+f.w+'</text>');
+      x += f.w;
+    });
+    (tops||[]).forEach(function(t){
+      var x0 = px(t.x,t.w), x1 = x0 + t.w*K;
+      s.push('<rect x="'+x0+'" y="'+py(G+T)+'" width="'+(x1-x0)+'" height="'+(T*K)+'" fill="var(--box-bg)" stroke="var(--ink)" stroke-width="1.2"/>');
+      items(t, x0, x1, G);
+      s.push('<text x="'+((x0+x1)/2)+'" y="'+(py(G+T)-5)+'" text-anchor="middle">'+t.id+' · '+t.w+'</text>');
+    });
+    s.push('</svg>');
+    return '<div class="wall"><h3><span>'+name+'</span><small>'+sub+'</small></h3><div class="svgbox">'+s.join('')+'</div></div>';
+  }
+  var A={id:'A',w:100,who:'Eli',items:[{t:'shelf',y:214},{t:'rail',y:210,drop:84},{t:'rail',y:100,drop:90}]};
+  var B={id:'B',w:100,who:'Mezi',items:[{t:'shelf',y:214},{t:'rail',y:210,drop:84},{t:'drawers',y:102,n:1},{t:'rail',y:100,drop:90}]};
+  var C={id:'C',w:75,who:'Mezi',items:[{t:'shelf',y:214},{t:'drawers',y:0,n:3},{t:'shelf',y:64},{t:'shelf',y:70},{t:'tr',y:120},{t:'tr',y:166},{t:'tr',y:212}]};
+  var Gf={id:'G',w:100,who:'Eli',items:[{t:'shelf',y:214},{t:'rail',y:210,drop:104},{t:'shelf',y:102},{t:'drawers',y:0,n:5},{t:'mirror'}]};
+  var D={id:'D',w:75,who:'Eli',items:[{t:'boot',y:0,h:50},{t:'shelf',y:50},{t:'shelf',y:80},{t:'shelf',y:110},{t:'shelf',y:140},{t:'shelf',y:170},{t:'shelf',y:200}]};
+  var E={id:'E',w:100,who:'shared',h:201,step:true,items:[{t:'drawers',y:0,n:4},{t:'shelf',y:85},{t:'shelf',y:115},{t:'shelf',y:145},{t:'shelf',y:175}]};
+  var F={id:'F',w:100,who:'Mezi',items:[{t:'drawers',y:0,n:2},{t:'shelf',y:42},{t:'boot',y:44,h:46},{t:'shoes',y:92,n:8,pitch:19.5}]};
+  function deepTop(id,x,w){ var it=[]; [23,46,69,92,115].forEach(function(y){ it.push({t:'shelf',y:y}); }); [11,34,57,80,103,128].forEach(function(y){ it.push({t:'txt',y:y,s:'קופסה'}); }); return {id:id,x:x,w:w,items:it}; }
+  function shoeTop(id,x,w){ var it=[]; [19,38,57,76,95,114].forEach(function(y){ it.push({t:'shelf',y:y}); }); [9,47,85,123].forEach(function(y){ it.push({t:'txt',y:y,s:'קופסאות נעליים'}); }); return {id:id,x:x,w:w,items:it}; }
+  function foldTop(id,x,w){ var it=[]; [30,60,90,120].forEach(function(y){ it.push({t:'shelf',y:y}); }); [15,45,75,105,133].forEach(function(y){ it.push({t:'txt',y:y,s:'מקופל'}); }); return {id:id,x:x,w:w,items:it}; }
+  var A2={id:'A2',x:0,w:100,items:[{t:'rail',y:142,drop:130}]};
+  var B2=deepTop('B2',100,100);
+  var C2=deepTop('C2',200,75);
+  var G2=deepTop('G2',0,100);
+  var D2=foldTop('D2',0,75);
+  var F2=shoeTop('F2',175,100);
+  var html = '';
+  html += wall('קיר שמאל, עומק 58 ס"מ', 'הקיר האחורי משמאל · A B C, 21 עד 296 ס"מ מהקיר האחורי, צמוד לקיר הכניסה', [A,B,C], [A2,B2,C2], false);
+  html += wall('קיר אחורי', 'מסגרת G בין שתי השורות · 100 ס"מ · דלתות מראה', [Gf], [G2], false);
+  html += wall('קיר ימין, עומק 35 ס"מ', 'הקיר האחורי מימין · D 75, E 100, F 100, 21 עד 296 מהקיר האחורי · כנפי דלת עליית הגג 70.5 עד 112 (מכוסה) ו-112 עד 153.5 (בשימוש) · סף 202 · E בגובה 201', [D,E,F], [D2,F2], true, [{x:75,w:100,y0:201,s:'כנף קדמית, סף 202',s2:'לוח מדרגה על E ב-201'}]);
+  document.getElementById('walls').innerHTML = html;
+
+  (function(){
+    var K=1.05, top=30, left=60;
+    function panel(x0, depth, label){
+      var w=depth*K, h=201*K, y0=top;
+      var s='';
+      s+='<rect x="'+x0+'" y="'+y0+'" width="'+w+'" height="'+h+'" fill="var(--paper)" stroke="var(--ink)" stroke-width="1"/>';
+      s+='<rect x="'+x0+'" y="'+y0+'" width="'+w+'" height="'+(53*K)+'" fill="var(--warn-bg)" stroke="none"/>';
+      s+='<line x1="'+(x0-10)+'" y1="'+(y0+53*K)+'" x2="'+(x0+w+10)+'" y2="'+(y0+53*K)+'" stroke="#c0392b" stroke-width="1.5" stroke-dasharray="5 3"/>';
+      s+='<line x1="'+(x0+w-1.2*K)+'" y1="'+y0+'" x2="'+(x0+w-1.2*K)+'" y2="'+(y0+h)+'" stroke="var(--line-strong)" stroke-width="1" stroke-dasharray="2 2"/>';
+      for (var yy=8; yy<196; yy+=3.2){ if (yy < 53 || yy > 58){ s+='<circle cx="'+(x0+3.7*K)+'" cy="'+(y0+yy*K)+'" r="0.9" fill="var(--muted)"/>'; s+='<circle cx="'+(x0+w-4.9*K)+'" cy="'+(y0+yy*K)+'" r="0.9" fill="var(--muted)"/>'; } }
+      [[3.7,2.2],[depth-4.9,2.2]].forEach(function(p){ s+='<circle cx="'+(x0+p[0]*K)+'" cy="'+(y0+p[1]*K)+'" r="2.4" fill="var(--drawer-bg)" stroke="var(--drawer)" stroke-width="1"/>'; s+='<circle cx="'+(x0+p[0]*K)+'" cy="'+(y0+(53+p[1])*K)+'" r="2.4" fill="var(--drawer-bg)" stroke="var(--drawer)" stroke-width="1" stroke-dasharray="2 1.5"/>'; });
+      s+='<text x="'+(x0+w/2)+'" y="'+(y0+h+16)+'" text-anchor="middle">'+label+'</text>';
+      s+='<text x="'+(x0+w/2)+'" y="'+(y0+28*K)+'" text-anchor="middle" style="fill:var(--warn)">שארית 53</text>';
+      s+='<text x="'+(x0+w/2)+'" y="'+(y0+120*K)+'" text-anchor="middle">148</text>';
+      s+='<text x="'+(x0+w/2)+'" y="'+(y0+132*K)+'" text-anchor="middle">נשאר</text>';
+      return s;
+    }
+    var s=[]; var Wd=left+58*K+40+35*K+260, Hd=top+201*K+40;
+    s.push('<svg viewBox="0 0 '+Wd+' '+Hd+'" width="'+Wd+'" style="max-width:100%;height:auto;display:block">');
+    s.push(panel(left, 58, 'עומק 58, A2 B2 C2 G2'));
+    s.push(panel(left+58*K+40, 35, 'עומק 35, D2 F2'));
+    var tx = left+58*K+40+35*K+30;
+    s.push('<text x="'+tx+'" y="'+(top+2.2*K+4)+'" style="fill:var(--drawer)">חורי הלוח העליון הישנים: למדוד</text>');
+    s.push('<text x="'+tx+'" y="'+(top+55.2*K+4)+'" style="fill:var(--drawer)">חורים חדשים: אותם מרחקים מהקצה העליון החדש</text>');
+    s.push('<text x="'+tx+'" y="'+(top+53*K-6)+'" style="fill:#c0392b">לחתוך כאן, 53 ס"מ מלמעלה</text>');
+    s.push('<text x="'+tx+'" y="'+(top+100*K)+'">חורי פיני מדפים כל 3.2 ס"מ, כולם נשארים</text>');
+    s.push('<text x="'+tx+'" y="'+(top+114*K)+'">חריץ לוח הגב 1 ס"מ מהקצה האחורי</text>');
+    s.push('<text x="'+tx+'" y="'+(top+128*K)+'">הקצה התחתון ללא שינוי: רגליות ולוח תחתון</text>');
+    s.push('<text x="'+tx+'" y="'+(top+150*K)+'">לוח מוגמר 148 ס"מ; מסגרת 148 על גבי 236 = 384</text>');
+    s.push('<text x="'+tx+'" y="'+(top+164*K)+'">לחתוך במסור לוחות, להדביק סרט על הקו, לקנט את החיתוך</text>');
+    s.push('</svg>');
+    document.getElementById('cut').innerHTML = s.join('');
+  })();
+
+  (function(){
+    var LBL = {strips:'2 פסים', each:'כל אחד', corner:'פינה', drvL:'דרייבר L', drvR:'דרייבר R', pocket:'כיס 21', w30:'30 וואט', socket:'שקע', lead5:'מאריך 5 מ׳ מאחורי הבסיסים', lead2:'מאריך 2 מ׳ מאחורי G', left:'קיר שמאל, פרוס', right:'קיר ימין, פרוס', back:'קיר אחורי', c225:'225 ס"מ', entrance:'כניסה'};
+    var K=0.72, top=44, M=58;
+    var fr=[{id:'C',w:75,h:236,mid:118,x:21},{id:'B',w:100,h:236,mid:100,x:96},{id:'A',w:100,h:236,mid:118,x:196},
+            {id:'G',w:100,h:236,mid:102,x:337},
+            {id:'D',w:75,h:236,mid:118,x:478},{id:'E',w:100,h:201,mid:100,x:553},{id:'F',w:100,h:236,mid:118,x:653}];
+    var cords={C:'2.4 / 3.4',B:'1.6 / 2.6',A:'0.6 / 1.6',G:'1.3 / 2.3',D:'0.5 / 1.5',E:'1.6 / 2.5',F:'2.3 / 3.3'};
+    function px(cm){ return M + cm*K; } function py(cm){ return top + (236-cm)*K; }
+    var s=[]; var W=px(753)+40, H=py(0)+70;
+    s.push('<svg viewBox="0 0 '+W+' '+H+'" width="'+W+'" style="max-width:100%;height:auto;display:block">');
+    s.push('<line x1="'+px(0)+'" y1="'+py(0)+'" x2="'+px(753)+'" y2="'+py(0)+'" stroke="var(--line-strong)" stroke-width="2"/>');
+    fr.forEach(function(f){
+      var x0=px(f.x), x1=px(f.x+f.w);
+      s.push('<rect x="'+x0+'" y="'+py(f.h)+'" width="'+(x1-x0)+'" height="'+(f.h*K)+'" fill="var(--paper)" stroke="var(--ink)" stroke-width="1"/>');
+      s.push('<text class="big" x="'+((x0+x1)/2)+'" y="'+(py(0)+16)+'" text-anchor="middle">'+f.id+'</text>');
+      s.push('<text x="'+((x0+x1)/2)+'" y="'+(py(0)+30)+'" text-anchor="middle">'+LBL.strips+', '+cords[f.id]+' m</text>');
+      [f.h-4, f.mid].forEach(function(y){
+        s.push('<rect x="'+(x0+6)+'" y="'+(py(y)-2)+'" width="'+(x1-x0-12)+'" height="4" fill="#f2c94c" stroke="#8a5a0b" stroke-width=".5"/>');
+        s.push('<line x1="'+((x0+x1)/2)+'" y1="'+py(y)+'" x2="'+((x0+x1)/2)+'" y2="'+py(225)+'" stroke="#e07b00" stroke-width="1.2"/>');
+      });
+    });
+    function chan(xa,xb){ s.push('<line x1="'+px(xa)+'" y1="'+py(225)+'" x2="'+px(xb)+'" y2="'+py(225)+'" stroke="#e07b00" stroke-width="1.6" stroke-dasharray="6 3"/>'); }
+    chan(21,306); chan(337,437); chan(468,753);
+    s.push('<path d="M '+px(437)+' '+py(225)+' C '+px(445)+' '+py(260)+' '+px(460)+' '+py(260)+' '+px(468)+' '+py(225)+'" fill="none" stroke="#e07b00" stroke-width="1.6" stroke-dasharray="6 3"/>');
+    s.push('<text x="'+px(452)+'" y="'+(py(260)+4)+'" text-anchor="middle">'+LBL.corner+'</text>');
+    [96,196,296,337,478,553,653].forEach(function(x){ s.push('<circle cx="'+px(x)+'" cy="'+py(225)+'" r="3.5" fill="var(--paper)" stroke="#8a5a0b" stroke-width="1.2"/>'); });
+    [[296,316],[458,478]].forEach(function(p){ s.push('<rect x="'+px(p[0])+'" y="'+py(236)+'" width="'+((p[1]-p[0])*K)+'" height="'+(236*K)+'" fill="var(--warn-bg)" stroke="var(--warn)" stroke-dasharray="3 2"/>'); s.push('<text x="'+px(p[0]+10)+'" y="'+(py(120))+'" text-anchor="middle" style="font-size:9px;fill:var(--warn)">'+LBL.pocket+'</text>'); });
+    s.push('<rect x="'+(px(306)-6)+'" y="'+(py(232))+'" width="12" height="'+(11*K)+'" fill="#8a8f93" stroke="var(--ink)" stroke-width=".5"/>');
+    s.push('<text class="lbl" x="'+px(306)+'" y="'+(py(232)-8)+'" text-anchor="middle">'+LBL.drvL+'</text>');
+    s.push('<rect x="'+(px(468)-6)+'" y="'+(py(227))+'" width="12" height="'+(11*K)+'" fill="#8a8f93" stroke="var(--ink)" stroke-width=".5"/>');
+    s.push('<text class="lbl" x="'+px(468)+'" y="'+(py(227)-8)+'" text-anchor="middle">'+LBL.drvR+'</text>');
+    s.push('<rect x="'+(px(0))+'" y="'+(py(30))+'" width="12" height="10" fill="#185fa5"/>');
+    s.push('<text x="'+(px(0)+6)+'" y="'+(py(30)+24)+'" text-anchor="middle">'+LBL.socket+'</text>');
+    s.push('<path d="M '+(px(0)+6)+' '+py(30)+' L '+(px(0)+6)+' '+py(12)+' L '+px(306)+' '+py(12)+' L '+px(306)+' '+py(221)+'" fill="none" stroke="#185fa5" stroke-width="1.6"/>');
+    s.push('<text x="'+px(160)+'" y="'+(py(12)-6)+'" text-anchor="middle" style="fill:#185fa5">'+LBL.lead5+'</text>');
+    s.push('<path d="M '+px(306)+' '+py(221)+' L '+px(306)+' '+py(6)+' L '+px(468)+' '+py(6)+' L '+px(468)+' '+py(216)+'" fill="none" stroke="#185fa5" stroke-width="1.6" stroke-dasharray="3 3"/>');
+    s.push('<text x="'+px(387)+'" y="'+(py(6)+16)+'" text-anchor="middle" style="fill:#185fa5">'+LBL.lead2+'</text>');
+    s.push('<text x="'+px(160)+'" y="'+(py(236)-8)+'" text-anchor="middle">'+LBL.left+'</text>');
+    s.push('<text x="'+px(387)+'" y="'+(py(236)-8)+'" text-anchor="middle">'+LBL.back+'</text>');
+    s.push('<text x="'+px(610)+'" y="'+(py(236)-8)+'" text-anchor="middle">'+LBL.right+'</text>');
+    s.push('<text x="'+(px(21)-4)+'" y="'+(py(225)+4)+'" text-anchor="end" style="font-size:10px">'+LBL.c225+'</text>');
+    s.push('<text x="'+(px(0)+6)+'" y="'+(py(0)+16)+'" text-anchor="middle">'+LBL.entrance+'</text>');
+    s.push('</svg>');
+    document.getElementById('wiring').innerHTML = s.join('');
+  })();
+})();
+</script>
+
+</body>
+</html>
