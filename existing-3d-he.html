@@ -336,7 +336,7 @@ label.t input{accent-color:var(--accent);margin:0}
     Rf('R1','Eli',0,76,HG, dbl),
     Rf('R2','shared',77.8,79,202, [{t:'drawers',y:0,n:3},{t:'accDrawer',y:60},{t:'shelf',y:85,fold:true},{t:'shelf',y:115,fold:true},{t:'shelf',y:145,fold:true},{t:'shelf',y:175,fold:true}]),
     Rf('R3','Mezi',158.6,66,HG, [{t:'drawers',y:0,n:3},{t:'accDrawer',y:60},{t:'trouser',y:120},{t:'trouser',y:165},{t:'trouser',y:210},{t:'shelf',y:215,fold:true},{t:'shelf',y:243,fold:true}]),
-    Rf('R4','Mezi',226.4,67,HG, [{t:'boot',y:0},{t:'shelf',y:45,fixed:true},{t:'shoes',y:50,n:10,pitch:19},{t:'shelf',y:240,fold:true}])
+    Rf('R4','Mezi',226.4,67,HG, [{t:'boot',y:0},{t:'shelf',y:45,fixed:true},{t:'shoes',y:50,n:9,pitch:18},{t:'shelf',y:215,fold:true},{t:'shelf',y:243,fold:true}])
   ];
   function up(o, items, id){ var c = JSON.parse(JSON.stringify(o)); c.id = id; c.h = HT; c.pos[1] = HG; c.level2 = true; c.isNew = true; c.items = items; delete c.who; return c; }
   function halfBox(kind){ var n = kind==='shoebox' ? 2 : 1; return [{t:'boxes',y:0,kind:kind,n:n},{t:'shelf',y:38},{t:'boxes',y:38,kind:kind,n:n},{t:'shelf',y:76},{t:'boxes',y:76,kind:kind,n:n}]; }
@@ -346,7 +346,7 @@ label.t input{accent-color:var(--accent);margin:0}
     up(GROUND[4], halfBox('bin'), 'R1↑'), up(GROUND[6], halfBox('bag'), 'R3↑'), up(GROUND[7], halfBox('shoebox'), 'R4↑')
   ];
   var ZONES = [[0,0,57,95.7,ELI],[0,95.7,57,94.8,SH],[0,190.5,57,95.7,MEZI],[0,286.2,57,10.8,SH],[57,0,79,35,ELI],[136,0,56,78.7,ELI],[136,78.7,56,80.8,SH],[136,159.5,56,137.5,MEZI]];
-  var DESC = '<b>הארונות הקיימים, פנים חדשים.</b> L1 ו-R1 בפינות האחוריות הם תלייה כפולה של אלי, כי G מסתיר את החלק האחורי שלהם ובתלייה מחליקים את הקולבים. G החדש, בעומק 35, מחזיק חמש מגירות עם חזית זכוכית ומדפים מאחורי שתי דלתות מראה. L2 הוא תלייה ארוכה משותפת מעל שתי מגירות, ו-R2 מתחת לדלת עליית הגג הוא מגירות רדודות, מגירת אביזרים עם מכסה זכוכית ומדפים, עם לוח מדרגה על הגג. L3 של מזי הוא תלייה כפולה עם מגירה בין המוטות, R3 מגירות, מגירת אביזרים ושלושה מתלי מכנסיים, ו-R4 מגדל נעליים מעל תא מגפיים: 10 מדפים לנעליים בשתי שורות, 6 נשלפים עד 150 ו-4 קבועים מעליהם. כל המדפים עד גובה 150 נשלפים. למעלה: בכל שבע התיבות שני מדפים, שלושה תאים לקופסאות, תיקים וקופסאות נעליים.';
+  var DESC = '<b>הארונות הקיימים, פנים חדשים.</b> L1 ו-R1 בפינות האחוריות הם תלייה כפולה של אלי, כי G מסתיר את החלק האחורי שלהם ובתלייה מחליקים את הקולבים. G החדש, בעומק 35, מחזיק חמש מגירות עם חזית זכוכית ומדפים מאחורי שתי דלתות מראה. L2 הוא תלייה ארוכה משותפת מעל שתי מגירות, ו-R2 מתחת לדלת עליית הגג הוא מגירות רדודות, מגירת אביזרים עם מכסה זכוכית ומדפים, עם לוח מדרגה על הגג. L3 של מזי הוא תלייה כפולה עם מגירה בין המוטות, R3 מגירות, מגירת אביזרים ושלושה מתלי מכנסיים, ו-R4 מגדל נעליים מעל תא מגפיים: 9 מדפים לנעליים בשתי שורות, 6 נשלפים עד 150 ו-3 קבועים מעליהם, ומעליהם שני מדפי בגדים ב-215 וב-243, באותו גובה כמו ב-R3. כל המדפים עד גובה 150 נשלפים. למעלה: בכל שבע התיבות שני מדפים, שלושה תאים לקופסאות, תיקים וקופסאות נעליים.';
 
   function stripGroup(){
     var g = new THREE.Group(); g.userData.run = 'left'; g.userData.strip = true; frames.push(g); ground.add(g);
