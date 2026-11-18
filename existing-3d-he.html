@@ -292,12 +292,11 @@ label.t input{accent-color:var(--accent);margin:0}
               box(pc6, 8, 1.4, len, sx4, ys+T, z0, M.sole, false); box(pc6, 8, 1.4, len, sx4+9, ys+T, z0, M.sole, false);
               box(pc6, 7.4, 5.5, len-2, sx4+0.3, ys+T+1.4, z0+1, sm, false); box(pc6, 7.4, 5.5, len-2, sx4+9.3, ys+T+1.4, z0+1, sm, false); sx4 += 21; } });
           } else {
-            var sub = new THREE.Group(); sub.position.set(w/2, ys, -d+3); sub.rotation.x = 0.26; g.add(sub);
-            tag('shoeshelf_'+iw+'x'+d); box(sub, w-2*T, 1.5, d-5, -(w-2*T)/2, 0, 0, M.steel, false); curTag = null;
-            var csub = new THREE.Group(); csub.position.copy(sub.position); csub.rotation.copy(sub.rotation); cg.add(csub);
-            var sx5 = -(w-2*T)/2 + 3; while (sx5 + 19 < (w-2*T)/2 - 2){ var sm2 = pick(shoeMats), len2 = Math.min(26, d-8);
-              box(csub, 8, 1.4, len2, sx5, 1.5, 2, M.sole, false); box(csub, 8, 1.4, len2, sx5+9, 1.5, 2, M.sole, false);
-              box(csub, 7.4, 5.5, len2-2, sx5+0.3, 2.9, 3, sm2, false); box(csub, 7.4, 5.5, len2-2, sx5+9.3, 2.9, 3, sm2, false); sx5 += 21; }
+            tag('shelf_'+iw+'x'+d); box(g, w-2*T, T, d-2, T, ys, -d+1, mat); curTag = null;
+            var len2 = Math.min(24, (d-10)/2);
+            [-d+4, -d+6+len2].forEach(function(z0){ var sx5 = T+3; while (sx5 + 19 < w - T - 1){ var sm2 = pick(shoeMats);
+              box(cg, 8, 1.4, len2, sx5, ys+T, z0, M.sole, false); box(cg, 8, 1.4, len2, sx5+9, ys+T, z0, M.sole, false);
+              box(cg, 7.4, 5.5, len2-2, sx5+0.3, ys+T+1.4, z0+1, sm2, false); box(cg, 7.4, 5.5, len2-2, sx5+9.3, ys+T+1.4, z0+1, sm2, false); sx5 += 21; } });
           } } }
       if (it.t === 'boot'){ var bx = T+4, by = (it.y||0)+0.5; while (bx + 12 < w - T - 4){ var bm = pick(shoeMats); var bh = 30 + rnd()*12; box(cg, 10, bh, Math.min(28, d-6), bx, by, -d+4, bm, false); bx += 14; } }
       if (it.t === 'mirror'){ tag('mirror', 2); var hw = (w-0.8)/2; var h1 = hinge(g, 0.2, 2, 0, -1.5), h2 = hinge(g, w-0.2, 2, 0, 1.5); var m1 = box(h1, hw, 266, T, 0, 0, 0, M.mirror), m2 = box(h2, hw, 266, T, -hw, 0, 0, M.mirror); mirrors.push(m1, m2); curTag = null; }
@@ -347,7 +346,7 @@ label.t input{accent-color:var(--accent);margin:0}
     up(GROUND[4], halfBox('bin'), 'R1↑'), up(GROUND[6], halfBox('bag'), 'R3↑'), up(GROUND[7], halfBox('shoebox'), 'R4↑')
   ];
   var ZONES = [[0,0,57,95.7,ELI],[0,95.7,57,94.8,SH],[0,190.5,57,95.7,MEZI],[0,286.2,57,10.8,SH],[57,0,79,35,ELI],[136,0,56,78.7,ELI],[136,78.7,56,80.8,SH],[136,159.5,56,137.5,MEZI]];
-  var DESC = '<b>הארונות הקיימים, פנים חדשים.</b> L1 ו-R1 בפינות האחוריות הם תלייה כפולה של אלי, כי G מסתיר את החלק האחורי שלהם ובתלייה מחליקים את הקולבים. G החדש, בעומק 35, מחזיק חמש מגירות עם חזית זכוכית ומדפים מאחורי שתי דלתות מראה. L2 הוא תלייה ארוכה משותפת מעל שתי מגירות, ו-R2 מתחת לדלת עליית הגג הוא מגירות רדודות, מגירת אביזרים עם מכסה זכוכית ומדפים, עם לוח מדרגה על הגג. L3 של מזי הוא תלייה כפולה עם מגירה בין המוטות, R3 מגירות, מגירת אביזרים ושלושה מתלי מכנסיים, ו-R4 מגדל נעליים מעל תא מגפיים: 6 מדפים נשלפים בשתי שורות עד 150, ומעליהם 4 מדפים משופעים. כל המדפים עד גובה 150 נשלפים. למעלה: בכל שבע התיבות שני מדפים, שלושה תאים לקופסאות, תיקים וקופסאות נעליים.';
+  var DESC = '<b>הארונות הקיימים, פנים חדשים.</b> L1 ו-R1 בפינות האחוריות הם תלייה כפולה של אלי, כי G מסתיר את החלק האחורי שלהם ובתלייה מחליקים את הקולבים. G החדש, בעומק 35, מחזיק חמש מגירות עם חזית זכוכית ומדפים מאחורי שתי דלתות מראה. L2 הוא תלייה ארוכה משותפת מעל שתי מגירות, ו-R2 מתחת לדלת עליית הגג הוא מגירות רדודות, מגירת אביזרים עם מכסה זכוכית ומדפים, עם לוח מדרגה על הגג. L3 של מזי הוא תלייה כפולה עם מגירה בין המוטות, R3 מגירות, מגירת אביזרים ושלושה מתלי מכנסיים, ו-R4 מגדל נעליים מעל תא מגפיים: 10 מדפים לנעליים בשתי שורות, 6 נשלפים עד 150 ו-4 קבועים מעליהם. כל המדפים עד גובה 150 נשלפים. למעלה: בכל שבע התיבות שני מדפים, שלושה תאים לקופסאות, תיקים וקופסאות נעליים.';
 
   function stripGroup(){
     var g = new THREE.Group(); g.userData.run = 'left'; g.userData.strip = true; frames.push(g); ground.add(g);
@@ -374,7 +373,7 @@ label.t input{accent-color:var(--accent);margin:0}
       if (it.t==='rail'){ if (it.kind==='long') o.long += iw; else o.short += iw; }
       if (it.t==='drawers') o.dr += it.n;
       if (it.t==='accDrawer') o.dr += 1;
-      if (it.t==='shoes'){ for (var q=0;q<it.n;q++) o.shoes += (iw>=60?3:2) * (it.y+q*it.pitch <= 150 ? 2 : 1); }
+      if (it.t==='shoes'){ for (var q=0;q<it.n;q++) o.shoes += (iw>=60?3:2) * 2; }
       if (it.t==='boot') boots++;
       if (it.t==='trouser'){ racks++; o.tr += 10; }
     }); });
