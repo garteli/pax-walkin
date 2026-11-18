@@ -1,0 +1,499 @@
+<meta charset="utf-8">
+<title>ארון הליכה, תלת-ממד</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Hebrew:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{--bg:#eef0ed;--paper:#ffffff;--ink:#1d2327;--muted:#5b6469;--line:#d5d9d6;--accent:#185fa5;--accent-bg:#e3eefb;--warn:#8a5a0b;--warn-bg:#f8ecd3;
+  --eli:#1d6fa3;--eli-bg:#dcecf8;--mezi:#a0346b;--mezi-bg:#f7e1ec;--shared:#5f6a6e;--shared-bg:#e6eaea;
+  --sans:"IBM Plex Sans Hebrew","IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;--mono:"IBM Plex Mono",ui-monospace,Consolas,monospace}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#14181a;--paper:#1f2426;--ink:#e8ebe9;--muted:#a4adaf;--line:#343c3f;--accent:#85b7eb;--accent-bg:#12314d;--warn:#fac775;--warn-bg:#3f2d0c;--eli:#7db8e6;--eli-bg:#143550;--mezi:#e68cc0;--mezi-bg:#4a1f38;--shared:#aab4b8;--shared-bg:#2c3336}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#14181a;--paper:#1f2426;--ink:#e8ebe9;--muted:#a4adaf;--line:#343c3f;--accent:#85b7eb;--accent-bg:#12314d;--warn:#fac775;--warn-bg:#3f2d0c;--eli:#7db8e6;--eli-bg:#143550;--mezi:#e68cc0;--mezi-bg:#4a1f38;--shared:#aab4b8;--shared-bg:#2c3336}
+*{box-sizing:border-box}
+body{direction:rtl;margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.55;padding-inline:16px;padding-block:22px 48px}
+.wrap{max-width:1160px;margin:0 auto;display:grid;gap:14px}
+h1{font-size:24px;font-weight:600;margin:0;letter-spacing:-.01em}
+.sub{color:var(--muted);margin:0;max-width:78ch}
+.sub a{color:var(--accent)}
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:stretch}
+.grp{display:flex;flex-wrap:wrap;gap:6px;align-items:center;align-content:flex-start;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--paper)}
+.lab{flex:0 0 100%;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 2px}
+#app.full .bars .bar{flex-direction:column;align-items:stretch;gap:8px}
+#app.full .grp{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+#app.full .lab{grid-column:1/-1}
+#app.full button.v,#app.full label.t{width:100%;justify-content:flex-start;text-align:right}
+
+button.v,button.l{font:inherit;font-size:13px;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer}
+button.v:hover,button.l:hover{border-color:var(--accent)} button.v:focus-visible,button.l:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+button.v.on,button.l.on{background:var(--accent-bg);color:var(--accent);border-color:var(--accent)}
+label.t{display:inline-flex;align-items:center;gap:6px;font-size:13px;padding:5px 10px;border-radius:999px;border:1px solid var(--line);background:var(--paper);cursor:pointer}
+label.t input{accent-color:var(--accent);margin:0}
+.view{display:flex;gap:12px;align-items:stretch}
+.view .stage{flex:1;min-width:0}
+#info{width:300px;flex:none;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:16px;font-size:14px;overflow:auto}
+#info h3{margin:0 0 4px;font-size:16px;font-weight:600}
+#info .art{font-family:var(--mono);font-size:12px;color:var(--muted)}
+#info .price{font-family:var(--mono);font-size:22px;font-weight:500;margin:10px 0 2px}
+#info .row{display:flex;justify-content:space-between;gap:8px;border-top:1px solid var(--line);padding:6px 0;font-size:13px}
+#info .row span:first-child{color:var(--muted)}
+#info a{color:var(--accent)}
+#info .hint2{color:var(--muted)}
+#info button{font:inherit;font-size:12px;margin-top:10px;padding:4px 10px;border-radius:999px;border:1px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer}
+@media (max-width:820px){.view{flex-direction:column}#info{width:auto}}
+#app.full{position:fixed;inset:0;z-index:50;background:var(--bg);padding:10px;display:grid;grid-template-columns:330px 1fr;grid-template-rows:auto 1fr;gap:10px;direction:ltr}
+#app.full{grid-template-rows:52vh 1fr}
+#app.full .bars{grid-column:1;grid-row:1;overflow:auto;display:flex;flex-direction:column;gap:6px;height:52vh;padding-right:4px}
+#app.full .bars .stats{display:none}
+#app.full .bars .desc{display:none}
+#app.full .view{display:contents}
+#app.full .stage{grid-column:2;grid-row:1 / span 2;height:auto;min-height:0}
+#app.full #info{grid-column:1;grid-row:2;width:auto;min-height:0;overflow:auto}
+#app.full .bars,#app.full #info{direction:rtl}
+.stage{position:relative;background:var(--paper);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.stage{direction:ltr}
+.stage canvas{display:block;width:100%;height:100%;touch-action:none;cursor:grab}
+.stage canvas:active{cursor:grabbing}
+.hint{position:absolute;left:12px;bottom:10px;font-size:12px;color:var(--muted);background:var(--paper);padding:3px 8px;border-radius:6px;opacity:.9;pointer-events:none}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.stat{background:var(--paper);padding:10px 14px}
+.stat b{display:block;font-family:var(--mono);font-size:18px;font-weight:500;font-variant-numeric:tabular-nums}
+.stat span{font-size:12px;color:var(--muted)}
+.desc{font-size:14px;color:var(--muted);margin:0;max-width:90ch}
+.desc b{color:var(--ink);font-weight:600}
+.legend{display:flex;flex-wrap:wrap;gap:8px 20px;font-size:13px;color:var(--muted)}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-1px;margin-right:6px;border:1px solid var(--line)}
+.err{padding:16px;color:var(--warn);background:var(--warn-bg);border-radius:8px}
+.foot{font-size:13px;color:var(--muted);max-width:90ch}
+.foot a{color:var(--accent)}
+</style>
+
+<div class="wrap">
+  <div>
+    <h1>ארון הליכה על הבסיסים הקיימים, תלת-ממד</h1>
+    <p class="sub">חדר 192 × 297 ס"מ, תקרה 389. שבעת הארונות הקיימים בגובה 270, עם פנים חדשים: R2 בגובה 202 מתחת לדלת עליית הגג, ארון G חדש עם דלתות מראה על הקיר האחורי, שבע תיבות עליונות עד 384, וסולם ספרייה על מסילות בגובה 380. גררו לסיבוב, גלגלו לזום, Shift+גרירה להזזה. מידות ורשימה לנגר נמצאות ב<a href="existing-he.html">גיליונות התוכנית</a>.</p>
+  </div>
+  <div id="app"><div class="bars">
+  <div class="stats" id="stats"></div>
+  <p class="desc" id="desc"></p>
+  <div class="bar">
+    <div class="grp"><span class="lab">תצוגה</span>
+      <button class="v on" data-view="dollL" type="button">בית בובות, קיר שמאל</button>
+      <button class="v" data-view="dollR" type="button">בית בובות, קיר ימין</button>
+      <button class="v" data-view="door" type="button">מהדלת</button>
+      <button class="v" data-view="inside" type="button">עומדים בפנים</button>
+      <button class="v" data-view="left" type="button">קיר שמאל</button>
+      <button class="v" data-view="back" type="button">קיר אחורי</button>
+      <button class="v" data-view="right" type="button">קיר ימין</button>
+      <button class="v" data-view="top" type="button">מלמעלה</button>
+      <button class="v" data-view="spread" type="button">פרוס</button>
+    </div>
+    <div class="grp"><span class="lab">קירות</span>
+      <label class="t"><input type="checkbox" id="tgLeft" checked> קיר שמאל</label>
+      <label class="t"><input type="checkbox" id="tgBack" checked> קיר אחורי</label>
+      <label class="t"><input type="checkbox" id="tgRight" checked> קיר ימין</label>
+      <label class="t"><input type="checkbox" id="tgDoor" checked> דלת עליית הגג</label>
+    </div>
+    <div class="grp"><span class="lab">הצג</span>
+      <label class="t"><input type="checkbox" id="tgLevel2" checked> קומה שנייה</label>
+      <label class="t"><input type="checkbox" id="tgClothes" checked> בגדים ומוצרים</label>
+      <label class="t"><input type="checkbox" id="tgLabels" checked> תוויות</label>
+      <label class="t"><input type="checkbox" id="tgLadder" checked> סולם ספרייה</label>
+      <label class="t"><input type="checkbox" id="tgCeiling"> תקרה</label>
+      <label class="t"><input type="checkbox" id="tgMirror" checked> דלתות מראה</label>
+    </div>
+    <div class="grp"><span class="lab">מדידה</span>
+      <button class="v" id="btnMeasure" type="button">מדידה</button>
+      <button class="v" id="btnMeasureClear" type="button">נקה מדידות</button>
+    </div>
+    <div class="grp"><span class="lab">מסך</span><button class="v" id="btnFull" type="button">מסך מלא</button></div>
+  </div>
+  </div>
+  <div class="view"><div class="stage" id="stage"><div class="hint" style="direction:rtl">גררו לסיבוב &middot; גלגלו לזום &middot; Shift+גרירה להזזה &middot; לחצו על פריט לפרטים, לחצו על מגירה כדי לשלוף &middot; מדידה: לחצו על שתי נקודות</div></div>
+  <aside id="info"><h3>פרטי פריט</h3><p class="hint2">לחצו על ארון, מדף, מוט, מגירה, קופסה, דלת או הסולם במודל כדי לראות מה זה והאם הוא קיים או חדש.</p></aside></div></div>
+  <div class="legend">
+    <span><i style="background:#1d6fa3"></i>אלי</span><span><i style="background:#a0346b"></i>מזי</span><span><i style="background:#5f6a6e"></i>משותף</span>
+    <span><i style="background:#f7d9a8"></i>דלת עליית הגג בקיר הימני, 83 ס"מ, מעל R2</span>
+    <span><i style="background:#c9d9e3"></i>דלתות מראה של G</span>
+    <span><i style="background:#9c7a52"></i>סולם ספרייה וחיזוק הגג של R2</span>
+  </div>
+  <p class="foot">המידות של הארונות הקיימים הן מידות פנים, עם לוח משותף של 1.8 ס"מ בין ארונות שכנים; בקיר הימני זה יוצא בדיוק 297, ובשמאלי 286 עם רצועת אביזרים של כ-11 ס"מ ליד הכניסה. אורכי התלייה הם אורך המוט, כלומר רוחב הפנים. תלייה קצרה היא מוט עם כ-90 ס"מ מתחתיו; תלייה ארוכה, ב-L2, היא מוט עם 150 ס"מ מתחתיו. G בעומק 35 כדי לא לחסום את L1 ו-R1 בפינות, ולכן אין בו מוט. הסולם תלוי על מסילות בחזית התיבות העליונות, בגובה 380, ומצויר מול דלת עליית הגג: הרגליים כ-68 ס"מ מחזית הארון, כ-80 מעלות. מיקום הדלת ממורכז מעל R2 ודורש מדידה. לחיצה על מגירה, המגש או מתלה מכנסיים שולפת אותם; לחיצה נוספת סוגרת. תצוגת "פרוס" פותחת את שני הקירות שטוחים לצד הקיר האחורי.</p>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+  var stage = document.getElementById('stage');
+  if (typeof THREE === 'undefined') { stage.innerHTML = '<div class="err">ספריית התלת-ממד לא נטענה. טענו את הדף מחדש, או פתחו אותו בדפדפן שמאפשר סקריפטים מ-cdnjs.cloudflare.com.</div>'; return; }
+
+  var W=192, L=297, HC=389, HG=270, HT=114, T=1.8, R=Math.PI/2;
+  var DOOR = {z0:77.6, w:83, y0:202, h:130};
+  var css = getComputedStyle(document.documentElement);
+  function cssColor(name, fb){ var v = css.getPropertyValue(name).trim(); return v || fb; }
+
+  var scene = new THREE.Scene();
+  scene.background = new THREE.Color(cssColor('--paper', '#ffffff'));
+  var camera = new THREE.PerspectiveCamera(46, 1, 5, 6000);
+  var renderer = new THREE.WebGLRenderer({antialias:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1, 2));
+  stage.insertBefore(renderer.domElement, stage.firstChild);
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x9a9a9a, 0.9));
+  var d1 = new THREE.DirectionalLight(0xffffff, 0.6); d1.position.set(400, 700, 700); scene.add(d1);
+  var d2 = new THREE.DirectionalLight(0xffffff, 0.3); d2.position.set(-400, 500, -300); scene.add(d2);
+
+  var M = {
+    panel: new THREE.MeshLambertMaterial({color:0xf3f1e8}),
+    newPanel: new THREE.MeshLambertMaterial({color:0xf7f7f4}),
+    front: new THREE.MeshLambertMaterial({color:0xe4e6e1}),
+    glass: new THREE.MeshPhongMaterial({color:0xdfeef5, transparent:true, opacity:0.35, shininess:120, specular:0xffffff}),
+    glassFrame: new THREE.MeshLambertMaterial({color:0xcfd3cf}),
+    floor: new THREE.MeshLambertMaterial({color:0xb48c66}),
+    wall: new THREE.MeshLambertMaterial({color:0xf5f4f0}),
+    ceil: new THREE.MeshLambertMaterial({color:0xf5f4f0, transparent:true, opacity:0.5}),
+    rail: new THREE.MeshStandardMaterial({color:0xbfc3c7, metalness:0.75, roughness:0.3}),
+    mirror: new THREE.MeshPhongMaterial({color:0xc9d9e3, specular:0xffffff, shininess:160}),
+    door: new THREE.MeshLambertMaterial({color:0xf7d9a8}),
+    hemma: new THREE.MeshLambertMaterial({color:0xe9e7e0}),
+    hemmaStripe: new THREE.MeshLambertMaterial({color:0xb9bdb9}),
+    skubb: new THREE.MeshLambertMaterial({color:0x4a4f55}),
+    skubbWin: new THREE.MeshLambertMaterial({color:0xa9adb3}),
+    insert: new THREE.MeshLambertMaterial({color:0xd9dbd7}),
+    steel: new THREE.MeshStandardMaterial({color:0x8a8f93, metalness:0.6, roughness:0.4}),
+    wood: new THREE.MeshLambertMaterial({color:0x9c7a52}),
+    sole: new THREE.MeshLambertMaterial({color:0x2a2a2a})
+  };
+  var edgeMat = new THREE.LineBasicMaterial({color:0x7d8484, transparent:true, opacity:0.5});
+  var wireMat = new THREE.LineBasicMaterial({color:0xb5b9bc});
+  var clothPal = [0x3b4a5a,0x8c6b5d,0xd9d2c5,0x56707a,0x2f2f33,0xb7a58a,0x7a8c6e,0xe8e2d8,0x9a5c5c,0x4b5b7a,0xcfc0a8,0xe3b7c2,0x6d5b7b];
+  var clothMats = clothPal.map(function(c){ return new THREE.MeshLambertMaterial({color:c}); });
+  var shoePal = [0x2b2b2b,0xe5e1d8,0x8a6a4e,0x5a6d7a,0xb84a3a,0xf0e9dd,0x1f3a5a];
+  var shoeMats = shoePal.map(function(c){ return new THREE.MeshLambertMaterial({color:c}); });
+  var suitMats = [0xe9e2c8,0x1f8a8a,0x2a2a2a,0xd98aa0,0x2b3d66,0xc9b48f].map(function(c){ return new THREE.MeshLambertMaterial({color:c}); });
+  var seed = 11; function rnd(){ seed = (seed*9301+49297)%233280; return seed/233280; }
+  function pick(a){ return a[Math.floor(rnd()*a.length)]; }
+
+  var PRODUCTS = {
+    'mirror': {name:'דלת מראה', size:'כ-39 × 266 ס"מ', note:'שתיים ל-G. מראה מודבקת על דלת מלמינה, 4 צירים עם טריקה שקטה לכל דלת.'},
+    'suitcase': {name:'המזוודות שלכם', size:'עומדות, כ-3 בכל תיבה', own:true, note:'בתיבות העליונות מעל L1 ו-L2, בלי מדף, 110 ס"מ גובה פנימי.'},
+    'bag': {name:'התיקים שלכם', size:'על מדפים', own:true},
+    'bin': {name:'קופסת אחסון', size:'כ-40 × 24 × 48 ס"מ', note:'להמחשה: כל קופסה בגודל דומה מתאימה. שמיכות ובגדים עונתיים.'},
+    'shoebox': {name:'קופסאות נעליים', size:'כ-22 × 16 × 34 ס"מ', note:'להמחשה. בתיבה העליונה מעל מגדל הנעליים R4.'},
+    'ladder': {name:'סולם ספרייה עם ווים', size:'כ-388 ס"מ, כ-80 מעלות, מסילות 286 ו-297 ס"מ בגובה 380', note:'המעבר 79 ס"מ, ולכן הסולם תלול יותר מבתוכנית הקודמת: הרגליים כ-68 ס"מ מחזית הארון. לבחור דגם עם מאחז יד. מצויר מול דלת עליית הגג.'},
+    'step': {name:'חיזוק גג R2', size:'79 × 56 × 2.5 ס"מ', note:'לוח על הגג של R2, ממנו עוברים לדלת עליית הגג.'},
+    'door': {name:'דלת עליית הגג, קיימת', size:'שתי כנפיים, 83 ס"מ יחד, סף ב-202', existing:true, note:'מצוירת ממורכזת מעל R2. צריך למדוד את הקצוות ולבדוק ששתי הכנפיים נפתחות ליד הלוחות של R1 ו-R3.'},
+    'strip': {name:'רצועת אביזרים', size:'כ-11 × 57 ס"מ', note:'ווים לחגורות וצעיפים על הצד של L3 עד 100, ומעליהם 6 מדפונים צרים.'}
+  };
+  function ensure(k){
+    if (!k || PRODUCTS[k]) return;
+    var m = k.split('_'), dm = (m[1]||'').split('x'), iw = dm[0], d = +dm[1], h = +dm[2], p = null;
+    if (m[0]==='frame') p = h===114 ? {name:'תיבה עליונה חדשה', size:iw+' פנים × '+d+' × 114 ס"מ', note:'קומה שנייה, 270 עד 384. מלמינה לבנה 18 מ"מ, מורכבת במקום, מוברגת לגג הארון ולקיר.'}
+      : (d===35 ? {name:'ארון G חדש, קיר אחורי', size:'79 × 35 × 270 ס"מ', note:'מלמינה לבנה 18 מ"מ, מעוגן לקיר, שתי דלתות מראה. בעומק 35 כדי לא לחסום את L1 ו-R1.'}
+      : {name:'ארון קיים', size:iw+' פנים × '+d+' × '+h+' ס"מ', existing:true, note:'נשאר במקומו. מפרקים את כל המדפים והאביזרים שבפנים ובונים מחדש.'});
+    if (m[0]==='shelf') p = {name:'מדף, מלמינה לבנה', size:iw+' × '+(d-2)+' ס"מ', note:'לפי רוחב הפנים. אפשר לחתוך מחדש מדפים קיימים כשהרוחב מתאים.'};
+    if (m[0]==='glassshelf') p = {name:'מדף זכוכית', size:iw+' × '+(d-3)+' ס"מ', note:'מעל המגירות עם חזית הזכוכית.'};
+    if (m[0]==='rail') p = {name:'מוט תלייה אובלי עם תושבות', size:iw+' ס"מ'};
+    if (m[0]==='drawer') p = {name:'מגירה, חזית 16 ס"מ', size:iw+' × '+d+' ס"מ', note:'מסילות טלסקופיות מלאות עם טריקה שקטה.'};
+    if (m[0]==='glassdrawer') p = {name:'מגירה עם חזית זכוכית', size:iw+' × '+d+' ס"מ', note:'מסילות 30 ס"מ. חמש ב-G, מאחורי דלתות המראה.'};
+    if (m[0]==='shoeshelf') p = {name:'מדף נעליים משופע עם פס עצירה', size:iw+' × '+d+' ס"מ', note:'3 זוגות למדף.'};
+    if (m[0]==='trouser') p = {name:'מתלה מכנסיים נשלף', size:'לרוחב פנים '+iw+' ס"מ', note:'כ-10 זוגות.'};
+    if (m[0]==='tray') p = {name:'מגש אביזרים נשלף', size:'לרוחב פנים '+iw+' ס"מ', note:'שעונים, תכשיטים, משקפיים.'};
+    if (m[0]==='insert') p = {name:'חלוקה למגש האביזרים', size:'לרוחב פנים '+iw+' ס"מ'};
+    if (p) PRODUCTS[k] = p;
+  }
+  var counts = {}, curTag = null, slides = [];
+  function slider(g, ext){ var pg = new THREE.Group(); g.add(pg); var pc = new THREE.Group(); pg.add(pc); clothesGroups.push(pc); pg.userData.pc = pc; pg.userData.slide = {ext:ext, out:false, target:0}; slides.push(pg); return pg; }
+  function tag(k, n){ ensure(k); curTag = k; if (k && n !== 0) counts[k] = (counts[k]||0) + (n||1); }
+  function box(parent,w,h,d,x,y,z,mat,edges){
+    var g = new THREE.BoxGeometry(w,h,d); var m = new THREE.Mesh(g,mat); if (curTag) m.userData.product = curTag;
+    m.position.set(x+w/2, y+h/2, z+d/2); parent.add(m);
+    if (edges !== false){ var e = new THREE.LineSegments(new THREE.EdgesGeometry(g), edgeMat); m.add(e); }
+    return m;
+  }
+  function wire(parent,w,h,d,x,y,z){ var g = new THREE.BoxGeometry(w,h,d); var e = new THREE.LineSegments(new THREE.EdgesGeometry(g), wireMat); e.position.set(x+w/2,y+h/2,z+d/2); parent.add(e); return e; }
+  function sprite(text, color, scale){
+    var c = document.createElement('canvas'); c.width = 256; c.height = 128; var x = c.getContext('2d');
+    x.fillStyle = color || '#1d2327'; x.beginPath(); if (x.roundRect) x.roundRect(28, 18, 200, 92, 24); else x.rect(28,18,200,92); x.fill();
+    x.fillStyle = '#ffffff'; x.font = '600 56px IBM Plex Sans Hebrew, Arial, sans-serif'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText(text, 128, 66);
+    var tex = new THREE.CanvasTexture(c); tex.minFilter = THREE.LinearFilter;
+    var s = new THREE.Sprite(new THREE.SpriteMaterial({map:tex, depthTest:false, transparent:true, sizeAttenuation:false})); var k = scale || 1; s.scale.set(0.1*k, 0.05*k, 1); s.renderOrder = 10; return s;
+  }
+
+  var floor = new THREE.Mesh(new THREE.PlaneGeometry(W, L), M.floor); floor.rotation.x = -R; floor.position.set(W/2, 0, L/2); scene.add(floor);
+  var back = new THREE.Mesh(new THREE.PlaneGeometry(W, HC), M.wall); back.position.set(W/2, HC/2, 0); scene.add(back);
+  var left = new THREE.Mesh(new THREE.PlaneGeometry(L, HC), M.wall); left.rotation.y = R; left.position.set(0, HC/2, L/2); scene.add(left);
+  var right = new THREE.Mesh(new THREE.PlaneGeometry(L, HC), M.wall); right.rotation.y = -R; right.position.set(W, HC/2, L/2); scene.add(right);
+  var ceil = new THREE.Mesh(new THREE.PlaneGeometry(W, L), M.ceil); ceil.rotation.x = R; ceil.position.set(W/2, HC, L/2); ceil.visible = false; scene.add(ceil);
+
+  var doorG = new THREE.Group(); scene.add(doorG);
+  var LEAF = DOOR.w/2; tag('door', 0);
+  box(doorG, 2.2, DOOR.h, LEAF-0.5, W-2.2, DOOR.y0, DOOR.z0, M.door);
+  box(doorG, 2.2, DOOR.h, LEAF-0.5, W-2.2, DOOR.y0, DOOR.z0+LEAF+0.5, M.door);
+  box(doorG, 2, 2, 8, W-4.5, DOOR.y0+DOOR.h/2, DOOR.z0+LEAF-9, M.steel, false);
+  box(doorG, 2, 2, 8, W-4.5, DOOR.y0+DOOR.h/2, DOOR.z0+LEAF+1, M.steel, false); curTag = null;
+  tag('step', 0); box(doorG, 56, 2.5, 79, W-56, 202, 79.6, M.wood); curTag = null;
+  var doorLabel = sprite('דלת עליית הגג', '#8a5a0b', 0.9); doorLabel.position.set(W-6, DOOR.y0+DOOR.h+10, DOOR.z0+DOOR.w/2); doorG.add(doorLabel);
+
+  var ground = new THREE.Group(), upper = new THREE.Group(), labels = new THREE.Group(), ladder = new THREE.Group();
+  scene.add(ground); scene.add(upper); scene.add(labels); scene.add(ladder);
+  var clothesGroups = [], frames = [], mirrors = [], zones = [], currentView = 'dollL';
+
+  function garment(cg, x, railY, drop, width, d, mat, kind){
+    var s = new THREE.Shape(); var hw = width/2;
+    if (kind === 'long'){ s.moveTo(-hw*0.75, 0); s.lineTo(hw*0.75, 0); s.lineTo(hw, -drop); s.lineTo(-hw, -drop); s.closePath(); }
+    else { s.moveTo(-hw, 0); s.lineTo(hw, 0); s.lineTo(hw*0.82, -drop); s.lineTo(-hw*0.82, -drop); s.closePath(); }
+    var g = new THREE.ExtrudeGeometry(s, {depth:1.5, bevelEnabled:false});
+    var m = new THREE.Mesh(g, mat); m.rotation.y = R; m.position.set(x, railY-2.5, -d/2); cg.add(m);
+    var hook = new THREE.Mesh(new THREE.TorusGeometry(2.2, 0.35, 6, 12, Math.PI), M.steel); hook.rotation.y = R; hook.position.set(x+0.7, railY+0.4, -d/2); cg.add(hook);
+  }
+  function stack(cg, x, y, z, w, d){
+    var n = 3 + Math.floor(rnd()*3), yy = y;
+    for (var i=0;i<n;i++){ var h = 2.2 + rnd()*1.2; box(cg, w - rnd()*4, h, d - 2 - rnd()*4, x + rnd()*2, yy, z + 1 + rnd()*2, pick(clothMats), false); yy += h; }
+  }
+  var spread = false;
+  function frame(o){
+    var g = new THREE.Group(); var px = o.pos[0], py = o.pos[1], pz = o.pos[2], ry = o.rotY;
+    if (spread && o.run === 'left'){ var nx = -pz, nz = px; px = nx; pz = nz; ry = ry - R; }
+    if (spread && o.run === 'right'){ var nx2 = W + pz, nz2 = W - px; px = nx2; pz = nz2; ry = ry + R; }
+    g.position.set(px, py, pz); g.rotation.y = ry; g.userData.run = o.run; frames.push(g);
+    var cg = new THREE.Group(); g.add(cg); clothesGroups.push(cg);
+    var w=o.w, d=o.d, h=o.h, iw = Math.round((w-2*T)*10)/10, mat = o.isNew ? M.newPanel : M.panel;
+    var fk = 'frame_'+iw+'x'+d+'x'+h;
+    tag(fk);
+    box(g, T, h, d, 0, 0, -d, mat); box(g, T, h, d, w-T, 0, -d, mat);
+    box(g, w-2*T, T, d, T, 0, -d, mat);
+    var topG = new THREE.PlaneGeometry(w-2*T, d), topM = new THREE.Mesh(topG, mat); topM.rotation.x = R; topM.position.set(w/2, h-T, -d/2); g.add(topM);
+    var topE = new THREE.LineSegments(new THREE.EdgesGeometry(topG), edgeMat); topE.rotation.copy(topM.rotation); topE.position.copy(topM.position); g.add(topE);
+    var bkG = new THREE.PlaneGeometry(w-2*T, h-2*T), bkM = new THREE.Mesh(bkG, mat); bkM.position.set(w/2, h/2, -d+0.3); g.add(bkM); topM.userData.product = fk; bkM.userData.product = fk; curTag = null;
+    (o.items||[]).forEach(function(it){
+      if (it.t === 'shelf'){ tag('shelf_'+iw+'x'+d); box(g, w-2*T, T, d-2, T, it.y, -d+1, mat); curTag = null;
+        if (it.fold){ var sx = T+3; while (sx + 30 < w - T){ stack(cg, sx, it.y+T, -d+4, 28, d-8); sx += 33; } } }
+      if (it.t === 'glassShelf'){ tag('glassshelf_'+iw+'x'+d); box(g, w-2*T-1, 0.8, d-3, T+0.5, it.y, -d+1.5, M.glass, false); curTag = null; if (it.fold){ var gx = T+3; while (gx + 30 < w - T){ stack(cg, gx, it.y+1, -d+4, 28, d-8); gx += 33; } } }
+      if (it.t === 'rail'){
+        var cyl = new THREE.Mesh(new THREE.CylinderGeometry(1.1, 1.1, w-2*T, 14), M.rail); cyl.rotation.z = R; cyl.position.set(w/2, it.y, -d/2); g.add(cyl); tag('rail_'+iw); cyl.userData.product = curTag; curTag = null;
+        var x = T + 4, step = it.kind === 'long' ? 7 : 6; var width = Math.min(42, d - 8);
+        while (x < w - T - 3){ var dr = it.kind === 'long' ? it.drop*(0.8+rnd()*0.2) : it.drop*(0.72+rnd()*0.26); garment(cg, x, it.y, dr, width, d, pick(clothMats), it.kind); x += step; }
+      }
+      if (it.t === 'drawers'){ for (var k=0;k<it.n;k++){ var yb = it.y + k*20; tag((it.glass?'glassdrawer_':'drawer_')+iw+'x'+d); var pg = slider(g, d-10), pc = pg.userData.pc;
+          if (it.glass){ box(pg, w-2*T-0.4, 16, T, T+0.2, yb+2, -T, M.glassFrame); box(pg, w-2*T-6, 11, 0.6, T+3, yb+4.5, -0.9, M.glass, false); box(pg, w-2*T-2, 14, d-6, T+1, yb+2.5, -d+3, M.front, false); }
+          else { box(pg, w-2*T-0.4, 16, T, T+0.2, yb+2, -T, M.front); box(pg, w-2*T-2, 14, d-6, T+1, yb+2.5, -d+3, M.front, false); }
+          curTag = null; var sx5=T+4; while (sx5+26 < w-T){ stack(pc, sx5, yb+3, -d+6, 24, Math.max(10, d-12)); sx5 += 28; } } }
+      if (it.t === 'shoes'){ for (var s=0;s<it.n;s++){ var sub = new THREE.Group(); sub.position.set(w/2, it.y + s*it.pitch, -d+3); sub.rotation.x = 0.26; g.add(sub);
+          tag('shoeshelf_'+iw+'x'+d); box(sub, w-2*T, 1.5, d-5, -(w-2*T)/2, 0, 0, M.steel, false); curTag = null;
+          var csub = new THREE.Group(); csub.position.copy(sub.position); csub.rotation.copy(sub.rotation); cg.add(csub);
+          var sx4 = -(w-2*T)/2 + 3; while (sx4 + 19 < (w-2*T)/2 - 2){ var sm = pick(shoeMats), len = Math.min(26, d-8);
+            box(csub, 8, 1.4, len, sx4, 1.5, 2, M.sole, false); box(csub, 8, 1.4, len, sx4+9, 1.5, 2, M.sole, false);
+            box(csub, 7.4, 5.5, len-2, sx4+0.3, 2.9, 3, sm, false); box(csub, 7.4, 5.5, len-2, sx4+9.3, 2.9, 3, sm, false); sx4 += 21; } } }
+      if (it.t === 'boot'){ var bx = T+4, by = (it.y||0)+0.5; while (bx + 12 < w - T - 4){ var bm = pick(shoeMats); var bh = 30 + rnd()*12; box(cg, 10, bh, Math.min(28, d-6), bx, by, -d+4, bm, false); bx += 14; } }
+      if (it.t === 'mirror'){ tag('mirror', 2); var hw = (w-0.8)/2; var m1 = box(g, hw, 266, T, 0.2, 2, 0, M.mirror), m2 = box(g, hw, 266, T, 0.6+hw, 2, 0, M.mirror); mirrors.push(m1, m2); curTag = null; }
+      if (it.t === 'trouser'){ tag('trouser_'+iw+'x'+d); var pg4 = slider(g, d-14), pc4 = pg4.userData.pc; box(pg4, w-2*T-2, 2, 4, T+1, it.y, -d+2, M.steel, false); var ax = T+4; while (ax + 4 < w - T - 3){ box(pg4, 1.2, 1.2, d-10, ax, it.y+1, -d+4, M.steel, false); box(pc4, 1.6, 36, Math.min(30, d-14), ax-0.2, it.y-35, -d/2-12, pick(clothMats), false); ax += 6; } curTag = null; }
+      if (it.t === 'tray'){ tag('tray_'+iw+'x'+d); var pg3 = slider(g, d-12); box(pg3, w-2*T-1, 3, d-4, T+0.5, it.y, -d+2, M.front); tag('insert_'+iw+'x'+d); var ix = T+2; [22,22,14].forEach(function(cw){ if (ix+cw < w-T){ box(pg3, cw-1, 5, d-6, ix, it.y+3, -d+3, M.insert); wire(pg3, cw-1, 5, d-6, ix, it.y+3, -d+3); ix += cw; } }); curTag = null; }
+      if (it.t === 'boxes'){ tag(it.kind, 0); var b0 = T+2, by0 = it.y+T+0.3;
+        if (it.kind === 'suitcase'){ var sd = Math.min(48, d-6); while (b0 + 26 < w - T){ counts.suitcase = (counts.suitcase||0)+1; box(cg, 25, 72, sd, b0, by0, -d+3, suitMats[(counts.suitcase-1)%suitMats.length]); box(cg, 10, 2.5, 3, b0+7.5, by0+72, -d+3+sd/2-1.5, M.sole, false); b0 += 29; } }
+        if (it.kind === 'bin'){ var bd = Math.min(48, d-6); while (b0 + 40 < w - T){ for (var st=0; st<2; st++){ counts.bin = (counts.bin||0)+1; box(cg, 40, 24, bd, b0, by0+st*25, -d+3, M.hemma); box(cg, 39.6, 3, bd-0.4, b0+0.2, by0+st*25+10, -d+3.2, M.hemmaStripe, false); } b0 += 43; } }
+        if (it.kind === 'shoebox'){ while (b0 + 22 < w - T){ for (var sl=0; sl<3; sl++){ counts.shoebox = (counts.shoebox||0)+1; box(cg, 22, 16, 34, b0, by0+sl*17, -d+4, M.skubb); box(cg, 12, 8, 0.4, b0+5, by0+sl*17+4, -d+38.1, M.skubbWin, false); } b0 += 24; } }
+        if (it.kind === 'bag'){ while (b0 + 30 < w - T){ counts.bag = (counts.bag||0)+1; box(cg, 28, 22, 14, b0, by0, -d/2-7, pick(clothMats)); var hd = new THREE.Mesh(new THREE.TorusGeometry(7, 0.6, 6, 16, Math.PI), M.sole); hd.position.set(b0+14, by0+22, -d/2); cg.add(hd); b0 += 31; } }
+        curTag = null;
+      }
+    });
+    (o.level2 ? upper : ground).add(g);
+    g.updateMatrixWorld(true);
+    var ownerCol = o.who === 'Eli' ? '#1d6fa3' : o.who === 'Mezi' ? '#a0346b' : '#5f6a6e';
+    if (o.id){ var p = g.localToWorld(new THREE.Vector3(w/2, o.level2 ? 80 : 150, 10)); var sp = sprite(o.id, o.level2 ? '#5b6469' : ownerCol, o.level2 ? 0.75 : 1); sp.position.copy(p); sp.userData.run = o.run; sp.userData.l2 = !!o.level2; labels.add(sp); }
+    return g;
+  }
+  function zone(x,z,w,l,c){ var m = new THREE.Mesh(new THREE.PlaneGeometry(w,l), new THREE.MeshBasicMaterial({color:c, transparent:true, opacity:0.35})); m.rotation.x = -R; m.position.set(x+w/2, 0.4, z+l/2); scene.add(m); zones.push(m); }
+
+  /* units: inside widths with 1.8 cm sides; neighbours share a panel, so frames overlap by 1.8 */
+  var ELI=0x1d6fa3, MEZI=0xa0346b, SH=0x5f6a6e;
+  function Lf(id,who,z0,items){ return {id:id, who:who, run:'left', w:96.6, d:57, h:HG, pos:[57,0,z0+96.6], rotY:R, items:items}; }
+  function Rf(id,who,z0,iw,h,items){ return {id:id, who:who, run:'right', w:iw+2*T, d:56, h:h||HG, pos:[136,0,z0], rotY:-R, items:items}; }
+  var dbl = [{t:'shelf',y:243,fold:true},{t:'shelf',y:215,fold:true},{t:'rail',y:210,drop:92,kind:'short'},{t:'rail',y:100,drop:90,kind:'short'}];
+  var GROUND = [
+    Lf('L1','Eli',0, dbl),
+    Lf('L2','shared',94.8, [{t:'drawers',y:2,n:2},{t:'shelf',y:42},{t:'rail',y:205,drop:148,kind:'long'},{t:'shelf',y:212,fold:true},{t:'shelf',y:241,fold:true}]),
+    Lf('L3','Mezi',189.6, [{t:'shelf',y:243,fold:true},{t:'shelf',y:215,fold:true},{t:'rail',y:210,drop:86,kind:'short'},{t:'drawers',y:102,n:1},{t:'rail',y:100,drop:90,kind:'short'}]),
+    {id:'G', who:'Eli', run:'back', w:79, d:35, h:HG, pos:[57,0,35], rotY:0, isNew:true, items:[{t:'drawers',y:0,n:5,glass:true},{t:'glassShelf',y:102,fold:true},{t:'shelf',y:135,fold:true},{t:'shelf',y:170,fold:true},{t:'shelf',y:205,fold:true},{t:'shelf',y:240,fold:true},{t:'mirror'}]},
+    Rf('R1','Eli',0,76,HG, dbl),
+    Rf('R2','shared',77.8,79,202, [{t:'drawers',y:0,n:4},{t:'shelf',y:85,fold:true},{t:'shelf',y:115,fold:true},{t:'shelf',y:145,fold:true},{t:'shelf',y:175,fold:true}]),
+    Rf('R3','Mezi',158.6,66,HG, [{t:'drawers',y:0,n:3},{t:'shelf',y:62},{t:'tray',y:66},{t:'trouser',y:120},{t:'trouser',y:165},{t:'trouser',y:210},{t:'shelf',y:215,fold:true},{t:'shelf',y:243,fold:true}]),
+    Rf('R4','Mezi',226.4,67,HG, [{t:'boot',y:0},{t:'shelf',y:45},{t:'shoes',y:50,n:10,pitch:19},{t:'shelf',y:240,fold:true}])
+  ];
+  function up(o, items, id){ var c = JSON.parse(JSON.stringify(o)); c.id = id; c.h = HT; c.pos[1] = HG; c.level2 = true; c.isNew = true; c.items = items; delete c.who; return c; }
+  var suits = [{t:'boxes',y:0,kind:'suitcase'}];
+  function halfBox(kind){ return [{t:'boxes',y:0,kind:kind},{t:'shelf',y:57},{t:'boxes',y:57,kind:kind}]; }
+  var UPPER = [
+    up(GROUND[0], suits, 'L1↑'), up(GROUND[1], suits, 'L2↑'), up(GROUND[2], halfBox('bin'), 'L3↑'),
+    up(GROUND[3], halfBox('bin'), 'G↑'),
+    up(GROUND[4], halfBox('bin'), 'R1↑'), up(GROUND[6], halfBox('bag'), 'R3↑'), up(GROUND[7], halfBox('shoebox'), 'R4↑')
+  ];
+  var ZONES = [[0,0,57,95.7,ELI],[0,95.7,57,94.8,SH],[0,190.5,57,95.7,MEZI],[0,286.2,57,10.8,SH],[57,0,79,35,ELI],[136,0,56,78.7,ELI],[136,78.7,56,80.8,SH],[136,159.5,56,137.5,MEZI]];
+  var DESC = '<b>הארונות הקיימים, פנים חדשים.</b> L1 ו-R1 בפינות האחוריות הם תלייה כפולה של אלי, כי G מסתיר את החלק האחורי שלהם ובתלייה מחליקים את הקולבים. G החדש, בעומק 35, מחזיק חמש מגירות עם חזית זכוכית ומדפים מאחורי שתי דלתות מראה. L2 הוא תלייה ארוכה משותפת מעל שתי מגירות, ו-R2 מתחת לדלת עליית הגג הוא מגירות רדודות ומדפים, עם לוח מדרגה על הגג. L3 של מזי הוא תלייה כפולה עם מגירה בין המוטות, R3 מגירות, מגש ושלושה מתלי מכנסיים, ו-R4 מגדל נעליים מעל תא מגפיים. למעלה: מזוודות מעל L1 ו-L2, קופסאות, תיקים וקופסאות נעליים בשאר.';
+
+  function stripGroup(){
+    var g = new THREE.Group(); g.userData.run = 'left'; g.userData.strip = true; frames.push(g); ground.add(g);
+    tag('strip', 0);
+    [100,130,160,190,220,250].forEach(function(y){ box(g, 54, T, 8.6, 1.5, y, 287.2, M.newPanel); });
+    for (var hy=30; hy<100; hy+=14){ box(g, 3, 1, 1, 56, hy, 287.6, M.steel, false); var sc = box(g, 0.6, 26, 5, 58.4, hy-26, 287.6, pick(clothMats), false); clothesGroups.push(sc); }
+    curTag = null;
+  }
+
+  function clearGroup(gr){ while (gr.children.length){ var c = gr.children.pop(); gr.remove(c); } }
+  function build(){
+    clearGroup(ground); clearGroup(upper); clearGroup(labels); clothesGroups = []; frames = []; mirrors = []; slides = []; counts = {}; counts.door = 1; counts.step = 1; counts.ladder = 1; counts.strip = 1; deselect();
+    zones.forEach(function(z){ scene.remove(z); }); zones = [];
+    seed = 11;
+    GROUND.forEach(frame); UPPER.forEach(frame);
+    if (!spread) stripGroup();
+    ZONES.forEach(function(z){ zone(z[0],z[1],z[2],z[3],z[4]); });
+    stats(); document.getElementById('desc').innerHTML = DESC;
+    applyVisibility();
+  }
+  function stats(){
+    var s = {Eli:{short:0,long:0,dr:0,shoes:0,tr:0}, Mezi:{short:0,long:0,dr:0,shoes:0,tr:0}, shared:{short:0,long:0,dr:0,shoes:0,tr:0}}, boots=0, racks=0;
+    GROUND.forEach(function(f){ var o = s[f.who]; var iw = f.w - 2*T; (f.items||[]).forEach(function(it){
+      if (it.t==='rail'){ if (it.kind==='long') o.long += iw; else o.short += iw; }
+      if (it.t==='drawers') o.dr += it.n;
+      if (it.t==='shoes') o.shoes += it.n * (iw>=60?3:2);
+      if (it.t==='boot') boots++;
+      if (it.t==='trouser'){ racks++; o.tr += 10; }
+    }); });
+    function r(v){ return Math.round(v); }
+    var tShort = s.Eli.short+s.Mezi.short+s.shared.short, tLong = s.Eli.long+s.Mezi.long+s.shared.long, tDr = s.Eli.dr+s.Mezi.dr+s.shared.dr, tSh = s.Eli.shoes+s.Mezi.shoes+s.shared.shoes, tTr = s.Eli.tr+s.Mezi.tr;
+    var html = '';
+    html += '<div class="stat"><b>'+r(tShort+tLong)+' ס"מ</b><span>מוט תלייה סה"כ</span></div>';
+    html += '<div class="stat"><b>'+r(tShort)+' ס"מ</b><span>תלייה קצרה &middot; אלי '+r(s.Eli.short)+', מזי '+r(s.Mezi.short)+'</span></div>';
+    html += '<div class="stat"><b>'+r(tLong)+' ס"מ</b><span>תלייה ארוכה, משותפת ב-L2</span></div>';
+    html += '<div class="stat"><b>'+tDr+'</b><span>מגירות &middot; אלי '+s.Eli.dr+', מזי '+s.Mezi.dr+', משותף '+s.shared.dr+'</span></div>';
+    html += '<div class="stat"><b>'+tTr+' זוגות</b><span>מכנסיים על '+racks+' מתלים נשלפים, מזי</span></div>';
+    html += '<div class="stat"><b>'+tSh+' זוגות</b><span>נעליים על מדפים'+(boots?' + תא מגפיים':'')+'</span></div>';
+    document.getElementById('stats').innerHTML = html;
+  }
+
+  /* library ladder on rails at 380 along the upper boxes, parked at the attic door */
+  tag('ladder', 0);
+  box(ladder, 3, 3, 286.2, 57, 378.5, 0, M.steel, false);
+  box(ladder, 3, 3, 297, 133, 378.5, 0, M.steel, false);
+  var LEN = Math.sqrt(68*68 + 380*380);
+  var lad = new THREE.Group(); lad.position.set(68, 0, 96); lad.rotation.z = -Math.asin(68/LEN); ladder.add(lad);
+  box(lad, 4, LEN-2, 3, -2, 0, 0, M.wood, false); box(lad, 4, LEN-2, 3, -2, 0, 42, M.wood, false);
+  for (var rr = 1; rr*28 < LEN-6; rr++){ var rg = new THREE.Mesh(new THREE.CylinderGeometry(1.4, 1.4, 42, 10), M.wood); rg.rotation.x = R; rg.position.set(0, rr*28, 22.5); lad.add(rg); }
+  box(lad, 6, 4, 50, -3, LEN-4, -2.5, M.steel, false);
+  box(lad, 4, 3, 3, -2, 0, -0.5, M.sole, false); box(lad, 4, 3, 3, -2, 0, 41.5, M.sole, false);
+  lad.children.forEach(function(c){ c.userData.product = 'ladder'; }); curTag = null;
+
+  var target = new THREE.Vector3(), sph = {r:600, theta:0, phi:1.1};
+  var views = {
+    dollL:  {t:[70,180,140], r:540, th:0.62, ph:1.08, hide:'right'},
+    dollR:  {t:[125,180,140], r:540, th:-0.62, ph:1.08, hide:'left'},
+    door:   {t:[96,170,120], r:480, th:0, ph:1.32},
+    inside: {t:[96,150,60], r:230, th:0, ph:1.52},
+    left:   {t:[29,185,150], r:470, th:R, ph:1.5, hide:'right'},
+    back:   {t:[96,185,30], r:360, th:0, ph:1.47},
+    right:  {t:[164,185,150], r:470, th:-R, ph:1.5, hide:'left'},
+    top:    {t:[96,0,148], r:720, th:0, ph:0.04},
+    spread: {t:[96,180,30], r:1000, th:0, ph:1.36}
+  };
+  function applyVisibility(){
+    var l2on = document.getElementById('tgLevel2').checked, con = document.getElementById('tgClothes').checked;
+    var runOn = {left: document.getElementById('tgLeft').checked, back: document.getElementById('tgBack').checked, right: document.getElementById('tgRight').checked};
+    upper.visible = l2on; clothesGroups.forEach(function(g){ g.visible = con; });
+    frames.forEach(function(f){ f.visible = runOn[f.userData.run] !== false; });
+    labels.children.forEach(function(s){ var ok = s.userData.run ? runOn[s.userData.run] !== false : true; if (s.userData.l2 && !l2on) ok = false; s.visible = ok; });
+    var labOn = document.getElementById('tgLabels').checked; labels.visible = labOn; doorLabel.visible = labOn;
+    ladder.visible = document.getElementById('tgLadder').checked && !spread;
+    doorG.visible = document.getElementById('tgDoor').checked && !spread;
+    ceil.visible = document.getElementById('tgCeiling').checked;
+    var mon = document.getElementById('tgMirror').checked; mirrors.forEach(function(m){ m.visible = mon; });
+    left.visible = !spread; right.visible = !spread; zones.forEach(function(z){ z.visible = !spread; });
+  }
+  function updateCam(){ camera.position.set(target.x + sph.r*Math.sin(sph.phi)*Math.sin(sph.theta), target.y + sph.r*Math.cos(sph.phi), target.z + sph.r*Math.sin(sph.phi)*Math.cos(sph.theta)); camera.lookAt(target); }
+  function setView(k){ var v = views[k]; currentView = k; var wantSpread = (k === 'spread'); if (wantSpread !== spread){ spread = wantSpread; build(); } target.set(v.t[0], v.t[1], v.t[2]); sph.r = v.r; sph.theta = v.th; sph.phi = v.ph;
+    var side = (k === 'left' || k === 'right' || k === 'dollL' || k === 'dollR');
+    document.getElementById('tgLeft').checked = v.hide !== 'left'; document.getElementById('tgRight').checked = v.hide !== 'right'; document.getElementById('tgBack').checked = true;
+    document.getElementById('tgDoor').checked = (v.hide !== 'right') && !wantSpread; document.getElementById('tgLadder').checked = !side && !wantSpread;
+    applyVisibility(); updateCam(); }
+
+  var el = renderer.domElement;
+  var selected = null, selectedMat = null, selMat = new THREE.MeshLambertMaterial({color:0xffd166, emissive:0x8a5a0b, emissiveIntensity:0.5});
+  function deselect(){ if (selected){ selected.material = selectedMat; selected = null; selectedMat = null; } }
+  function showInfo(key){
+    var p = PRODUCTS[key], bx = document.getElementById('info'); if (!p){ return; }
+    var n = counts[key] || 0;
+    var h = '<h3>'+p.name+'</h3><div class="art">'+(p.existing ? 'קיים, נשאר' : p.own ? 'שלכם' : 'חדש, אצל הנגר')+'</div>';
+    h += '<div class="row"><span>מידה</span><span>'+p.size+'</span></div>';
+    if (n) h += '<div class="row"><span>בתוכנית</span><span>'+n+'</span></div>';
+    if (p.note) h += '<p style="margin:10px 0 0">'+p.note+'</p>';
+    h += '<button type="button" id="infoClose">נקה בחירה</button>';
+    bx.innerHTML = h; document.getElementById('infoClose').addEventListener('click', function(){ deselect(); resetInfo(); });
+  }
+  function resetInfo(){ document.getElementById('info').innerHTML = '<h3>פרטי פריט</h3><p class="hint2">לחצו על ארון, מדף, מוט, מגירה, קופסה, דלת או הסולם במודל כדי לראות מה זה והאם הוא קיים או חדש.</p>'; }
+  var measuring = false, mPts = [], mGroup = new THREE.Group(); scene.add(mGroup);
+  var mMat = new THREE.MeshBasicMaterial({color:0xd9a84e}), mLine = new THREE.LineBasicMaterial({color:0xd9a84e});
+  function fmt(v){ return (Math.round(v*10)/10).toFixed(1); }
+  function addMeasurePoint(pt){
+    var s = new THREE.Mesh(new THREE.SphereGeometry(1.6, 12, 12), mMat); s.position.copy(pt); s.renderOrder = 9; mGroup.add(s); mPts.push(pt.clone());
+    if (mPts.length === 2){
+      var a = mPts[0], b = mPts[1], d = a.distanceTo(b);
+      mGroup.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([a, b]), mLine));
+      var lab = sprite(fmt(d)+' ס"מ', '#8a5a0b', 1.1); lab.position.copy(a).lerp(b, 0.5); mGroup.add(lab);
+      document.getElementById('info').innerHTML = '<h3>מדידה</h3><div class="price">'+fmt(d)+' ס"מ</div>'
+        + '<div class="row"><span>הפרש גובה</span><span>'+fmt(Math.abs(b.y-a.y))+' ס"מ</span></div>'
+        + '<div class="row"><span>לרוחב החדר</span><span>'+fmt(Math.abs(b.x-a.x))+' ס"מ</span></div>'
+        + '<div class="row"><span>לאורך החדר</span><span>'+fmt(Math.abs(b.z-a.z))+' ס"מ</span></div>'
+        + '<p class="hint2" style="margin-top:10px">x הוא המרחק מהקיר השמאלי, h הגובה מהרצפה, z המרחק מהקיר האחורי.</p>';
+      mPts = [];
+    } else {
+      document.getElementById('info').innerHTML = '<h3>מדידה</h3><p class="hint2">נקודה ראשונה ב-x '+fmt(pt.x)+', h '+fmt(pt.y)+', z '+fmt(pt.z)+'. לחצו על הנקודה השנייה.</p>';
+    }
+  }
+  function clearMeasure(){ while (mGroup.children.length) mGroup.remove(mGroup.children[0]); mPts = []; }
+  document.getElementById('btnMeasure').addEventListener('click', function(){ measuring = !measuring; this.classList.toggle('on', measuring); el.style.cursor = measuring ? 'crosshair' : ''; if (measuring){ deselect(); document.getElementById('info').innerHTML = '<h3>מדידה</h3><p class="hint2">לחצו על נקודה ראשונה על משטח כלשהו, ואז על שנייה. לחצו שוב על מדידה כדי לחזור לבחירת פריטים.</p>'; } else resetInfo(); });
+  document.getElementById('btnMeasureClear').addEventListener('click', function(){ clearMeasure(); if (!measuring) resetInfo(); });
+  var ray = new THREE.Raycaster(), ndc = new THREE.Vector2(), downAt = null;
+  function pickAt(cx, cy){
+    var r = el.getBoundingClientRect(); ndc.x = ((cx - r.left)/r.width)*2 - 1; ndc.y = -((cy - r.top)/r.height)*2 + 1;
+    ray.setFromCamera(ndc, camera); var hits = ray.intersectObjects(scene.children, true);
+    for (var i=0;i<hits.length;i++){ var o = hits[i].object; if (o.isSprite || o.isLineSegments || o.isLine || o.parent === mGroup) continue; var vis = true, q = o; while (q){ if (q.visible === false){ vis = false; break; } q = q.parent; } if (!vis) continue;
+      if (measuring){ addMeasurePoint(hits[i].point); return; }
+      var key = o.userData.product; if (!key) continue; deselect(); if (o.isMesh && o.material){ selected = o; selectedMat = o.material; o.material = selMat; }
+      var sg = o; while (sg && !(sg.userData && sg.userData.slide)) sg = sg.parent; if (sg){ var sl = sg.userData.slide; sl.out = !sl.out; sl.target = sl.out ? sl.ext : 0; }
+      showInfo(key); return; }
+  }
+  var pointers = {}, last = null, pinch = 0;
+  function dist(a,b){ return Math.hypot(a.x-b.x, a.y-b.y); }
+  el.addEventListener('contextmenu', function(e){ e.preventDefault(); });
+  el.addEventListener('pointerdown', function(e){ downAt = {x:e.clientX, y:e.clientY, t:Date.now()}; el.setPointerCapture(e.pointerId); pointers[e.pointerId] = {x:e.clientX, y:e.clientY, b:e.button, shift:e.shiftKey}; last = {x:e.clientX, y:e.clientY}; var ids = Object.keys(pointers); if (ids.length === 2) pinch = dist(pointers[ids[0]], pointers[ids[1]]); });
+  el.addEventListener('pointermove', function(e){
+    if (!pointers[e.pointerId]) return;
+    pointers[e.pointerId].x = e.clientX; pointers[e.pointerId].y = e.clientY;
+    var ids = Object.keys(pointers);
+    if (ids.length >= 2){ var nd = dist(pointers[ids[0]], pointers[ids[1]]); if (pinch > 0) sph.r = Math.min(1600, Math.max(90, sph.r * pinch / nd)); pinch = nd; updateCam(); return; }
+    var dx = e.clientX - last.x, dy = e.clientY - last.y; last = {x:e.clientX, y:e.clientY};
+    var p = pointers[e.pointerId];
+    if (p.b === 2 || p.shift || p.b === 1){ var rv = new THREE.Vector3(), uv = new THREE.Vector3(); camera.matrix.extractBasis(rv, uv, new THREE.Vector3()); var k = sph.r*0.0016; target.addScaledVector(rv, -dx*k); target.addScaledVector(uv, dy*k); }
+    else { sph.theta -= dx*0.006; sph.phi = Math.min(1.56, Math.max(0.04, sph.phi - dy*0.006)); }
+    updateCam();
+  });
+  function upEv(e){ if (downAt && e.button === 0 && Math.hypot(e.clientX-downAt.x, e.clientY-downAt.y) < 6 && Date.now()-downAt.t < 600) pickAt(e.clientX, e.clientY); downAt = null; delete pointers[e.pointerId]; if (Object.keys(pointers).length < 2) pinch = 0; }
+  el.addEventListener('pointerup', upEv); el.addEventListener('pointercancel', upEv);
+  el.addEventListener('wheel', function(e){ e.preventDefault(); sph.r = Math.min(1600, Math.max(90, sph.r*(1 + e.deltaY*0.0012))); updateCam(); }, {passive:false});
+
+  document.querySelectorAll('button.v[data-view]').forEach(function(b){ b.addEventListener('click', function(){ document.querySelectorAll('button.v[data-view]').forEach(function(x){ x.classList.remove('on'); }); b.classList.add('on'); setView(b.getAttribute('data-view')); }); });
+  ['tgLevel2','tgClothes','tgLabels','tgLadder','tgCeiling','tgMirror','tgLeft','tgBack','tgRight','tgDoor'].forEach(function(id){ document.getElementById(id).addEventListener('change', applyVisibility); });
+
+  var appEl = document.getElementById('app');
+  function isFull(){ return appEl.classList.contains('full'); }
+  function resize(){ var w = stage.clientWidth || 800; var h = isFull() ? Math.max(300, appEl.clientHeight - 20) : Math.max(440, Math.min(780, Math.round(window.innerHeight*0.72))); stage.style.height = h+'px'; renderer.setSize(w, h, false); camera.aspect = w/h; camera.updateProjectionMatrix(); }
+  resize(); window.addEventListener('resize', resize); if (window.ResizeObserver) new ResizeObserver(resize).observe(stage);
+  var btnFull = document.getElementById('btnFull');
+  function setFullLabel(){ btnFull.textContent = isFull() ? 'יציאה ממסך מלא' : 'מסך מלא'; btnFull.classList.toggle('on', isFull()); setTimeout(resize, 50); setTimeout(resize, 300); }
+  function leaveFull(){ appEl.classList.remove('full'); if (document.fullscreenElement) document.exitFullscreen().catch(function(){}); setFullLabel(); }
+  btnFull.addEventListener('click', function(){ if (isFull()){ leaveFull(); return; } appEl.classList.add('full'); setFullLabel(); if (appEl.requestFullscreen) appEl.requestFullscreen().catch(function(){}); });
+  document.addEventListener('fullscreenchange', setFullLabel);
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && isFull()) leaveFull(); });
+  var mq = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)');
+  function theme(){ css = getComputedStyle(document.documentElement); scene.background = new THREE.Color(cssColor('--paper', '#ffffff')); }
+  if (mq && mq.addEventListener) mq.addEventListener('change', theme);
+  new MutationObserver(theme).observe(document.documentElement, {attributes:true, attributeFilter:['data-theme']});
+
+  build(); setView('dollL');
+  (function loop(){ slides.forEach(function(pg){ var sl = pg.userData.slide; var dz = sl.target - pg.position.z; if (Math.abs(dz) > 0.05) pg.position.z += dz*0.18; }); renderer.render(scene, camera); requestAnimationFrame(loop); })();
+})();
+</script>
