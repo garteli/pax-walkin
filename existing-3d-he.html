@@ -114,7 +114,7 @@ label.t input{accent-color:var(--accent);margin:0}
     <span><i style="background:#c9d9e3"></i>דלתות מראה של G</span>
     <span><i style="background:#9c7a52"></i>סולם ספרייה וחיזוק הגג של R2</span>
   </div>
-  <p class="foot">המידות של הארונות הקיימים הן מידות פנים, עם לוח משותף של 1.8 ס"מ בין ארונות שכנים; בקיר הימני זה יוצא בדיוק 297, ובשמאלי 286 עם רצועת אביזרים של כ-11 ס"מ ליד הכניסה. אורכי התלייה הם אורך המוט, כלומר רוחב הפנים. תלייה קצרה היא מוט עם כ-90 ס"מ מתחתיו; תלייה ארוכה, ב-L2, היא מוט עם 150 ס"מ מתחתיו. G בעומק 35 כדי לא לחסום את L1 ו-R1 בפינות, ולכן אין בו מוט. הסולם תלוי על מסילות בחזית התיבות העליונות, בגובה 380, ומצויר מול דלת עליית הגג: הרגליים כ-68 ס"מ מחזית הארון, כ-80 מעלות. מיקום הדלת ממורכז מעל R2 ודורש מדידה. לחיצה על מגירה, מגש, מגש נעליים, מדף נשלף או מתלה מכנסיים שולפת אותם; לחיצה על דלתות המראה של G או על דלת עליית הגג פותחת אותן. לחיצה נוספת סוגרת. תצוגת "פרוס" פותחת את שני הקירות שטוחים לצד הקיר האחורי.</p>
+  <p class="foot">המידות של הארונות הקיימים הן מידות פנים, עם לוח משותף של 1.8 ס"מ בין ארונות שכנים; בקיר הימני זה יוצא בדיוק 297, ובשמאלי 286 עם רצועת אביזרים של כ-11 ס"מ ליד הכניסה. אורכי התלייה הם אורך המוט, כלומר רוחב הפנים. תלייה קצרה היא מוט עם כ-90 ס"מ מתחתיו; תלייה ארוכה, ב-L2, היא מוט עם 150 ס"מ מתחתיו. G בעומק 35 כדי לא לחסום את L1 ו-R1 בפינות, ולכן אין בו מוט. הסולם תלוי על מסילות בחזית התיבות העליונות, בגובה 380, ומצויר מול דלת עליית הגג: הרגליים כ-68 ס"מ מחזית הארון, כ-80 מעלות. מיקום הדלת ממורכז מעל R2 ודורש מדידה. לחיצה על מגירה, מדף נשלף או מתלה מכנסיים שולפת אותם; לחיצה על דלתות המראה של G או על דלת עליית הגג פותחת אותן. לחיצה נוספת סוגרת. תצוגת "פרוס" פותחת את שני הקירות שטוחים לצד הקיר האחורי.</p>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -194,8 +194,9 @@ label.t input{accent-color:var(--accent);margin:0}
     if (m[0]==='pullshelf') p = {name:'מדף נשלף', size:(Math.round((iw-2.6)*10)/10)+' × '+(d-4)+' ס"מ', note:'עד גובה 150 כל המדפים נשלפים: מסילות טלסקופיות מלאות עם טריקה שקטה, ופס עצירה נמוך בחזית. צר בכ-2.6 ס"מ מרוחב הפנים בגלל המסילות.'};
     if (m[0]==='pullglass') p = {name:'מדף זכוכית נשלף', size:(Math.round((iw-2.6)*10)/10)+' × '+(d-3)+' ס"מ', note:'מעל המגירות עם חזית הזכוכית ב-G, על מסילות 30 ס"מ.'};
     if (m[0]==='shoeshelf') p = {name:'מדף נעליים משופע עם פס עצירה', size:iw+' × '+d+' ס"מ', note:'קבוע, מעל 150. 3 זוגות למדף.'};
-    if (m[0]==='shoetray') p = {name:'מגש נעליים נשלף, שתי שורות', size:iw+' × '+(d-4)+' ס"מ', note:'עד גובה 150. מגש שטוח עם פס עצירה בחזית, מסילות טלסקופיות מלאות. 6 זוגות: 3 מקדימה ו-3 מאחור.'};
+    if (m[0]==='shoetray') p = {name:'מדף נעליים נשלף, שתי שורות', size:(Math.round((iw-2.6)*10)/10)+' × '+(d-4)+' ס"מ', note:'מדף מלמינה נשלף, כמו שאר המדפים עד 150: מסילות טלסקופיות מלאות ופס עצירה נמוך בחזית. 6 זוגות: 3 מקדימה ו-3 מאחור.'};
     if (m[0]==='trouser') p = {name:'מתלה מכנסיים נשלף', size:'לרוחב פנים '+iw+' ס"מ', note:'כ-10 זוגות.'};
+    if (m[0]==='accdrawer') p = {name:'מגירת אביזרים עם מכסה זכוכית', size:iw+' × '+d+' ס"מ, חזית 16', note:'אחת ב-R2 ואחת ב-R3, שתיהן ב-60. חלוקה פנימית לשעונים, תכשיטים ומשקפיים, ומכסה זכוכית שרואים דרכו את התכולה כשהמגירה בחוץ. מסילות טלסקופיות מלאות עם טריקה שקטה.'};
     if (m[0]==='tray') p = {name:'מגש אביזרים נשלף', size:'לרוחב פנים '+iw+' ס"מ', note:'שעונים, תכשיטים, משקפיים.'};
     if (m[0]==='insert') p = {name:'חלוקה למגש האביזרים', size:'לרוחב פנים '+iw+' ס"מ'};
     if (p) PRODUCTS[k] = p;
@@ -285,11 +286,11 @@ label.t input{accent-color:var(--accent);margin:0}
       if (it.t === 'shoes'){ for (var s=0;s<it.n;s++){ var ys = it.y + s*it.pitch;
           if (ys <= PULL){
             tag('shoetray_'+iw+'x'+d); var pg6 = slider(g, d-12), pc6 = pg6.userData.pc;
-            box(pg6, w-2*T-1, 1.5, d-4, T+0.5, ys, -d+2, M.steel, false); box(pg6, w-2*T-1, 4, 1.2, T+0.5, ys, -3.2, M.steel, false); curTag = null;
+            box(pg6, w-2*T-2.6, T, d-4, T+1.3, ys, -d+2, mat); box(pg6, w-2*T-2.6, 4, 1.2, T+1.3, ys+T, -2.4, mat); curTag = null;
             var len = Math.min(24, (d-10)/2);
             [-d+4, -d+6+len].forEach(function(z0){ var sx4 = T+3; while (sx4 + 19 < w - T - 1){ var sm = pick(shoeMats);
-              box(pc6, 8, 1.4, len, sx4, ys+1.5, z0, M.sole, false); box(pc6, 8, 1.4, len, sx4+9, ys+1.5, z0, M.sole, false);
-              box(pc6, 7.4, 5.5, len-2, sx4+0.3, ys+2.9, z0+1, sm, false); box(pc6, 7.4, 5.5, len-2, sx4+9.3, ys+2.9, z0+1, sm, false); sx4 += 21; } });
+              box(pc6, 8, 1.4, len, sx4, ys+T, z0, M.sole, false); box(pc6, 8, 1.4, len, sx4+9, ys+T, z0, M.sole, false);
+              box(pc6, 7.4, 5.5, len-2, sx4+0.3, ys+T+1.4, z0+1, sm, false); box(pc6, 7.4, 5.5, len-2, sx4+9.3, ys+T+1.4, z0+1, sm, false); sx4 += 21; } });
           } else {
             var sub = new THREE.Group(); sub.position.set(w/2, ys, -d+3); sub.rotation.x = 0.26; g.add(sub);
             tag('shoeshelf_'+iw+'x'+d); box(sub, w-2*T, 1.5, d-5, -(w-2*T)/2, 0, 0, M.steel, false); curTag = null;
@@ -301,7 +302,12 @@ label.t input{accent-color:var(--accent);margin:0}
       if (it.t === 'boot'){ var bx = T+4, by = (it.y||0)+0.5; while (bx + 12 < w - T - 4){ var bm = pick(shoeMats); var bh = 30 + rnd()*12; box(cg, 10, bh, Math.min(28, d-6), bx, by, -d+4, bm, false); bx += 14; } }
       if (it.t === 'mirror'){ tag('mirror', 2); var hw = (w-0.8)/2; var h1 = hinge(g, 0.2, 2, 0, -1.5), h2 = hinge(g, w-0.2, 2, 0, 1.5); var m1 = box(h1, hw, 266, T, 0, 0, 0, M.mirror), m2 = box(h2, hw, 266, T, -hw, 0, 0, M.mirror); mirrors.push(m1, m2); curTag = null; }
       if (it.t === 'trouser'){ tag('trouser_'+iw+'x'+d); var pg4 = slider(g, d-14), pc4 = pg4.userData.pc; box(pg4, w-2*T-2, 2, 4, T+1, it.y, -d+2, M.steel, false); var ax = T+4; while (ax + 4 < w - T - 3){ box(pg4, 1.2, 1.2, d-10, ax, it.y+1, -d+4, M.steel, false); box(pc4, 1.6, 36, Math.min(30, d-14), ax-0.2, it.y-35, -d/2-12, pick(clothMats), false); ax += 6; } curTag = null; }
-      if (it.t === 'tray'){ tag('tray_'+iw+'x'+d); var pg3 = slider(g, d-12); box(pg3, w-2*T-1, 3, d-4, T+0.5, it.y, -d+2, M.front); tag('insert_'+iw+'x'+d); var ix = T+2; [22,22,14].forEach(function(cw){ if (ix+cw < w-T){ box(pg3, cw-1, 5, d-6, ix, it.y+3, -d+3, M.insert); wire(pg3, cw-1, 5, d-6, ix, it.y+3, -d+3); ix += cw; } }); curTag = null; }
+      if (it.t === 'accDrawer'){ var ya = it.y; tag('accdrawer_'+iw+'x'+d); var pg9 = slider(g, d-10), iw9 = w-2*T-2;
+        box(pg9, w-2*T-0.4, 16, T, T+0.2, ya+2, -T, M.front);
+        box(pg9, iw9, 1.2, d-6, T+1, ya+2.5, -d+3, M.front);
+        box(pg9, 1.2, 13, d-6, T+1, ya+2.5, -d+3, M.front); box(pg9, 1.2, 13, d-6, w-T-2.2, ya+2.5, -d+3, M.front); box(pg9, iw9, 13, 1.2, T+1, ya+2.5, -d+3, M.front);
+        var ix9 = T+2.6, cws = [22,22,14,14,14], c9 = 0; while (c9 < cws.length && ix9 + cws[c9] < w - T - 2.4){ box(pg9, cws[c9]-1, 5, d-9, ix9, ya+3.7, -d+4.5, M.insert); wire(pg9, cws[c9]-1, 5, d-9, ix9, ya+3.7, -d+4.5); ix9 += cws[c9]; c9++; }
+        box(pg9, iw9, 0.6, d-6, T+1, ya+15.5, -d+3, M.glass, false); curTag = null; }
       if (it.t === 'boxes'){ tag(it.kind, 0); var b0 = T+2, by0 = it.y+T+0.3;
         if (it.kind === 'suitcase'){ var sd = Math.min(48, d-6); while (b0 + 26 < w - T){ counts.suitcase = (counts.suitcase||0)+1; box(cg, 25, 72, sd, b0, by0, -d+3, suitMats[(counts.suitcase-1)%suitMats.length]); box(cg, 10, 2.5, 3, b0+7.5, by0+72, -d+3+sd/2-1.5, M.sole, false); b0 += 29; } }
         if (it.kind === 'bin'){ var bd = Math.min(48, d-6); while (b0 + 40 < w - T){ for (var st=0; st<(it.n||2); st++){ counts.bin = (counts.bin||0)+1; box(cg, 40, 24, bd, b0, by0+st*25, -d+3, M.hemma); box(cg, 39.6, 3, bd-0.4, b0+0.2, by0+st*25+10, -d+3.2, M.hemmaStripe, false); } b0 += 43; } }
@@ -329,8 +335,8 @@ label.t input{accent-color:var(--accent);margin:0}
     Lf('L3','Mezi',189.6, [{t:'shelf',y:243,fold:true},{t:'shelf',y:215,fold:true},{t:'rail',y:210,drop:86,kind:'short'},{t:'drawers',y:102,n:1},{t:'rail',y:100,drop:90,kind:'short'}]),
     {id:'G', who:'Eli', run:'back', w:79, d:35, h:HG, pos:[57,0,35], rotY:0, isNew:true, items:[{t:'drawers',y:0,n:5,glass:true},{t:'glassShelf',y:102,fold:true},{t:'shelf',y:135,fold:true},{t:'shelf',y:170,fold:true},{t:'shelf',y:205,fold:true},{t:'shelf',y:240,fold:true},{t:'mirror'}]},
     Rf('R1','Eli',0,76,HG, dbl),
-    Rf('R2','shared',77.8,79,202, [{t:'drawers',y:0,n:4},{t:'shelf',y:85,fold:true},{t:'shelf',y:115,fold:true},{t:'shelf',y:145,fold:true},{t:'shelf',y:175,fold:true}]),
-    Rf('R3','Mezi',158.6,66,HG, [{t:'drawers',y:0,n:3},{t:'shelf',y:62,fixed:true},{t:'tray',y:66},{t:'trouser',y:120},{t:'trouser',y:165},{t:'trouser',y:210},{t:'shelf',y:215,fold:true},{t:'shelf',y:243,fold:true}]),
+    Rf('R2','shared',77.8,79,202, [{t:'drawers',y:0,n:3},{t:'accDrawer',y:60},{t:'shelf',y:85,fold:true},{t:'shelf',y:115,fold:true},{t:'shelf',y:145,fold:true},{t:'shelf',y:175,fold:true}]),
+    Rf('R3','Mezi',158.6,66,HG, [{t:'drawers',y:0,n:3},{t:'accDrawer',y:60},{t:'trouser',y:120},{t:'trouser',y:165},{t:'trouser',y:210},{t:'shelf',y:215,fold:true},{t:'shelf',y:243,fold:true}]),
     Rf('R4','Mezi',226.4,67,HG, [{t:'boot',y:0},{t:'shelf',y:45,fixed:true},{t:'shoes',y:50,n:10,pitch:19},{t:'shelf',y:240,fold:true}])
   ];
   function up(o, items, id){ var c = JSON.parse(JSON.stringify(o)); c.id = id; c.h = HT; c.pos[1] = HG; c.level2 = true; c.isNew = true; c.items = items; delete c.who; return c; }
@@ -341,7 +347,7 @@ label.t input{accent-color:var(--accent);margin:0}
     up(GROUND[4], halfBox('bin'), 'R1↑'), up(GROUND[6], halfBox('bag'), 'R3↑'), up(GROUND[7], halfBox('shoebox'), 'R4↑')
   ];
   var ZONES = [[0,0,57,95.7,ELI],[0,95.7,57,94.8,SH],[0,190.5,57,95.7,MEZI],[0,286.2,57,10.8,SH],[57,0,79,35,ELI],[136,0,56,78.7,ELI],[136,78.7,56,80.8,SH],[136,159.5,56,137.5,MEZI]];
-  var DESC = '<b>הארונות הקיימים, פנים חדשים.</b> L1 ו-R1 בפינות האחוריות הם תלייה כפולה של אלי, כי G מסתיר את החלק האחורי שלהם ובתלייה מחליקים את הקולבים. G החדש, בעומק 35, מחזיק חמש מגירות עם חזית זכוכית ומדפים מאחורי שתי דלתות מראה. L2 הוא תלייה ארוכה משותפת מעל שתי מגירות, ו-R2 מתחת לדלת עליית הגג הוא מגירות רדודות ומדפים, עם לוח מדרגה על הגג. L3 של מזי הוא תלייה כפולה עם מגירה בין המוטות, R3 מגירות, מגש ושלושה מתלי מכנסיים, ו-R4 מגדל נעליים מעל תא מגפיים: 6 מגשים נשלפים בשתי שורות עד 150, ומעליהם 4 מדפים משופעים. כל המדפים עד גובה 150 נשלפים. למעלה: בכל שבע התיבות שני מדפים, שלושה תאים לקופסאות, תיקים וקופסאות נעליים.';
+  var DESC = '<b>הארונות הקיימים, פנים חדשים.</b> L1 ו-R1 בפינות האחוריות הם תלייה כפולה של אלי, כי G מסתיר את החלק האחורי שלהם ובתלייה מחליקים את הקולבים. G החדש, בעומק 35, מחזיק חמש מגירות עם חזית זכוכית ומדפים מאחורי שתי דלתות מראה. L2 הוא תלייה ארוכה משותפת מעל שתי מגירות, ו-R2 מתחת לדלת עליית הגג הוא מגירות רדודות, מגירת אביזרים עם מכסה זכוכית ומדפים, עם לוח מדרגה על הגג. L3 של מזי הוא תלייה כפולה עם מגירה בין המוטות, R3 מגירות, מגירת אביזרים ושלושה מתלי מכנסיים, ו-R4 מגדל נעליים מעל תא מגפיים: 6 מדפים נשלפים בשתי שורות עד 150, ומעליהם 4 מדפים משופעים. כל המדפים עד גובה 150 נשלפים. למעלה: בכל שבע התיבות שני מדפים, שלושה תאים לקופסאות, תיקים וקופסאות נעליים.';
 
   function stripGroup(){
     var g = new THREE.Group(); g.userData.run = 'left'; g.userData.strip = true; frames.push(g); ground.add(g);
@@ -367,6 +373,7 @@ label.t input{accent-color:var(--accent);margin:0}
     GROUND.forEach(function(f){ var o = s[f.who]; var iw = f.w - 2*T; (f.items||[]).forEach(function(it){
       if (it.t==='rail'){ if (it.kind==='long') o.long += iw; else o.short += iw; }
       if (it.t==='drawers') o.dr += it.n;
+      if (it.t==='accDrawer') o.dr += 1;
       if (it.t==='shoes'){ for (var q=0;q<it.n;q++) o.shoes += (iw>=60?3:2) * (it.y+q*it.pitch <= 150 ? 2 : 1); }
       if (it.t==='boot') boots++;
       if (it.t==='trouser'){ racks++; o.tr += 10; }
@@ -379,7 +386,7 @@ label.t input{accent-color:var(--accent);margin:0}
     html += '<div class="stat"><b>'+r(tLong)+' ס"מ</b><span>תלייה ארוכה, משותפת ב-L2</span></div>';
     html += '<div class="stat"><b>'+tDr+'</b><span>מגירות &middot; אלי '+s.Eli.dr+', מזי '+s.Mezi.dr+', משותף '+s.shared.dr+'</span></div>';
     html += '<div class="stat"><b>'+tTr+' זוגות</b><span>מכנסיים על '+racks+' מתלים נשלפים, מזי</span></div>';
-    html += '<div class="stat"><b>'+tSh+' זוגות</b><span>נעליים, מגשים נשלפים עד 150'+(boots?' + תא מגפיים':'')+'</span></div>';
+    html += '<div class="stat"><b>'+tSh+' זוגות</b><span>נעליים, מדפים נשלפים עד 150'+(boots?' + תא מגפיים':'')+'</span></div>';
     document.getElementById('stats').innerHTML = html;
   }
 
