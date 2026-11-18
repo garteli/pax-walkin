@@ -316,15 +316,14 @@ label.t input{accent-color:var(--accent);margin:0}
     Rf('R4','Mezi',226.4,67,HG, [{t:'boot',y:0},{t:'shelf',y:45},{t:'shoes',y:50,n:10,pitch:19},{t:'shelf',y:240,fold:true}])
   ];
   function up(o, items, id){ var c = JSON.parse(JSON.stringify(o)); c.id = id; c.h = HT; c.pos[1] = HG; c.level2 = true; c.isNew = true; c.items = items; delete c.who; return c; }
-  var suits = [{t:'boxes',y:0,kind:'suitcase'},{t:'shelf',y:80},{t:'boxes',y:80,kind:'bag'}];
   function halfBox(kind){ var n = kind==='shoebox' ? 2 : 1; return [{t:'boxes',y:0,kind:kind,n:n},{t:'shelf',y:38},{t:'boxes',y:38,kind:kind,n:n},{t:'shelf',y:76},{t:'boxes',y:76,kind:kind,n:n}]; }
   var UPPER = [
-    up(GROUND[0], suits, 'L1↑'), up(GROUND[1], suits, 'L2↑'), up(GROUND[2], halfBox('bin'), 'L3↑'),
+    up(GROUND[0], halfBox('bin'), 'L1↑'), up(GROUND[1], halfBox('bag'), 'L2↑'), up(GROUND[2], halfBox('bin'), 'L3↑'),
     up(GROUND[3], halfBox('bin'), 'G↑'),
     up(GROUND[4], halfBox('bin'), 'R1↑'), up(GROUND[6], halfBox('bag'), 'R3↑'), up(GROUND[7], halfBox('shoebox'), 'R4↑')
   ];
   var ZONES = [[0,0,57,95.7,ELI],[0,95.7,57,94.8,SH],[0,190.5,57,95.7,MEZI],[0,286.2,57,10.8,SH],[57,0,79,35,ELI],[136,0,56,78.7,ELI],[136,78.7,56,80.8,SH],[136,159.5,56,137.5,MEZI]];
-  var DESC = '<b>הארונות הקיימים, פנים חדשים.</b> L1 ו-R1 בפינות האחוריות הם תלייה כפולה של אלי, כי G מסתיר את החלק האחורי שלהם ובתלייה מחליקים את הקולבים. G החדש, בעומק 35, מחזיק חמש מגירות עם חזית זכוכית ומדפים מאחורי שתי דלתות מראה. L2 הוא תלייה ארוכה משותפת מעל שתי מגירות, ו-R2 מתחת לדלת עליית הגג הוא מגירות רדודות ומדפים, עם לוח מדרגה על הגג. L3 של מזי הוא תלייה כפולה עם מגירה בין המוטות, R3 מגירות, מגש ושלושה מתלי מכנסיים, ו-R4 מגדל נעליים מעל תא מגפיים. למעלה: מזוודות מעל L1 ו-L2 עם מדף לתיקים מעליהן, ובשאר התיבות שני מדפים, שלושה תאים לקופסאות, תיקים וקופסאות נעליים.';
+  var DESC = '<b>הארונות הקיימים, פנים חדשים.</b> L1 ו-R1 בפינות האחוריות הם תלייה כפולה של אלי, כי G מסתיר את החלק האחורי שלהם ובתלייה מחליקים את הקולבים. G החדש, בעומק 35, מחזיק חמש מגירות עם חזית זכוכית ומדפים מאחורי שתי דלתות מראה. L2 הוא תלייה ארוכה משותפת מעל שתי מגירות, ו-R2 מתחת לדלת עליית הגג הוא מגירות רדודות ומדפים, עם לוח מדרגה על הגג. L3 של מזי הוא תלייה כפולה עם מגירה בין המוטות, R3 מגירות, מגש ושלושה מתלי מכנסיים, ו-R4 מגדל נעליים מעל תא מגפיים. למעלה: בכל שבע התיבות שני מדפים, שלושה תאים לקופסאות, תיקים וקופסאות נעליים.';
 
   function stripGroup(){
     var g = new THREE.Group(); g.userData.run = 'left'; g.userData.strip = true; frames.push(g); ground.add(g);
