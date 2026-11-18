@@ -171,7 +171,7 @@ label.t input{accent-color:var(--accent);margin:0}
 
   var PRODUCTS = {
     'mirror': {name:'דלת מראה', size:'כ-39 × 266 ס"מ', note:'שתיים ל-G. מראה מודבקת על דלת מלמינה, 4 צירים עם טריקה שקטה לכל דלת.'},
-    'suitcase': {name:'המזוודות שלכם', size:'עומדות, כ-3 בכל תיבה', own:true, note:'בתיבות העליונות מעל L1 ו-L2, בלי מדף, 110 ס"מ גובה פנימי.'},
+    'suitcase': {name:'המזוודות שלכם', size:'עומדות, כ-3 בכל תיבה', own:true, note:'בתיבות העליונות מעל L1 ו-L2, מתחת למדף ב-80 ס"מ: 78 ס"מ פנויים.'},
     'bag': {name:'התיקים שלכם', size:'על מדפים', own:true},
     'bin': {name:'קופסת אחסון', size:'כ-40 × 24 × 48 ס"מ', note:'להמחשה: כל קופסה בגודל דומה מתאימה. שמיכות ובגדים עונתיים.'},
     'shoebox': {name:'קופסאות נעליים', size:'כ-22 × 16 × 34 ס"מ', note:'להמחשה. בתיבה העליונה מעל מגדל הנעליים R4.'},
@@ -286,8 +286,8 @@ label.t input{accent-color:var(--accent);margin:0}
       if (it.t === 'tray'){ tag('tray_'+iw+'x'+d); var pg3 = slider(g, d-12); box(pg3, w-2*T-1, 3, d-4, T+0.5, it.y, -d+2, M.front); tag('insert_'+iw+'x'+d); var ix = T+2; [22,22,14].forEach(function(cw){ if (ix+cw < w-T){ box(pg3, cw-1, 5, d-6, ix, it.y+3, -d+3, M.insert); wire(pg3, cw-1, 5, d-6, ix, it.y+3, -d+3); ix += cw; } }); curTag = null; }
       if (it.t === 'boxes'){ tag(it.kind, 0); var b0 = T+2, by0 = it.y+T+0.3;
         if (it.kind === 'suitcase'){ var sd = Math.min(48, d-6); while (b0 + 26 < w - T){ counts.suitcase = (counts.suitcase||0)+1; box(cg, 25, 72, sd, b0, by0, -d+3, suitMats[(counts.suitcase-1)%suitMats.length]); box(cg, 10, 2.5, 3, b0+7.5, by0+72, -d+3+sd/2-1.5, M.sole, false); b0 += 29; } }
-        if (it.kind === 'bin'){ var bd = Math.min(48, d-6); while (b0 + 40 < w - T){ for (var st=0; st<2; st++){ counts.bin = (counts.bin||0)+1; box(cg, 40, 24, bd, b0, by0+st*25, -d+3, M.hemma); box(cg, 39.6, 3, bd-0.4, b0+0.2, by0+st*25+10, -d+3.2, M.hemmaStripe, false); } b0 += 43; } }
-        if (it.kind === 'shoebox'){ while (b0 + 22 < w - T){ for (var sl=0; sl<3; sl++){ counts.shoebox = (counts.shoebox||0)+1; box(cg, 22, 16, 34, b0, by0+sl*17, -d+4, M.skubb); box(cg, 12, 8, 0.4, b0+5, by0+sl*17+4, -d+38.1, M.skubbWin, false); } b0 += 24; } }
+        if (it.kind === 'bin'){ var bd = Math.min(48, d-6); while (b0 + 40 < w - T){ for (var st=0; st<(it.n||2); st++){ counts.bin = (counts.bin||0)+1; box(cg, 40, 24, bd, b0, by0+st*25, -d+3, M.hemma); box(cg, 39.6, 3, bd-0.4, b0+0.2, by0+st*25+10, -d+3.2, M.hemmaStripe, false); } b0 += 43; } }
+        if (it.kind === 'shoebox'){ while (b0 + 22 < w - T){ for (var sl=0; sl<(it.n||3); sl++){ counts.shoebox = (counts.shoebox||0)+1; box(cg, 22, 16, 34, b0, by0+sl*17, -d+4, M.skubb); box(cg, 12, 8, 0.4, b0+5, by0+sl*17+4, -d+38.1, M.skubbWin, false); } b0 += 24; } }
         if (it.kind === 'bag'){ while (b0 + 30 < w - T){ counts.bag = (counts.bag||0)+1; box(cg, 28, 22, 14, b0, by0, -d/2-7, pick(clothMats)); var hd = new THREE.Mesh(new THREE.TorusGeometry(7, 0.6, 6, 16, Math.PI), M.sole); hd.position.set(b0+14, by0+22, -d/2); cg.add(hd); b0 += 31; } }
         curTag = null;
       }
@@ -316,15 +316,15 @@ label.t input{accent-color:var(--accent);margin:0}
     Rf('R4','Mezi',226.4,67,HG, [{t:'boot',y:0},{t:'shelf',y:45},{t:'shoes',y:50,n:10,pitch:19},{t:'shelf',y:240,fold:true}])
   ];
   function up(o, items, id){ var c = JSON.parse(JSON.stringify(o)); c.id = id; c.h = HT; c.pos[1] = HG; c.level2 = true; c.isNew = true; c.items = items; delete c.who; return c; }
-  var suits = [{t:'boxes',y:0,kind:'suitcase'}];
-  function halfBox(kind){ return [{t:'boxes',y:0,kind:kind},{t:'shelf',y:57},{t:'boxes',y:57,kind:kind}]; }
+  var suits = [{t:'boxes',y:0,kind:'suitcase'},{t:'shelf',y:80},{t:'boxes',y:80,kind:'bag'}];
+  function halfBox(kind){ var n = kind==='shoebox' ? 2 : 1; return [{t:'boxes',y:0,kind:kind,n:n},{t:'shelf',y:38},{t:'boxes',y:38,kind:kind,n:n},{t:'shelf',y:76},{t:'boxes',y:76,kind:kind,n:n}]; }
   var UPPER = [
     up(GROUND[0], suits, 'L1↑'), up(GROUND[1], suits, 'L2↑'), up(GROUND[2], halfBox('bin'), 'L3↑'),
     up(GROUND[3], halfBox('bin'), 'G↑'),
     up(GROUND[4], halfBox('bin'), 'R1↑'), up(GROUND[6], halfBox('bag'), 'R3↑'), up(GROUND[7], halfBox('shoebox'), 'R4↑')
   ];
   var ZONES = [[0,0,57,95.7,ELI],[0,95.7,57,94.8,SH],[0,190.5,57,95.7,MEZI],[0,286.2,57,10.8,SH],[57,0,79,35,ELI],[136,0,56,78.7,ELI],[136,78.7,56,80.8,SH],[136,159.5,56,137.5,MEZI]];
-  var DESC = '<b>הארונות הקיימים, פנים חדשים.</b> L1 ו-R1 בפינות האחוריות הם תלייה כפולה של אלי, כי G מסתיר את החלק האחורי שלהם ובתלייה מחליקים את הקולבים. G החדש, בעומק 35, מחזיק חמש מגירות עם חזית זכוכית ומדפים מאחורי שתי דלתות מראה. L2 הוא תלייה ארוכה משותפת מעל שתי מגירות, ו-R2 מתחת לדלת עליית הגג הוא מגירות רדודות ומדפים, עם לוח מדרגה על הגג. L3 של מזי הוא תלייה כפולה עם מגירה בין המוטות, R3 מגירות, מגש ושלושה מתלי מכנסיים, ו-R4 מגדל נעליים מעל תא מגפיים. למעלה: מזוודות מעל L1 ו-L2, קופסאות, תיקים וקופסאות נעליים בשאר.';
+  var DESC = '<b>הארונות הקיימים, פנים חדשים.</b> L1 ו-R1 בפינות האחוריות הם תלייה כפולה של אלי, כי G מסתיר את החלק האחורי שלהם ובתלייה מחליקים את הקולבים. G החדש, בעומק 35, מחזיק חמש מגירות עם חזית זכוכית ומדפים מאחורי שתי דלתות מראה. L2 הוא תלייה ארוכה משותפת מעל שתי מגירות, ו-R2 מתחת לדלת עליית הגג הוא מגירות רדודות ומדפים, עם לוח מדרגה על הגג. L3 של מזי הוא תלייה כפולה עם מגירה בין המוטות, R3 מגירות, מגש ושלושה מתלי מכנסיים, ו-R4 מגדל נעליים מעל תא מגפיים. למעלה: מזוודות מעל L1 ו-L2 עם מדף לתיקים מעליהן, ובשאר התיבות שני מדפים, שלושה תאים לקופסאות, תיקים וקופסאות נעליים.';
 
   function stripGroup(){
     var g = new THREE.Group(); g.userData.run = 'left'; g.userData.strip = true; frames.push(g); ground.add(g);
