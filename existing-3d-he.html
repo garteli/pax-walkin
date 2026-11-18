@@ -99,6 +99,10 @@ label.t input{accent-color:var(--accent);margin:0}
       <label class="t"><input type="checkbox" id="tgCeiling"> תקרה</label>
       <label class="t"><input type="checkbox" id="tgMirror" checked> דלתות מראה</label>
     </div>
+    <div class="grp"><span class="lab">סולם</span>
+      <input type="range" id="ladPos" min="0" max="100" value="38" style="width:150px" aria-label="מיקום הסולם לאורך המסילה">
+      <button class="v" id="ladSide" type="button">לקיר שמאל</button>
+    </div>
     <div class="grp"><span class="lab">מדידה</span>
       <button class="v" id="btnMeasure" type="button">מדידה</button>
       <button class="v" id="btnMeasureClear" type="button">נקה מדידות</button>
@@ -114,7 +118,7 @@ label.t input{accent-color:var(--accent);margin:0}
     <span><i style="background:#c9d9e3"></i>דלתות מראה של G</span>
     <span><i style="background:#9c7a52"></i>סולם ספרייה וחיזוק הגג של R2</span>
   </div>
-  <p class="foot">המידות של הארונות הקיימים הן מידות פנים, עם לוח משותף של 1.8 ס"מ בין ארונות שכנים; בקיר הימני זה יוצא בדיוק 297, ובשמאלי 286 עם רצועת אביזרים של כ-11 ס"מ ליד הכניסה. אורכי התלייה הם אורך המוט, כלומר רוחב הפנים. תלייה קצרה היא מוט עם כ-90 ס"מ מתחתיו; תלייה ארוכה, ב-L2, היא מוט עם 150 ס"מ מתחתיו. G בעומק 35 כדי לא לחסום את L1 ו-R1 בפינות, ולכן אין בו מוט. הסולם תלוי על מסילות בחזית התיבות העליונות, בגובה 380, ומצויר מול דלת עליית הגג: הרגליים כ-68 ס"מ מחזית הארון, כ-80 מעלות. מיקום הדלת ממורכז מעל R2 ודורש מדידה. לחיצה על מגירה, מדף נשלף או מתלה מכנסיים שולפת אותם; לחיצה על דלתות המראה של G או על דלת עליית הגג פותחת אותן. לחיצה נוספת סוגרת. תצוגת "פרוס" פותחת את שני הקירות שטוחים לצד הקיר האחורי.</p>
+  <p class="foot">המידות של הארונות הקיימים הן מידות פנים, עם לוח משותף של 1.8 ס"מ בין ארונות שכנים; בקיר הימני זה יוצא בדיוק 297, ובשמאלי 286 עם רצועת אביזרים של כ-11 ס"מ ליד הכניסה. אורכי התלייה הם אורך המוט, כלומר רוחב הפנים. תלייה קצרה היא מוט עם כ-90 ס"מ מתחתיו; תלייה ארוכה, ב-L2, היא מוט עם 150 ס"מ מתחתיו. G בעומק 35 כדי לא לחסום את L1 ו-R1 בפינות, ולכן אין בו מוט. הסולם תלוי על מסילות בחזית התיבות העליונות, בגובה 380, ומתחיל מול דלת עליית הגג; בפקדי "סולם" מחליקים אותו לאורך המסילה ומעבירים לקיר השני. הרגליים כ-68 ס"מ מחזית הארון, כ-80 מעלות. מיקום הדלת ממורכז מעל R2 ודורש מדידה. לחיצה על מגירה, מדף נשלף או מתלה מכנסיים שולפת אותם; לחיצה על דלתות המראה של G או על דלת עליית הגג פותחת אותן. לחיצה נוספת סוגרת. תצוגת "פרוס" פותחת את שני הקירות שטוחים לצד הקיר האחורי.</p>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -175,7 +179,7 @@ label.t input{accent-color:var(--accent);margin:0}
     'bag': {name:'התיקים שלכם', size:'על מדפים', own:true},
     'bin': {name:'קופסת אחסון', size:'כ-40 × 24 × 48 ס"מ', note:'להמחשה: כל קופסה בגודל דומה מתאימה. שמיכות ובגדים עונתיים.'},
     'shoebox': {name:'קופסאות נעליים', size:'כ-22 × 16 × 34 ס"מ', note:'להמחשה. בתיבה העליונה מעל מגדל הנעליים R4.'},
-    'ladder': {name:'סולם ספרייה עם ווים', size:'כ-388 ס"מ, כ-80 מעלות, מסילות 286 ו-297 ס"מ בגובה 380', note:'המעבר 79 ס"מ, ולכן הסולם תלול יותר מבתוכנית הקודמת: הרגליים כ-68 ס"מ מחזית הארון. לבחור דגם עם מאחז יד. מצויר מול דלת עליית הגג.'},
+    'ladder': {name:'סולם ספרייה עם ווים', size:'כ-388 ס"מ, כ-80 מעלות, מסילות 286 ו-297 ס"מ בגובה 380', note:'המעבר 79 ס"מ, ולכן הסולם תלול יותר מבתוכנית הקודמת: הרגליים כ-68 ס"מ מחזית הארון. לבחור דגם עם מאחז יד. בפקדי "סולם" מחליקים אותו לאורך המסילה ומעבירים לקיר השני.'},
     'step': {name:'חיזוק גג R2', size:'79 × 56 × 2.5 ס"מ', note:'לוח על הגג של R2, ממנו עוברים לדלת עליית הגג.'},
     'door': {name:'דלת עליית הגג, קיימת', size:'שתי כנפיים, 83 ס"מ יחד, סף ב-202', existing:true, note:'מצוירת ממורכזת מעל R2. צריך למדוד את הקצוות ולבדוק ששתי הכנפיים נפתחות ליד הלוחות של R1 ו-R3.'},
     'strip': {name:'רצועת אביזרים', size:'כ-11 × 57 ס"מ', note:'ווים לחגורות וצעיפים על הצד של L3 עד 100, ומעליהם 6 מדפונים צרים.'}
@@ -194,6 +198,7 @@ label.t input{accent-color:var(--accent);margin:0}
     if (m[0]==='pullshelf') p = {name:'מדף נשלף', size:(Math.round((iw-2.6)*10)/10)+' × '+(d-4)+' ס"מ', note:'עד גובה 150 כל המדפים נשלפים: מסילות טלסקופיות מלאות עם טריקה שקטה, ופס עצירה נמוך בחזית. צר בכ-2.6 ס"מ מרוחב הפנים בגלל המסילות.'};
     if (m[0]==='pullglass') p = {name:'מדף זכוכית נשלף', size:(Math.round((iw-2.6)*10)/10)+' × '+(d-3)+' ס"מ', note:'מעל המגירות עם חזית הזכוכית ב-G, על מסילות 30 ס"מ.'};
     if (m[0]==='shoeshelf') p = {name:'מדף נעליים משופע עם פס עצירה', size:iw+' × '+d+' ס"מ', note:'קבוע, מעל 150. 3 זוגות למדף.'};
+    if (m[0]==='boottray') p = {name:'מגש מגפיים נשלף', size:(Math.round((iw-2.6)*10)/10)+' × '+(d-4)+' ס"מ', note:'בתחתית R4, מתחת למדף הקבוע ב-45. מסילות טלסקופיות מלאות ופס עצירה נמוך בחזית, כמו המדפים הנשלפים.'};
     if (m[0]==='shoetray') p = {name:'מדף נעליים נשלף, שתי שורות', size:(Math.round((iw-2.6)*10)/10)+' × '+(d-4)+' ס"מ', note:'מדף מלמינה נשלף, כמו שאר המדפים עד 150: מסילות טלסקופיות מלאות ופס עצירה נמוך בחזית. 6 זוגות: 3 מקדימה ו-3 מאחור.'};
     if (m[0]==='trouser') p = {name:'מתלה מכנסיים נשלף', size:'לרוחב פנים '+iw+' ס"מ', note:'כ-10 זוגות.'};
     if (m[0]==='accdrawer') p = {name:'מגירת אביזרים עם מכסה זכוכית', size:iw+' × '+d+' ס"מ, חזית 16', note:'אחת ב-R2 ואחת ב-R3, שתיהן ב-60. חלוקה פנימית לשעונים, תכשיטים ומשקפיים, ומכסה זכוכית שרואים דרכו את התכולה כשהמגירה בחוץ. מסילות טלסקופיות מלאות עם טריקה שקטה.'};
@@ -298,7 +303,9 @@ label.t input{accent-color:var(--accent);margin:0}
               box(cg, 8, 1.4, len2, sx5, ys+T, z0, M.sole, false); box(cg, 8, 1.4, len2, sx5+9, ys+T, z0, M.sole, false);
               box(cg, 7.4, 5.5, len2-2, sx5+0.3, ys+T+1.4, z0+1, sm2, false); box(cg, 7.4, 5.5, len2-2, sx5+9.3, ys+T+1.4, z0+1, sm2, false); sx5 += 21; } });
           } } }
-      if (it.t === 'boot'){ var bx = T+4, by = (it.y||0)+0.5; while (bx + 12 < w - T - 4){ var bm = pick(shoeMats); var bh = 30 + rnd()*12; box(cg, 10, bh, Math.min(28, d-6), bx, by, -d+4, bm, false); bx += 14; } }
+      if (it.t === 'boot'){ var yb0 = (it.y||0)+T; tag('boottray_'+iw+'x'+d); var pgB = slider(g, d-12), pcB = pgB.userData.pc;
+        box(pgB, w-2*T-2.6, T, d-4, T+1.3, yb0, -d+2, mat); box(pgB, w-2*T-2.6, 4, 1.2, T+1.3, yb0+T, -2.4, mat); curTag = null;
+        var bx = T+4, by = yb0+T; while (bx + 12 < w - T - 4){ var bm = pick(shoeMats); var bh = 28 + rnd()*10; box(pcB, 10, bh, Math.min(28, d-6), bx, by, -d+4, bm, false); bx += 14; } }
       if (it.t === 'mirror'){ tag('mirror', 2); var hw = (w-0.8)/2; var h1 = hinge(g, 0.2, 2, 0, -1.5), h2 = hinge(g, w-0.2, 2, 0, 1.5); var m1 = box(h1, hw, 266, T, 0, 0, 0, M.mirror), m2 = box(h2, hw, 266, T, -hw, 0, 0, M.mirror); mirrors.push(m1, m2); curTag = null; }
       if (it.t === 'trouser'){ tag('trouser_'+iw+'x'+d); var pg4 = slider(g, d-14), pc4 = pg4.userData.pc; box(pg4, w-2*T-2, 2, 4, T+1, it.y, -d+2, M.steel, false); var ax = T+4; while (ax + 4 < w - T - 3){ box(pg4, 1.2, 1.2, d-10, ax, it.y+1, -d+4, M.steel, false); box(pc4, 1.6, 36, Math.min(30, d-14), ax-0.2, it.y-35, -d/2-12, pick(clothMats), false); ax += 6; } curTag = null; }
       if (it.t === 'accDrawer'){ var ya = it.y; tag('accdrawer_'+iw+'x'+d); var pg9 = slider(g, d-10), iw9 = w-2*T-2;
@@ -385,7 +392,7 @@ label.t input{accent-color:var(--accent);margin:0}
     html += '<div class="stat"><b>'+r(tLong)+' ס"מ</b><span>תלייה ארוכה, משותפת ב-L2</span></div>';
     html += '<div class="stat"><b>'+tDr+'</b><span>מגירות &middot; אלי '+s.Eli.dr+', מזי '+s.Mezi.dr+', משותף '+s.shared.dr+'</span></div>';
     html += '<div class="stat"><b>'+tTr+' זוגות</b><span>מכנסיים על '+racks+' מתלים נשלפים, מזי</span></div>';
-    html += '<div class="stat"><b>'+tSh+' זוגות</b><span>נעליים, מדפים נשלפים עד 150'+(boots?' + תא מגפיים':'')+'</span></div>';
+    html += '<div class="stat"><b>'+tSh+' זוגות</b><span>נעליים, מדפים נשלפים עד 150'+(boots?' + מגש מגפיים נשלף':'')+'</span></div>';
     document.getElementById('stats').innerHTML = html;
   }
 
@@ -400,6 +407,13 @@ label.t input{accent-color:var(--accent);margin:0}
   box(lad, 6, 4, 50, -3, LEN-4, -2.5, M.steel, false);
   box(lad, 4, 3, 3, -2, 0, -0.5, M.sole, false); box(lad, 4, 3, 3, -2, 0, 41.5, M.sole, false);
   lad.children.forEach(function(c){ c.userData.product = 'ladder'; }); curTag = null;
+  /* slide along the rail: right rail 297, left rail 286.2, ladder about 46 wide */
+  var ladSide = 'right', ladT = 0.38, LADA = Math.asin(68/LEN);
+  function ladZ(){ return ladT * ((ladSide === 'right' ? 297 : 286.2) - 46); }
+  function placeLadder(){ if (ladSide === 'right'){ lad.position.x = 68; lad.rotation.z = -LADA; } else { lad.position.x = 128; lad.rotation.z = LADA; } }
+  placeLadder(); lad.position.z = ladZ();
+  document.getElementById('ladPos').addEventListener('input', function(){ ladT = this.value/100; });
+  document.getElementById('ladSide').addEventListener('click', function(){ ladSide = ladSide === 'right' ? 'left' : 'right'; this.textContent = ladSide === 'right' ? 'לקיר שמאל' : 'לקיר ימין'; placeLadder(); });
 
   var target = new THREE.Vector3(), sph = {r:600, theta:0, phi:1.1};
   var views = {
@@ -519,6 +533,7 @@ label.t input{accent-color:var(--accent);margin:0}
 
   build(); setView('dollL');
   (function loop(){ slides.forEach(function(pg){ var sl = pg.userData.slide; var dz = sl.target - pg.position.z; if (Math.abs(dz) > 0.05) pg.position.z += dz*0.18; });
+    var lz = ladZ(); if (Math.abs(lz - lad.position.z) > 0.05) lad.position.z += (lz - lad.position.z)*0.2;
     swings.concat(doorSwings).forEach(function(h){ var sw = h.userData.swing, da = sw.target - h.rotation.y; if (Math.abs(da) > 0.002) h.rotation.y += da*0.15; }); renderer.render(scene, camera); requestAnimationFrame(loop); })();
 })();
 </script>
