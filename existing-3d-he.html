@@ -114,7 +114,7 @@ label.t input{accent-color:var(--accent);margin:0}
     <span><i style="background:#c9d9e3"></i>דלתות מראה של G</span>
     <span><i style="background:#9c7a52"></i>סולם ספרייה וחיזוק הגג של R2</span>
   </div>
-  <p class="foot">המידות של הארונות הקיימים הן מידות פנים, עם לוח משותף של 1.8 ס"מ בין ארונות שכנים; בקיר הימני זה יוצא בדיוק 297, ובשמאלי 286 עם רצועת אביזרים של כ-11 ס"מ ליד הכניסה. אורכי התלייה הם אורך המוט, כלומר רוחב הפנים. תלייה קצרה היא מוט עם כ-90 ס"מ מתחתיו; תלייה ארוכה, ב-L2, היא מוט עם 150 ס"מ מתחתיו. G בעומק 35 כדי לא לחסום את L1 ו-R1 בפינות, ולכן אין בו מוט. הסולם תלוי על מסילות בחזית התיבות העליונות, בגובה 380, ומצויר מול דלת עליית הגג: הרגליים כ-68 ס"מ מחזית הארון, כ-80 מעלות. מיקום הדלת ממורכז מעל R2 ודורש מדידה. לחיצה על מגירה, המגש או מתלה מכנסיים שולפת אותם; לחיצה נוספת סוגרת. תצוגת "פרוס" פותחת את שני הקירות שטוחים לצד הקיר האחורי.</p>
+  <p class="foot">המידות של הארונות הקיימים הן מידות פנים, עם לוח משותף של 1.8 ס"מ בין ארונות שכנים; בקיר הימני זה יוצא בדיוק 297, ובשמאלי 286 עם רצועת אביזרים של כ-11 ס"מ ליד הכניסה. אורכי התלייה הם אורך המוט, כלומר רוחב הפנים. תלייה קצרה היא מוט עם כ-90 ס"מ מתחתיו; תלייה ארוכה, ב-L2, היא מוט עם 150 ס"מ מתחתיו. G בעומק 35 כדי לא לחסום את L1 ו-R1 בפינות, ולכן אין בו מוט. הסולם תלוי על מסילות בחזית התיבות העליונות, בגובה 380, ומצויר מול דלת עליית הגג: הרגליים כ-68 ס"מ מחזית הארון, כ-80 מעלות. מיקום הדלת ממורכז מעל R2 ודורש מדידה. לחיצה על מגירה, מגש, מגש נעליים או מתלה מכנסיים שולפת אותם; לחיצה נוספת סוגרת. תצוגת "פרוס" פותחת את שני הקירות שטוחים לצד הקיר האחורי.</p>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -191,7 +191,7 @@ label.t input{accent-color:var(--accent);margin:0}
     if (m[0]==='rail') p = {name:'מוט תלייה אובלי עם תושבות', size:iw+' ס"מ'};
     if (m[0]==='drawer') p = {name:'מגירה, חזית 16 ס"מ', size:iw+' × '+d+' ס"מ', note:'מסילות טלסקופיות מלאות עם טריקה שקטה.'};
     if (m[0]==='glassdrawer') p = {name:'מגירה עם חזית זכוכית', size:iw+' × '+d+' ס"מ', note:'מסילות 30 ס"מ. חמש ב-G, מאחורי דלתות המראה.'};
-    if (m[0]==='shoeshelf') p = {name:'מדף נעליים משופע עם פס עצירה', size:iw+' × '+d+' ס"מ', note:'3 זוגות למדף.'};
+    if (m[0]==='shoetray') p = {name:'מגש נעליים נשלף, שתי שורות', size:iw+' × '+(d-4)+' ס"מ', note:'מגש שטוח עם פס עצירה בחזית, מסילות טלסקופיות מלאות. 6 זוגות: 3 מקדימה ו-3 מאחור.'};
     if (m[0]==='trouser') p = {name:'מתלה מכנסיים נשלף', size:'לרוחב פנים '+iw+' ס"מ', note:'כ-10 זוגות.'};
     if (m[0]==='tray') p = {name:'מגש אביזרים נשלף', size:'לרוחב פנים '+iw+' ס"מ', note:'שעונים, תכשיטים, משקפיים.'};
     if (m[0]==='insert') p = {name:'חלוקה למגש האביזרים', size:'לרוחב פנים '+iw+' ס"מ'};
@@ -274,12 +274,13 @@ label.t input{accent-color:var(--accent);margin:0}
           if (it.glass){ box(pg, w-2*T-0.4, 16, T, T+0.2, yb+2, -T, M.glassFrame); box(pg, w-2*T-6, 11, 0.6, T+3, yb+4.5, -0.9, M.glass, false); box(pg, w-2*T-2, 14, d-6, T+1, yb+2.5, -d+3, M.front, false); }
           else { box(pg, w-2*T-0.4, 16, T, T+0.2, yb+2, -T, M.front); box(pg, w-2*T-2, 14, d-6, T+1, yb+2.5, -d+3, M.front, false); }
           curTag = null; var sx5=T+4; while (sx5+26 < w-T){ stack(pc, sx5, yb+3, -d+6, 24, Math.max(10, d-12)); sx5 += 28; } } }
-      if (it.t === 'shoes'){ for (var s=0;s<it.n;s++){ var sub = new THREE.Group(); sub.position.set(w/2, it.y + s*it.pitch, -d+3); sub.rotation.x = 0.26; g.add(sub);
-          tag('shoeshelf_'+iw+'x'+d); box(sub, w-2*T, 1.5, d-5, -(w-2*T)/2, 0, 0, M.steel, false); curTag = null;
-          var csub = new THREE.Group(); csub.position.copy(sub.position); csub.rotation.copy(sub.rotation); cg.add(csub);
-          var sx4 = -(w-2*T)/2 + 3; while (sx4 + 19 < (w-2*T)/2 - 2){ var sm = pick(shoeMats), len = Math.min(26, d-8);
-            box(csub, 8, 1.4, len, sx4, 1.5, 2, M.sole, false); box(csub, 8, 1.4, len, sx4+9, 1.5, 2, M.sole, false);
-            box(csub, 7.4, 5.5, len-2, sx4+0.3, 2.9, 3, sm, false); box(csub, 7.4, 5.5, len-2, sx4+9.3, 2.9, 3, sm, false); sx4 += 21; } } }
+      if (it.t === 'shoes'){ for (var s=0;s<it.n;s++){ var ys = it.y + s*it.pitch;
+          tag('shoetray_'+iw+'x'+d); var pg6 = slider(g, d-12), pc6 = pg6.userData.pc;
+          box(pg6, w-2*T-1, 1.5, d-4, T+0.5, ys, -d+2, M.steel, false); box(pg6, w-2*T-1, 4, 1.2, T+0.5, ys, -3.2, M.steel, false); curTag = null;
+          var len = Math.min(24, (d-10)/2);
+          [-d+4, -d+6+len].forEach(function(z0){ var sx4 = T+3; while (sx4 + 19 < w - T - 1){ var sm = pick(shoeMats);
+            box(pc6, 8, 1.4, len, sx4, ys+1.5, z0, M.sole, false); box(pc6, 8, 1.4, len, sx4+9, ys+1.5, z0, M.sole, false);
+            box(pc6, 7.4, 5.5, len-2, sx4+0.3, ys+2.9, z0+1, sm, false); box(pc6, 7.4, 5.5, len-2, sx4+9.3, ys+2.9, z0+1, sm, false); sx4 += 21; } }); } }
       if (it.t === 'boot'){ var bx = T+4, by = (it.y||0)+0.5; while (bx + 12 < w - T - 4){ var bm = pick(shoeMats); var bh = 30 + rnd()*12; box(cg, 10, bh, Math.min(28, d-6), bx, by, -d+4, bm, false); bx += 14; } }
       if (it.t === 'mirror'){ tag('mirror', 2); var hw = (w-0.8)/2; var m1 = box(g, hw, 266, T, 0.2, 2, 0, M.mirror), m2 = box(g, hw, 266, T, 0.6+hw, 2, 0, M.mirror); mirrors.push(m1, m2); curTag = null; }
       if (it.t === 'trouser'){ tag('trouser_'+iw+'x'+d); var pg4 = slider(g, d-14), pc4 = pg4.userData.pc; box(pg4, w-2*T-2, 2, 4, T+1, it.y, -d+2, M.steel, false); var ax = T+4; while (ax + 4 < w - T - 3){ box(pg4, 1.2, 1.2, d-10, ax, it.y+1, -d+4, M.steel, false); box(pc4, 1.6, 36, Math.min(30, d-14), ax-0.2, it.y-35, -d/2-12, pick(clothMats), false); ax += 6; } curTag = null; }
@@ -323,7 +324,7 @@ label.t input{accent-color:var(--accent);margin:0}
     up(GROUND[4], halfBox('bin'), 'R1↑'), up(GROUND[6], halfBox('bag'), 'R3↑'), up(GROUND[7], halfBox('shoebox'), 'R4↑')
   ];
   var ZONES = [[0,0,57,95.7,ELI],[0,95.7,57,94.8,SH],[0,190.5,57,95.7,MEZI],[0,286.2,57,10.8,SH],[57,0,79,35,ELI],[136,0,56,78.7,ELI],[136,78.7,56,80.8,SH],[136,159.5,56,137.5,MEZI]];
-  var DESC = '<b>הארונות הקיימים, פנים חדשים.</b> L1 ו-R1 בפינות האחוריות הם תלייה כפולה של אלי, כי G מסתיר את החלק האחורי שלהם ובתלייה מחליקים את הקולבים. G החדש, בעומק 35, מחזיק חמש מגירות עם חזית זכוכית ומדפים מאחורי שתי דלתות מראה. L2 הוא תלייה ארוכה משותפת מעל שתי מגירות, ו-R2 מתחת לדלת עליית הגג הוא מגירות רדודות ומדפים, עם לוח מדרגה על הגג. L3 של מזי הוא תלייה כפולה עם מגירה בין המוטות, R3 מגירות, מגש ושלושה מתלי מכנסיים, ו-R4 מגדל נעליים מעל תא מגפיים. למעלה: בכל שבע התיבות שני מדפים, שלושה תאים לקופסאות, תיקים וקופסאות נעליים.';
+  var DESC = '<b>הארונות הקיימים, פנים חדשים.</b> L1 ו-R1 בפינות האחוריות הם תלייה כפולה של אלי, כי G מסתיר את החלק האחורי שלהם ובתלייה מחליקים את הקולבים. G החדש, בעומק 35, מחזיק חמש מגירות עם חזית זכוכית ומדפים מאחורי שתי דלתות מראה. L2 הוא תלייה ארוכה משותפת מעל שתי מגירות, ו-R2 מתחת לדלת עליית הגג הוא מגירות רדודות ומדפים, עם לוח מדרגה על הגג. L3 של מזי הוא תלייה כפולה עם מגירה בין המוטות, R3 מגירות, מגש ושלושה מתלי מכנסיים, ו-R4 מגדל של 10 מגשי נעליים נשלפים, שתי שורות בכל מגש, מעל תא מגפיים. למעלה: בכל שבע התיבות שני מדפים, שלושה תאים לקופסאות, תיקים וקופסאות נעליים.';
 
   function stripGroup(){
     var g = new THREE.Group(); g.userData.run = 'left'; g.userData.strip = true; frames.push(g); ground.add(g);
@@ -349,7 +350,7 @@ label.t input{accent-color:var(--accent);margin:0}
     GROUND.forEach(function(f){ var o = s[f.who]; var iw = f.w - 2*T; (f.items||[]).forEach(function(it){
       if (it.t==='rail'){ if (it.kind==='long') o.long += iw; else o.short += iw; }
       if (it.t==='drawers') o.dr += it.n;
-      if (it.t==='shoes') o.shoes += it.n * (iw>=60?3:2);
+      if (it.t==='shoes') o.shoes += it.n * (iw>=60?3:2) * 2;
       if (it.t==='boot') boots++;
       if (it.t==='trouser'){ racks++; o.tr += 10; }
     }); });
@@ -361,7 +362,7 @@ label.t input{accent-color:var(--accent);margin:0}
     html += '<div class="stat"><b>'+r(tLong)+' ס"מ</b><span>תלייה ארוכה, משותפת ב-L2</span></div>';
     html += '<div class="stat"><b>'+tDr+'</b><span>מגירות &middot; אלי '+s.Eli.dr+', מזי '+s.Mezi.dr+', משותף '+s.shared.dr+'</span></div>';
     html += '<div class="stat"><b>'+tTr+' זוגות</b><span>מכנסיים על '+racks+' מתלים נשלפים, מזי</span></div>';
-    html += '<div class="stat"><b>'+tSh+' זוגות</b><span>נעליים על מדפים'+(boots?' + תא מגפיים':'')+'</span></div>';
+    html += '<div class="stat"><b>'+tSh+' זוגות</b><span>נעליים על מגשים נשלפים, שתי שורות'+(boots?' + תא מגפיים':'')+'</span></div>';
     document.getElementById('stats').innerHTML = html;
   }
 
